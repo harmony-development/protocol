@@ -8,47 +8,43 @@ package protocol.foundation.v1;
 option go_package = "foundation;foundationv1";
 
 // Connection
-message FederateRequest {
-    string target = 1;
-}
+message FederateRequest { string target = 1; }
 message FederateReply {
-    string token = 1;
-    string nonce = 2;
+  string token = 1;
+  string nonce = 2;
 }
 
 message KeyRequest {}
-message KeyReply {
-    string key = 1;
-}
+message KeyReply { string key = 1; }
 
 message LoginRequest {
-    message Federated {
-        string auth_token = 1;
-        string domain = 2;
-    }
-    message Local {
-        string email = 1;
-        string password = 2;
-    }
-    oneof login {
-        Federated federated = 1;
-        Local local = 2;
-    }
+  message Federated {
+    string auth_token = 1;
+    string domain = 2;
+  }
+  message Local {
+    string email = 1;
+    string password = 2;
+  }
+  oneof login {
+    Federated federated = 1;
+    Local local = 2;
+  }
 }
 message RegisterRequest {
-    string email = 1;
-    string username = 2;
-    bytes password = 3;
+  string email = 1;
+  string username = 2;
+  bytes password = 3;
 }
 
 message Session {
-    uint64 user_id = 1;
-    string session_token = 2;
+  uint64 user_id = 1 [ jstype = JS_STRING ];
+  string session_token = 2;
 }
 
 service FoundationService {
-    rpc Federate (FederateRequest) returns (FederateReply);
-    rpc Key (KeyRequest) returns (KeyReply);
-    rpc Login (LoginRequest) returns (Session);
-    rpc Register (RegisterRequest) returns (Session);
+  rpc Federate(FederateRequest) returns (FederateReply);
+  rpc Key(KeyRequest) returns (KeyReply);
+  rpc Login(LoginRequest) returns (Session);
+  rpc Register(RegisterRequest) returns (Session);
 }

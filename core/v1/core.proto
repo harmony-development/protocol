@@ -11,9 +11,9 @@ option go_package = "core;corev1";
 // Location is a special type that is added in for RPCs that need to check
 // permissions
 message Location {
-  uint64 guild_id = 1;
-  uint64 channel_id = 2;
-  uint64 message_id = 3;
+  uint64 guild_id = 1 [ jstype = JS_STRING ];
+  uint64 channel_id = 2 [ jstype = JS_STRING ];
+  uint64 message_id = 3 [ jstype = JS_STRING ];
 }
 
 // EMBEDS AND ACTIONS
@@ -82,7 +82,7 @@ message Embed {
 
 message Message {
   Location location = 1;
-  uint64 author_id = 2;
+  uint64 author_id = 2 [ jstype = JS_STRING ];
   google.protobuf.Timestamp created_at = 3;
   google.protobuf.Timestamp edited_at = 4;
   string content = 5;
@@ -97,7 +97,7 @@ message CreateGuildRequest {
   string guild_name = 1 [ (validate.rules).string.min_len = 1 ];
   string picture_url = 2;
 }
-message CreateGuildResponse { uint64 guild_id = 1; }
+message CreateGuildResponse { uint64 guild_id = 1 [ jstype = JS_STRING ]; }
 
 message CreateInviteRequest {
   Location location = 1;
@@ -110,7 +110,7 @@ message CreateChannelRequest {
   Location location = 1 [ (validate.rules).message.required = true ];
   string channel_name = 2 [ (validate.rules).string.min_len = 1 ];
 }
-message CreateChannelResponse { uint64 channel_id = 1; }
+message CreateChannelResponse { uint64 channel_id = 1 [ jstype = JS_STRING ]; }
 
 // READ
 
@@ -119,7 +119,7 @@ message GetGuildRequest {
 }
 message GetGuildResponse {
   string guild_name = 1;
-  uint64 guild_owner = 2;
+  uint64 guild_owner = 2 [ jstype = JS_STRING ];
   string guild_picture = 3;
 }
 
@@ -138,14 +138,16 @@ message GetGuildInvitesResponse {
 message GetGuildMembersRequest {
   Location location = 1 [ (validate.rules).message.required = true ];
 }
-message GetGuildMembersResponse { repeated uint64 members = 1; }
+message GetGuildMembersResponse {
+  repeated uint64 members = 1 [ jstype = JS_STRING ];
+}
 
 message GetGuildChannelsRequest {
   Location location = 1 [ (validate.rules).message.required = true ];
 }
 message GetGuildChannelsResponse {
   message Channel {
-    uint64 channel_id = 1;
+    uint64 channel_id = 1 [ jstype = JS_STRING ];
     string channel_name = 2;
   }
 
@@ -154,7 +156,7 @@ message GetGuildChannelsResponse {
 
 message GetChannelMessagesRequest {
   Location location = 1 [ (validate.rules).message.required = true ];
-  uint64 before_message = 3;
+  uint64 before_message = 3 [ jstype = JS_STRING ];
 }
 message GetChannelMessagesResponse { repeated Message messages = 1; }
 
@@ -231,8 +233,8 @@ message GuildEvent {
     bool update_name = 2;
   }
   message GuildDeleted {}
-  message MemberJoined { uint64 member_id = 1; }
-  message MemberLeft { uint64 member_id = 1; }
+  message MemberJoined { uint64 member_id = 1 [ jstype = JS_STRING ]; }
+  message MemberLeft { uint64 member_id = 1 [ jstype = JS_STRING ]; }
   oneof event {
     MessageSent sent_message = 1;
     MessageUpdated edited_message = 2;
