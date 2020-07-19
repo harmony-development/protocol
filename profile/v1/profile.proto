@@ -16,8 +16,7 @@ enum UserStatus {
 }
 
 message GetUserRequest {
-  uint64 user_id = 1 [ (validate.rules).uint64.gt = 0 ]
-  [jstype = JS_STRING];
+  uint64 user_id = 1 [ (validate.rules).uint64.gt = 0, jstype = JS_STRING ];
 }
 message GetUserResponse {
   string user_name = 1;
