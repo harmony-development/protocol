@@ -266,6 +266,11 @@ message JoinGuildResponse { Location location = 1; }
 
 message LeaveGuildRequest { Location location = 1; }
 
+message JoinedLocalGuildsRequest {}
+message JoinedLocalGuildsResponse {
+  repeated uint64 guild_id = 1;
+}
+
 // TRIGGERS
 
 message TriggerActionRequest {
@@ -308,6 +313,8 @@ service CoreService {
   rpc TriggerAction(TriggerActionRequest) returns (google.protobuf.Empty) {}
 
   rpc SendMessage(SendMessageRequest) returns (google.protobuf.Empty) {}
+
+  rpc LocalGuilds(JoinedLocalGuildsRequest) returns (JoinedLocalGuildsResponse);
 
   rpc StreamGuildEvents(StreamGuildEventsRequest) returns (stream GuildEvent) {}
   rpc StreamActionEvents(StreamActionEventsRequest)
