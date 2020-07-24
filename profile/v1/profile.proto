@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-import "validate/validate.proto";
+// import "validate/validate.proto";
 import "google/protobuf/empty.proto";
 
 package protocol.profile.v1;
@@ -16,7 +16,7 @@ enum UserStatus {
 }
 
 message GetUserRequest {
-  uint64 user_id = 1 [ (validate.rules).uint64.gt = 0, jstype = JS_STRING ];
+  uint64 user_id = 1;
 }
 message GetUserResponse {
   string user_name = 1;
@@ -25,16 +25,16 @@ message GetUserResponse {
 }
 
 message GetUserMetadataRequest {
-  string app_id = 1 [ (validate.rules).string.min_len = 1 ];
+  string app_id = 1;
 }
 message GetUserMetadataResponse { string metadata = 1; }
 
 message UsernameUpdateRequest {
-  string user_name = 1 [ (validate.rules).string.min_len = 1 ];
+  string user_name = 1;
 }
 
 message StatusUpdateRequest {
-  UserStatus new_status = 1 [ (validate.rules).enum.defined_only = true ];
+  UserStatus new_status = 1;
 }
 
 service ProfileService {
