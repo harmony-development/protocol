@@ -117,18 +117,14 @@ message CreateChannelResponse { uint64 channel_id = 1 [ jstype = JS_STRING ]; }
 
 // READ
 
-message GetGuildRequest {
-  Location location = 1;
-}
+message GetGuildRequest { Location location = 1; }
 message GetGuildResponse {
   string guild_name = 1;
   uint64 guild_owner = 2 [ jstype = JS_STRING ];
   string guild_picture = 3;
 }
 
-message GetGuildInvitesRequest {
-  Location location = 1;
-}
+message GetGuildInvitesRequest { Location location = 1; }
 message GetGuildInvitesResponse {
   message Invite {
     string invite_id = 1;
@@ -138,16 +134,12 @@ message GetGuildInvitesResponse {
   repeated Invite invites = 1;
 }
 
-message GetGuildMembersRequest {
-  Location location = 1;
-}
+message GetGuildMembersRequest { Location location = 1; }
 message GetGuildMembersResponse {
   repeated uint64 members = 1 [ jstype = JS_STRING ];
 }
 
-message GetGuildChannelsRequest {
-  Location location = 1;
-}
+message GetGuildChannelsRequest { Location location = 1; }
 message GetGuildChannelsResponse {
   message Channel {
     uint64 channel_id = 1 [ jstype = JS_STRING ];
@@ -195,22 +187,16 @@ message UpdateMessageRequest {
 
 // DELETE
 
-message DeleteGuildRequest {
-  Location location = 1;
-}
+message DeleteGuildRequest { Location location = 1; }
 
 message DeleteInviteRequest {
   Location location = 1;
   string invite_id = 2;
 }
 
-message DeleteChannelRequest {
-  Location location = 1;
-}
+message DeleteChannelRequest { Location location = 1; }
 
-message DeleteMessageRequest {
-  Location location = 1;
-}
+message DeleteMessageRequest { Location location = 1; }
 
 // STREAMS
 
@@ -299,7 +285,6 @@ message TriggerActionRequest {
 
 // SendMessage
 message SendMessageRequest {
-  uint64 messageID = 1 [ jstype = JS_STRING ];
   string content = 2;
   repeated Action actions = 3;
   repeated Embed embeds = 4;
@@ -324,7 +309,8 @@ service CoreService {
   rpc UpdateGuildName(UpdateGuildNameRequest) returns (google.protobuf.Empty) {}
   rpc UpdateChannelName(UpdateChannelNameRequest)
       returns (google.protobuf.Empty) {}
-  rpc UpdateChannelOrder(UpdateChannelOrderRequest) returns (google.protobuf.Empty) {}
+  rpc UpdateChannelOrder(UpdateChannelOrderRequest)
+      returns (google.protobuf.Empty) {}
   rpc UpdateMessage(UpdateMessageRequest) returns (google.protobuf.Empty) {}
 
   rpc DeleteGuild(DeleteGuildRequest) returns (google.protobuf.Empty) {}
