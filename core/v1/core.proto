@@ -267,9 +267,7 @@ message JoinGuildResponse { Location location = 1; }
 message LeaveGuildRequest { Location location = 1; }
 
 message JoinedLocalGuildsRequest {}
-message JoinedLocalGuildsResponse {
-  repeated uint64 guild_id = 1;
-}
+message JoinedLocalGuildsResponse { repeated uint64 guild_id = 1; }
 
 // TRIGGERS
 
@@ -280,7 +278,13 @@ message TriggerActionRequest {
 }
 
 // SendMessage
-message SendMessageRequest { Message message = 1; }
+message SendMessageRequest {
+  uint64 messageID = 1 [ jstype = JS_STRING ];
+  string content = 2;
+  repeated Action actions = 3;
+  repeated Embed embeds = 4;
+  repeated string attachments = 5;
+}
 
 service CoreService {
   rpc CreateGuild(CreateGuildRequest) returns (CreateGuildResponse) {}
