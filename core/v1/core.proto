@@ -236,6 +236,7 @@ message GuildEvent {
     string name = 2;
     uint64 previous_id = 3;
     uint64 next_id = 4;
+    bool is_category = 5;
   }
   message ChannelUpdated {
     Location location = 1;
