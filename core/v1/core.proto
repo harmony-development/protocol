@@ -286,6 +286,7 @@ message TriggerActionRequest {
 
 // SendMessage
 message SendMessageRequest {
+  Location location = 1;
   string content = 2;
   repeated Action actions = 3;
   repeated Embed embeds = 4;
