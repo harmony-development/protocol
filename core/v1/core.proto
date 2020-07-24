@@ -152,6 +152,7 @@ message GetGuildChannelsResponse {
   message Channel {
     uint64 channel_id = 1 [ jstype = JS_STRING ];
     string channel_name = 2;
+    bool is_category = 3;
   }
 
   repeated Channel channels = 1;
