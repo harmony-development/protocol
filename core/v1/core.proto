@@ -109,6 +109,9 @@ message CreateInviteResponse { string name = 1; }
 message CreateChannelRequest {
   Location location = 1 [ (validate.rules).message.required = true ];
   string channel_name = 2 [ (validate.rules).string.min_len = 1 ];
+  bool is_category = 3;
+  uint64 previous_id = 5;
+  uint64 next_id = 4;
 }
 message CreateChannelResponse { uint64 channel_id = 1 [ jstype = JS_STRING ]; }
 
@@ -172,6 +175,12 @@ message UpdateChannelNameRequest {
   string new_channel_name = 2;
 }
 
+message UpdateChannelOrderRequest {
+  Location location = 1;
+  uint64 previous_id = 2;
+  uint64 next_id = 3;
+}
+
 message UpdateMessageRequest {
   Location location = 1 [ (validate.rules).message.required = true ];
   string content = 2;
@@ -222,10 +231,19 @@ message GuildEvent {
     bool update_attachments = 10;
   }
   message MessageDeleted { Location location = 1; }
+  message ChannelCreated {
+    Location location = 1;
+    string name = 2;
+    uint64 previous_id = 3;
+    uint64 next_id = 4;
+  }
   message ChannelUpdated {
     Location location = 1;
     string name = 2;
     bool update_name = 3;
+    uint64 previous_id = 5;
+    uint64 next_id = 4;
+    bool update_order = 6;
   }
   message ChannelDeleted { Location location = 1; }
   message GuildUpdated {
@@ -239,12 +257,13 @@ message GuildEvent {
     MessageSent sent_message = 1;
     MessageUpdated edited_message = 2;
     MessageDeleted deleted_message = 3;
-    ChannelUpdated edited_channel = 4;
-    ChannelDeleted deleted_channel = 5;
-    GuildUpdated edited_guild = 6;
-    GuildDeleted deleted_guild = 7;
-    MemberJoined joined_member = 8;
-    MemberLeft left_member = 9;
+    ChannelCreated created_channel = 4;
+    ChannelUpdated edited_channel = 5;
+    ChannelDeleted deleted_channel = 6;
+    GuildUpdated edited_guild = 7;
+    GuildDeleted deleted_guild = 8;
+    MemberJoined joined_member = 9;
+    MemberLeft left_member = 10;
   }
 }
 
@@ -300,6 +319,7 @@ service CoreService {
   rpc UpdateGuildName(UpdateGuildNameRequest) returns (google.protobuf.Empty) {}
   rpc UpdateChannelName(UpdateChannelNameRequest)
       returns (google.protobuf.Empty) {}
+  rpc UpdateChannelOrder(UpdateChannelOrderRequest) returns (google.protobuf.Empty) {}
   rpc UpdateMessage(UpdateMessageRequest) returns (google.protobuf.Empty) {}
 
   rpc DeleteGuild(DeleteGuildRequest) returns (google.protobuf.Empty) {}
