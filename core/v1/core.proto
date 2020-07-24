@@ -151,7 +151,7 @@ message GetGuildChannelsResponse {
 
 message GetChannelMessagesRequest {
   Location location = 1;
-  uint64 before_message = 3;
+  uint64 before_message = 2 [ jstype = JS_STRING ];
 }
 message GetChannelMessagesResponse { repeated Message messages = 1; }
 
