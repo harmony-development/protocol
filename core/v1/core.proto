@@ -117,6 +117,17 @@ message CreateChannelResponse { uint64 channel_id = 1 [ jstype = JS_STRING ]; }
 
 // READ
 
+message GetGuildListRequest {}
+
+message GetGuildListResponse {
+  message GuildListEntry {
+    uint64 guild_id = 1 [ jstype = JS_STRING ];
+    string host = 2;
+  }
+
+  repeated GuildListEntry guilds = 1;
+}
+
 message GetGuildRequest { Location location = 1; }
 message GetGuildResponse {
   string guild_name = 1;
@@ -273,11 +284,6 @@ message JoinGuildResponse { Location location = 1; }
 
 message LeaveGuildRequest { Location location = 1; }
 
-message JoinedLocalGuildsRequest {}
-message JoinedLocalGuildsResponse {
-  repeated uint64 guild_id = 1 [ jstype = JS_STRING ];
-}
-
 // TRIGGERS
 
 message TriggerActionRequest {
@@ -300,6 +306,7 @@ service CoreService {
   rpc CreateInvite(CreateInviteRequest) returns (CreateInviteResponse) {}
   rpc CreateChannel(CreateChannelRequest) returns (CreateChannelResponse) {}
 
+  rpc GetGuildList(GetGuildListRequest) returns (GetGuildListResponse) {}
   rpc GetGuild(GetGuildRequest) returns (GetGuildResponse) {}
   rpc GetGuildInvites(GetGuildInvitesRequest)
       returns (GetGuildInvitesResponse) {}
@@ -328,8 +335,6 @@ service CoreService {
   rpc TriggerAction(TriggerActionRequest) returns (google.protobuf.Empty) {}
 
   rpc SendMessage(SendMessageRequest) returns (google.protobuf.Empty) {}
-
-  rpc LocalGuilds(JoinedLocalGuildsRequest) returns (JoinedLocalGuildsResponse);
 
   rpc StreamGuildEvents(StreamGuildEventsRequest) returns (stream GuildEvent) {}
   rpc StreamActionEvents(StreamActionEventsRequest)
