@@ -110,8 +110,8 @@ message CreateChannelRequest {
   Location location = 1 [ (validate.rules).message.required = true ];
   string channel_name = 2 [ (validate.rules).string.min_len = 1 ];
   bool is_category = 3;
-  uint64 previous_id = 5;
-  uint64 next_id = 4;
+  uint64 previous_id = 5 [ jstype = JS_STRING ];
+  uint64 next_id = 4 [ jstype = JS_STRING ];
 }
 message CreateChannelResponse { uint64 channel_id = 1 [ jstype = JS_STRING ]; }
 
@@ -170,8 +170,8 @@ message UpdateChannelNameRequest {
 
 message UpdateChannelOrderRequest {
   Location location = 1;
-  uint64 previous_id = 2;
-  uint64 next_id = 3;
+  uint64 previous_id = 2 [ jstype = JS_STRING ];
+  uint64 next_id = 3 [ jstype = JS_STRING ];
 }
 
 message UpdateMessageRequest {
@@ -221,16 +221,16 @@ message GuildEvent {
   message ChannelCreated {
     Location location = 1;
     string name = 2;
-    uint64 previous_id = 3;
-    uint64 next_id = 4;
+    uint64 previous_id = 3 [ jstype = JS_STRING ];
+    uint64 next_id = 4 [ jstype = JS_STRING ];
     bool is_category = 5;
   }
   message ChannelUpdated {
     Location location = 1;
     string name = 2;
     bool update_name = 3;
-    uint64 previous_id = 5;
-    uint64 next_id = 4;
+    uint64 previous_id = 5 [ jstype = JS_STRING ];
+    uint64 next_id = 4 [ jstype = JS_STRING ];
     bool update_order = 6;
   }
   message ChannelDeleted { Location location = 1; }
@@ -274,7 +274,9 @@ message JoinGuildResponse { Location location = 1; }
 message LeaveGuildRequest { Location location = 1; }
 
 message JoinedLocalGuildsRequest {}
-message JoinedLocalGuildsResponse { repeated uint64 guild_id = 1; }
+message JoinedLocalGuildsResponse {
+  repeated uint64 guild_id = 1 [ jstype = JS_STRING ];
+}
 
 // TRIGGERS
 
