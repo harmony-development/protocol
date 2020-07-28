@@ -24,7 +24,7 @@ message LoginRequest {
   }
   message Local {
     string email = 1;
-    string password = 2;
+    bytes password = 2;
   }
   oneof login {
     Federated federated = 1;
