@@ -301,12 +301,23 @@ message SendMessageRequest {
   repeated string attachments = 5;
 }
 
+// GUILD LIST
+message AddGuildToGuildListRequest {
+  uint64 guild_id = 1;
+  string homeserver = 2;
+}
+message AddGuildToGuildListResponse {
+
+}
+
 service CoreService {
   rpc CreateGuild(CreateGuildRequest) returns (CreateGuildResponse) {}
   rpc CreateInvite(CreateInviteRequest) returns (CreateInviteResponse) {}
   rpc CreateChannel(CreateChannelRequest) returns (CreateChannelResponse) {}
 
   rpc GetGuildList(GetGuildListRequest) returns (GetGuildListResponse) {}
+  rpc AddGuildToGuildList(AddGuildToGuildListRequest) returns (AddGuildToGuildListResponse) {}
+
   rpc GetGuild(GetGuildRequest) returns (GetGuildResponse) {}
   rpc GetGuildInvites(GetGuildInvitesRequest)
       returns (GetGuildInvitesResponse) {}
