@@ -266,6 +266,21 @@ message GuildEvent {
   }
 }
 
+message HomeserverEvent {
+  message GuildAddedToList {
+    uint64 guild_id = 1;
+    string homeserver = 2;
+  }
+  message GuildRemovedFromList {
+    uint64 guild_id = 1;
+    string homeserver = 2;
+  }
+  oneof event {
+    GuildAddedToList guild_added_to_list = 1;
+  }
+}
+message StreamHomeserverEventsRequest {}
+
 message StreamActionEventsRequest {}
 
 message ActionEvent {
@@ -350,4 +365,5 @@ service CoreService {
   rpc StreamGuildEvents(StreamGuildEventsRequest) returns (stream GuildEvent) {}
   rpc StreamActionEvents(StreamActionEventsRequest)
       returns (stream ActionEvent) {}
+  rpc StreamHomeserverEvents(StreamHomeserverEventsRequest) returns (stream HomeserverEvent) {}
 }
