@@ -94,14 +94,14 @@ message Message {
 // CREATE
 
 message CreateGuildRequest {
-  string guild_name = 1 [ (validate.rules).string.min_len = 1 ];
+  string guild_name = 1;
   string picture_url = 2;
 }
 message CreateGuildResponse { uint64 guild_id = 1 [ jstype = JS_STRING ]; }
 
 message CreateInviteRequest {
   Location location = 1;
-  string name = 2 [ (validate.rules).string.min_len = 1 ];
+  string name = 2;
   int32 possible_uses = 3;
 }
 message CreateInviteResponse { string name = 1; }
@@ -110,25 +110,32 @@ message CreateChannelRequest {
   Location location = 1 [ (validate.rules).message.required = true ];
   string channel_name = 2 [ (validate.rules).string.min_len = 1 ];
   bool is_category = 3;
-  uint64 previous_id = 5;
-  uint64 next_id = 4;
+  uint64 previous_id = 5 [ jstype = JS_STRING ];
+  uint64 next_id = 4 [ jstype = JS_STRING ];
 }
 message CreateChannelResponse { uint64 channel_id = 1 [ jstype = JS_STRING ]; }
 
 // READ
 
-message GetGuildRequest {
-  Location location = 1 [ (validate.rules).message.required = true ];
+message GetGuildListRequest {}
+
+message GetGuildListResponse {
+  message GuildListEntry {
+    uint64 guild_id = 1 [ jstype = JS_STRING ];
+    string host = 2;
+  }
+
+  repeated GuildListEntry guilds = 1;
 }
+
+message GetGuildRequest { Location location = 1; }
 message GetGuildResponse {
   string guild_name = 1;
   uint64 guild_owner = 2 [ jstype = JS_STRING ];
   string guild_picture = 3;
 }
 
-message GetGuildInvitesRequest {
-  Location location = 1 [ (validate.rules).message.required = true ];
-}
+message GetGuildInvitesRequest { Location location = 1; }
 message GetGuildInvitesResponse {
   message Invite {
     string invite_id = 1;
@@ -138,36 +145,33 @@ message GetGuildInvitesResponse {
   repeated Invite invites = 1;
 }
 
-message GetGuildMembersRequest {
-  Location location = 1 [ (validate.rules).message.required = true ];
-}
+message GetGuildMembersRequest { Location location = 1; }
 message GetGuildMembersResponse {
   repeated uint64 members = 1 [ jstype = JS_STRING ];
 }
 
-message GetGuildChannelsRequest {
-  Location location = 1 [ (validate.rules).message.required = true ];
-}
+message GetGuildChannelsRequest { Location location = 1; }
 message GetGuildChannelsResponse {
   message Channel {
     uint64 channel_id = 1 [ jstype = JS_STRING ];
     string channel_name = 2;
+    bool is_category = 3;
   }
 
   repeated Channel channels = 1;
 }
 
 message GetChannelMessagesRequest {
-  Location location = 1 [ (validate.rules).message.required = true ];
-  uint64 before_message = 3 [ jstype = JS_STRING ];
+  Location location = 1;
+  uint64 before_message = 2 [ jstype = JS_STRING ];
 }
 message GetChannelMessagesResponse { repeated Message messages = 1; }
 
 // UPDATE
 
 message UpdateGuildNameRequest {
-  Location location = 1 [ (validate.rules).message.required = true ];
-  string new_guild_name = 2 [ (validate.rules).string.min_len = 1 ];
+  Location location = 1;
+  string new_guild_name = 2;
 }
 
 message UpdateChannelNameRequest {
@@ -177,12 +181,12 @@ message UpdateChannelNameRequest {
 
 message UpdateChannelOrderRequest {
   Location location = 1;
-  uint64 previous_id = 2;
-  uint64 next_id = 3;
+  uint64 previous_id = 2 [ jstype = JS_STRING ];
+  uint64 next_id = 3 [ jstype = JS_STRING ];
 }
 
 message UpdateMessageRequest {
-  Location location = 1 [ (validate.rules).message.required = true ];
+  Location location = 1;
   string content = 2;
   bool update_content = 3;
   repeated Embed embeds = 4;
@@ -195,22 +199,16 @@ message UpdateMessageRequest {
 
 // DELETE
 
-message DeleteGuildRequest {
-  Location location = 1 [ (validate.rules).message.required = true ];
-}
+message DeleteGuildRequest { Location location = 1; }
 
 message DeleteInviteRequest {
-  Location location = 1 [ (validate.rules).message.required = true ];
+  Location location = 1;
   string invite_id = 2;
 }
 
-message DeleteChannelRequest {
-  Location location = 1 [ (validate.rules).message.required = true ];
-}
+message DeleteChannelRequest { Location location = 1; }
 
-message DeleteMessageRequest {
-  Location location = 1 [ (validate.rules).message.required = true ];
-}
+message DeleteMessageRequest { Location location = 1; }
 
 // STREAMS
 
@@ -234,16 +232,16 @@ message GuildEvent {
   message ChannelCreated {
     Location location = 1;
     string name = 2;
-    uint64 previous_id = 3;
-    uint64 next_id = 4;
+    uint64 previous_id = 3 [ jstype = JS_STRING ];
+    uint64 next_id = 4 [ jstype = JS_STRING ];
     bool is_category = 5;
   }
   message ChannelUpdated {
     Location location = 1;
     string name = 2;
     bool update_name = 3;
-    uint64 previous_id = 5;
-    uint64 next_id = 4;
+    uint64 previous_id = 5 [ jstype = JS_STRING ];
+    uint64 next_id = 4 [ jstype = JS_STRING ];
     bool update_order = 6;
   }
   message ChannelDeleted { Location location = 1; }
@@ -268,6 +266,19 @@ message GuildEvent {
   }
 }
 
+message HomeserverEvent {
+  message GuildAddedToList {
+    uint64 guild_id = 1;
+    string homeserver = 2;
+  }
+  message GuildRemovedFromList {
+    uint64 guild_id = 1;
+    string homeserver = 2;
+  }
+  oneof event { GuildAddedToList guild_added_to_list = 1; }
+}
+message StreamHomeserverEventsRequest {}
+
 message StreamActionEventsRequest {}
 
 message ActionEvent {
@@ -286,11 +297,6 @@ message JoinGuildResponse { Location location = 1; }
 
 message LeaveGuildRequest { Location location = 1; }
 
-message JoinedLocalGuildsRequest {}
-message JoinedLocalGuildsResponse {
-  repeated uint64 guild_id = 1;
-}
-
 // TRIGGERS
 
 message TriggerActionRequest {
@@ -300,12 +306,29 @@ message TriggerActionRequest {
 }
 
 // SendMessage
-message SendMessageRequest { Message message = 1; }
+message SendMessageRequest {
+  Location location = 1;
+  string content = 2;
+  repeated Action actions = 3;
+  repeated Embed embeds = 4;
+  repeated string attachments = 5;
+}
+
+// GUILD LIST
+message AddGuildToGuildListRequest {
+  uint64 guild_id = 1 [ jstype = JS_STRING ];
+  string homeserver = 2;
+}
+message AddGuildToGuildListResponse {}
 
 service CoreService {
   rpc CreateGuild(CreateGuildRequest) returns (CreateGuildResponse) {}
   rpc CreateInvite(CreateInviteRequest) returns (CreateInviteResponse) {}
   rpc CreateChannel(CreateChannelRequest) returns (CreateChannelResponse) {}
+
+  rpc GetGuildList(GetGuildListRequest) returns (GetGuildListResponse) {}
+  rpc AddGuildToGuildList(AddGuildToGuildListRequest)
+      returns (AddGuildToGuildListResponse) {}
 
   rpc GetGuild(GetGuildRequest) returns (GetGuildResponse) {}
   rpc GetGuildInvites(GetGuildInvitesRequest)
@@ -320,7 +343,8 @@ service CoreService {
   rpc UpdateGuildName(UpdateGuildNameRequest) returns (google.protobuf.Empty) {}
   rpc UpdateChannelName(UpdateChannelNameRequest)
       returns (google.protobuf.Empty) {}
-  rpc UpdateChannelOrder(UpdateChannelOrderRequest) returns (google.protobuf.Empty) {}
+  rpc UpdateChannelOrder(UpdateChannelOrderRequest)
+      returns (google.protobuf.Empty) {}
   rpc UpdateMessage(UpdateMessageRequest) returns (google.protobuf.Empty) {}
 
   rpc DeleteGuild(DeleteGuildRequest) returns (google.protobuf.Empty) {}
@@ -335,9 +359,9 @@ service CoreService {
 
   rpc SendMessage(SendMessageRequest) returns (google.protobuf.Empty) {}
 
-  rpc LocalGuilds(JoinedLocalGuildsRequest) returns (JoinedLocalGuildsResponse);
-
   rpc StreamGuildEvents(StreamGuildEventsRequest) returns (stream GuildEvent) {}
   rpc StreamActionEvents(StreamActionEventsRequest)
       returns (stream ActionEvent) {}
+  rpc StreamHomeserverEvents(StreamHomeserverEventsRequest)
+      returns (stream HomeserverEvent) {}
 }
