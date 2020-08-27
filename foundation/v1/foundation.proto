@@ -42,9 +42,12 @@ message Session {
   string session_token = 2;
 }
 
+message GetConfigResponse { bool require_2fa = 1; }
+
 service FoundationService {
   rpc Federate(FederateRequest) returns (FederateReply);
   rpc Key(KeyRequest) returns (KeyReply);
   rpc Login(LoginRequest) returns (Session);
   rpc Register(RegisterRequest) returns (Session);
+  rpc GetConfig(google.protobuf.Empty) returns (GetConfigResponse);
 }
