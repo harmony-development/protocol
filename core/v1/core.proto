@@ -317,7 +317,7 @@ message SendMessageRequest {
 
 // GUILD LIST
 message AddGuildToGuildListRequest {
-  uint64 guild_id = 1;
+  uint64 guild_id = 1 [ jstype = JS_STRING ];
   string homeserver = 2;
 }
 message AddGuildToGuildListResponse {}
