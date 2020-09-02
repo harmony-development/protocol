@@ -156,6 +156,7 @@ message GetGuildChannelsResponse {
     uint64 channel_id = 1 [ jstype = JS_STRING ];
     string channel_name = 2;
     bool is_category = 3;
+    bool is_voice = 4;
   }
 
   repeated Channel channels = 1;
@@ -275,9 +276,7 @@ message HomeserverEvent {
     uint64 guild_id = 1;
     string homeserver = 2;
   }
-  oneof event {
-    GuildAddedToList guild_added_to_list = 1;
-  }
+  oneof event { GuildAddedToList guild_added_to_list = 1; }
 }
 message StreamHomeserverEventsRequest {}
 
@@ -321,9 +320,7 @@ message AddGuildToGuildListRequest {
   uint64 guild_id = 1;
   string homeserver = 2;
 }
-message AddGuildToGuildListResponse {
-
-}
+message AddGuildToGuildListResponse {}
 
 service CoreService {
   rpc CreateGuild(CreateGuildRequest) returns (CreateGuildResponse) {}
@@ -331,7 +328,8 @@ service CoreService {
   rpc CreateChannel(CreateChannelRequest) returns (CreateChannelResponse) {}
 
   rpc GetGuildList(GetGuildListRequest) returns (GetGuildListResponse) {}
-  rpc AddGuildToGuildList(AddGuildToGuildListRequest) returns (AddGuildToGuildListResponse) {}
+  rpc AddGuildToGuildList(AddGuildToGuildListRequest)
+      returns (AddGuildToGuildListResponse) {}
 
   rpc GetGuild(GetGuildRequest) returns (GetGuildResponse) {}
   rpc GetGuildInvites(GetGuildInvitesRequest)
@@ -365,5 +363,6 @@ service CoreService {
   rpc StreamGuildEvents(StreamGuildEventsRequest) returns (stream GuildEvent) {}
   rpc StreamActionEvents(StreamActionEventsRequest)
       returns (stream ActionEvent) {}
-  rpc StreamHomeserverEvents(StreamHomeserverEventsRequest) returns (stream HomeserverEvent) {}
+  rpc StreamHomeserverEvents(StreamHomeserverEventsRequest)
+      returns (stream HomeserverEvent) {}
 }
