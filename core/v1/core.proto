@@ -29,7 +29,7 @@ enum ActionPresentation {
   Dropdown = 1;
   Menu = 2;
   SmallEntry = 3;
-  LargeEntr = 4;
+  LargeEntry = 4;
 }
 
 enum FieldPresentation {
@@ -43,7 +43,8 @@ message Action {
   string url = 2;
   string id = 3;
   ActionType type = 4;
-  repeated Action children = 5;
+  ActionPresentation presentation = 5;
+  repeated Action children = 6;
 }
 
 message EmbedHeading {
