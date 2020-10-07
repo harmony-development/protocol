@@ -289,7 +289,10 @@ message HomeserverEvent {
     uint64 guild_id = 1 [ jstype = JS_STRING ];
     string homeserver = 2;
   }
-  oneof event { GuildAddedToList guild_added_to_list = 1; }
+  oneof event {
+    GuildAddedToList guild_added_to_list = 1;
+    GuildRemovedFromList guild_removed_from_list = 2;
+  }
 }
 message StreamHomeserverEventsRequest {}
 
@@ -336,6 +339,12 @@ message AddGuildToGuildListRequest {
 }
 message AddGuildToGuildListResponse {}
 
+message RemoveGuildFromGuildListRequest {
+  uint64 guild_id = 1 [ jstype = JS_STRING ];
+  string homeserver = 2;
+}
+message RemoveGuildFromGuildListResponse {}
+
 service CoreService {
   rpc CreateGuild(CreateGuildRequest) returns (CreateGuildResponse) {}
   rpc CreateInvite(CreateInviteRequest) returns (CreateInviteResponse) {}
@@ -344,6 +353,8 @@ service CoreService {
   rpc GetGuildList(GetGuildListRequest) returns (GetGuildListResponse) {}
   rpc AddGuildToGuildList(AddGuildToGuildListRequest)
       returns (AddGuildToGuildListResponse) {}
+  rpc RemoveGuildFromGuildList(RemoveGuildFromGuildListRequest)
+      returns (RemoveGuildFromGuildListResponse) {}
 
   rpc GetGuild(GetGuildRequest) returns (GetGuildResponse) {}
   rpc GetGuildInvites(GetGuildInvitesRequest)
