@@ -176,6 +176,11 @@ message GetChannelMessagesRequest {
 }
 message GetChannelMessagesResponse { repeated Message messages = 1; }
 
+message GetMessageRequest {
+  Location location = 1;
+}
+message GetMessageResponse { Message message = 1; }
+
 // UPDATE
 
 message UpdateGuildNameRequest {
@@ -349,6 +354,7 @@ service CoreService {
       returns (GetGuildChannelsResponse) {}
   rpc GetChannelMessages(GetChannelMessagesRequest)
       returns (GetChannelMessagesResponse) {}
+  rpc GetMessage(GetMessageRequest) returns (GetMessageResponse) {}
 
   rpc UpdateGuildName(UpdateGuildNameRequest) returns (google.protobuf.Empty) {}
   rpc UpdateChannelName(UpdateChannelNameRequest)
