@@ -96,6 +96,7 @@ message Message {
   repeated Embed embeds = 6;
   repeated Action actions = 7;
   repeated string attachments = 8;
+  uint64 in_reply_to = 9 [ jstype = JS_STRING ];
 }
 
 // CREATE
@@ -320,6 +321,7 @@ message SendMessageRequest {
   repeated Action actions = 3;
   repeated Embed embeds = 4;
   repeated string attachments = 5;
+  uint64 in_reply_to = 6;
 }
 
 // GUILD LIST
