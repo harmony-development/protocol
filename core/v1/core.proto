@@ -16,6 +16,19 @@ message Location {
   uint64 message_id = 3 [ jstype = JS_STRING ];
 }
 
+// OVERRIDES
+message Override {
+  string name = 1;
+  string avatar = 2;
+  oneof reason {
+    string user_defined = 3;
+    google.protobuf.Empty webhook = 4;
+    google.protobuf.Empty system_plurality = 5; // plurality, not system as in computer
+    google.protobuf.Empty system_message = 6;
+    google.protobuf.Empty bridge = 7;
+  }
+}
+
 // EMBEDS AND ACTIONS
 
 enum ActionType {
@@ -97,6 +110,7 @@ message Message {
   repeated Action actions = 7;
   repeated string attachments = 8;
   uint64 in_reply_to = 9 [ jstype = JS_STRING ];
+  Override overrides = 10;
 }
 
 // CREATE
