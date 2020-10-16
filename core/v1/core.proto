@@ -11,9 +11,9 @@ option go_package = "core;corev1";
 // Location is a special type that is added in for RPCs that need to check
 // permissions
 message Location {
-  uint64 guild_id = 1 [ jstype = JS_STRING ];
-  uint64 channel_id = 2 [ jstype = JS_STRING ];
-  uint64 message_id = 3 [ jstype = JS_STRING ];
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 message_id = 3 [jstype = JS_STRING];
 }
 
 // OVERRIDES
@@ -23,7 +23,8 @@ message Override {
   oneof reason {
     string user_defined = 3;
     google.protobuf.Empty webhook = 4;
-    google.protobuf.Empty system_plurality = 5; // plurality, not system as in computer
+    google.protobuf.Empty system_plurality =
+        5; // plurality, not system as in computer
     google.protobuf.Empty system_message = 6;
     google.protobuf.Empty bridge = 7;
   }
@@ -31,32 +32,20 @@ message Override {
 
 // EMBEDS AND ACTIONS
 
-enum ActionType {
-  Normal = 0;
-  Primary = 1;
-  Destructive = 2;
-}
+enum ActionType { Normal = 0; Primary = 1; Destructive = 2; }
 
 enum ActionPresentation {
-  Button = 0;
-  Dropdown = 1;
-  Menu = 2;
-  SmallEntry = 3;
-  LargeEntry = 4;
+  Button = 0; Dropdown = 1; Menu = 2; SmallEntry = 3; LargeEntry = 4;
 }
 
-enum FieldPresentation {
-  Data = 0;
-  CaptionedImage = 1;
-  Row = 2;
-}
+enum FieldPresentation { Data = 0; CaptionedImage = 1; Row = 2; }
 
 // Rules on actions:
-// Actions without a type are assumed to be Button actions or Menu actions when nested.
-// Button actions can only have Menu actions as children.
-// Dropdown actions can only have non-recursive Menu actions as children.
-// Menu actions can only have other Menu actions as children.
-// SmallEntry and LargeActions cannot have children.
+// Actions without a type are assumed to be Button actions or Menu actions when
+// nested. Button actions can only have Menu actions as children. Dropdown
+// actions can only have non-recursive Menu actions as children. Menu actions
+// can only have other Menu actions as children. SmallEntry and LargeActions
+// cannot have children.
 message Action {
   string text = 1;
   string url = 2;
@@ -102,14 +91,14 @@ message Embed {
 
 message Message {
   Location location = 1;
-  uint64 author_id = 2 [ jstype = JS_STRING ];
+  uint64 author_id = 2 [jstype = JS_STRING];
   google.protobuf.Timestamp created_at = 3;
   google.protobuf.Timestamp edited_at = 4;
   string content = 5;
   repeated Embed embeds = 6;
   repeated Action actions = 7;
   repeated string attachments = 8;
-  uint64 in_reply_to = 9 [ jstype = JS_STRING ];
+  uint64 in_reply_to = 9 [jstype = JS_STRING];
   Override overrides = 10;
 }
 
@@ -119,7 +108,7 @@ message CreateGuildRequest {
   string guild_name = 1;
   string picture_url = 2;
 }
-message CreateGuildResponse { uint64 guild_id = 1 [ jstype = JS_STRING ]; }
+message CreateGuildResponse { uint64 guild_id = 1 [jstype = JS_STRING]; }
 
 message CreateInviteRequest {
   Location location = 1;
@@ -129,13 +118,13 @@ message CreateInviteRequest {
 message CreateInviteResponse { string name = 1; }
 
 message CreateChannelRequest {
-  Location location = 1 [ (validate.rules).message.required = true ];
-  string channel_name = 2 [ (validate.rules).string.min_len = 1 ];
+  Location location = 1 [(validate.rules).message.required = true];
+  string channel_name = 2 [(validate.rules).string.min_len = 1];
   bool is_category = 3;
-  uint64 previous_id = 5 [ jstype = JS_STRING ];
-  uint64 next_id = 4 [ jstype = JS_STRING ];
+  uint64 previous_id = 5 [jstype = JS_STRING];
+  uint64 next_id = 4 [jstype = JS_STRING];
 }
-message CreateChannelResponse { uint64 channel_id = 1 [ jstype = JS_STRING ]; }
+message CreateChannelResponse { uint64 channel_id = 1 [jstype = JS_STRING]; }
 
 // READ
 
@@ -143,7 +132,7 @@ message GetGuildListRequest {}
 
 message GetGuildListResponse {
   message GuildListEntry {
-    uint64 guild_id = 1 [ jstype = JS_STRING ];
+    uint64 guild_id = 1 [jstype = JS_STRING];
     string host = 2;
   }
 
@@ -153,7 +142,7 @@ message GetGuildListResponse {
 message GetGuildRequest { Location location = 1; }
 message GetGuildResponse {
   string guild_name = 1;
-  uint64 guild_owner = 2 [ jstype = JS_STRING ];
+  uint64 guild_owner = 2 [jstype = JS_STRING];
   string guild_picture = 3;
 }
 
@@ -169,13 +158,13 @@ message GetGuildInvitesResponse {
 
 message GetGuildMembersRequest { Location location = 1; }
 message GetGuildMembersResponse {
-  repeated uint64 members = 1 [ jstype = JS_STRING ];
+  repeated uint64 members = 1 [jstype = JS_STRING];
 }
 
 message GetGuildChannelsRequest { Location location = 1; }
 message GetGuildChannelsResponse {
   message Channel {
-    uint64 channel_id = 1 [ jstype = JS_STRING ];
+    uint64 channel_id = 1 [jstype = JS_STRING];
     string channel_name = 2;
     bool is_category = 3;
     bool is_voice = 4;
@@ -186,13 +175,11 @@ message GetGuildChannelsResponse {
 
 message GetChannelMessagesRequest {
   Location location = 1;
-  uint64 before_message = 2 [ jstype = JS_STRING ];
+  uint64 before_message = 2 [jstype = JS_STRING];
 }
 message GetChannelMessagesResponse { repeated Message messages = 1; }
 
-message GetMessageRequest {
-  Location location = 1;
-}
+message GetMessageRequest { Location location = 1; }
 message GetMessageResponse { Message message = 1; }
 
 // UPDATE
@@ -209,8 +196,8 @@ message UpdateChannelNameRequest {
 
 message UpdateChannelOrderRequest {
   Location location = 1;
-  uint64 previous_id = 2 [ jstype = JS_STRING ];
-  uint64 next_id = 3 [ jstype = JS_STRING ];
+  uint64 previous_id = 2 [jstype = JS_STRING];
+  uint64 next_id = 3 [jstype = JS_STRING];
 }
 
 message UpdateMessageRequest {
@@ -260,16 +247,16 @@ message GuildEvent {
   message ChannelCreated {
     Location location = 1;
     string name = 2;
-    uint64 previous_id = 3 [ jstype = JS_STRING ];
-    uint64 next_id = 4 [ jstype = JS_STRING ];
+    uint64 previous_id = 3 [jstype = JS_STRING];
+    uint64 next_id = 4 [jstype = JS_STRING];
     bool is_category = 5;
   }
   message ChannelUpdated {
     Location location = 1;
     string name = 2;
     bool update_name = 3;
-    uint64 previous_id = 5 [ jstype = JS_STRING ];
-    uint64 next_id = 4 [ jstype = JS_STRING ];
+    uint64 previous_id = 5 [jstype = JS_STRING];
+    uint64 next_id = 4 [jstype = JS_STRING];
     bool update_order = 6;
   }
   message ChannelDeleted { Location location = 1; }
@@ -278,8 +265,8 @@ message GuildEvent {
     bool update_name = 2;
   }
   message GuildDeleted {}
-  message MemberJoined { uint64 member_id = 1 [ jstype = JS_STRING ]; }
-  message MemberLeft { uint64 member_id = 1 [ jstype = JS_STRING ]; }
+  message MemberJoined { uint64 member_id = 1 [jstype = JS_STRING]; }
+  message MemberLeft { uint64 member_id = 1 [jstype = JS_STRING]; }
   oneof event {
     MessageSent sent_message = 1;
     MessageUpdated edited_message = 2;
@@ -296,11 +283,11 @@ message GuildEvent {
 
 message HomeserverEvent {
   message GuildAddedToList {
-    uint64 guild_id = 1 [ jstype = JS_STRING ];
+    uint64 guild_id = 1 [jstype = JS_STRING];
     string homeserver = 2;
   }
   message GuildRemovedFromList {
-    uint64 guild_id = 1 [ jstype = JS_STRING ];
+    uint64 guild_id = 1 [jstype = JS_STRING];
     string homeserver = 2;
   }
   oneof event {
@@ -345,64 +332,65 @@ message SendMessageRequest {
   repeated string attachments = 5;
   uint64 in_reply_to = 6;
 }
+message SendMessageResponse { uint64 message_id = 1 [jstype = JS_STRING]; }
 
 // GUILD LIST
 message AddGuildToGuildListRequest {
-  uint64 guild_id = 1 [ jstype = JS_STRING ];
+  uint64 guild_id = 1 [jstype = JS_STRING];
   string homeserver = 2;
 }
 message AddGuildToGuildListResponse {}
 
 message RemoveGuildFromGuildListRequest {
-  uint64 guild_id = 1 [ jstype = JS_STRING ];
+  uint64 guild_id = 1 [jstype = JS_STRING];
   string homeserver = 2;
 }
 message RemoveGuildFromGuildListResponse {}
 
 service CoreService {
-  rpc CreateGuild(CreateGuildRequest) returns (CreateGuildResponse) {}
-  rpc CreateInvite(CreateInviteRequest) returns (CreateInviteResponse) {}
-  rpc CreateChannel(CreateChannelRequest) returns (CreateChannelResponse) {}
+  rpc CreateGuild(CreateGuildRequest) returns(CreateGuildResponse) {}
+  rpc CreateInvite(CreateInviteRequest) returns(CreateInviteResponse) {}
+  rpc CreateChannel(CreateChannelRequest) returns(CreateChannelResponse) {}
 
-  rpc GetGuildList(GetGuildListRequest) returns (GetGuildListResponse) {}
+  rpc GetGuildList(GetGuildListRequest) returns(GetGuildListResponse) {}
   rpc AddGuildToGuildList(AddGuildToGuildListRequest)
-      returns (AddGuildToGuildListResponse) {}
+      returns(AddGuildToGuildListResponse) {}
   rpc RemoveGuildFromGuildList(RemoveGuildFromGuildListRequest)
-      returns (RemoveGuildFromGuildListResponse) {}
+      returns(RemoveGuildFromGuildListResponse) {}
 
-  rpc GetGuild(GetGuildRequest) returns (GetGuildResponse) {}
-  rpc GetGuildInvites(GetGuildInvitesRequest)
-      returns (GetGuildInvitesResponse) {}
-  rpc GetGuildMembers(GetGuildMembersRequest)
-      returns (GetGuildMembersResponse) {}
+  rpc GetGuild(GetGuildRequest) returns(GetGuildResponse) {}
+  rpc GetGuildInvites(GetGuildInvitesRequest) returns(GetGuildInvitesResponse) {
+  }
+  rpc GetGuildMembers(GetGuildMembersRequest) returns(GetGuildMembersResponse) {
+  }
   rpc GetGuildChannels(GetGuildChannelsRequest)
-      returns (GetGuildChannelsResponse) {}
+      returns(GetGuildChannelsResponse) {}
   rpc GetChannelMessages(GetChannelMessagesRequest)
-      returns (GetChannelMessagesResponse) {}
-  rpc GetMessage(GetMessageRequest) returns (GetMessageResponse) {}
+      returns(GetChannelMessagesResponse) {}
+  rpc GetMessage(GetMessageRequest) returns(GetMessageResponse) {}
 
-  rpc UpdateGuildName(UpdateGuildNameRequest) returns (google.protobuf.Empty) {}
+  rpc UpdateGuildName(UpdateGuildNameRequest) returns(google.protobuf.Empty) {}
   rpc UpdateChannelName(UpdateChannelNameRequest)
-      returns (google.protobuf.Empty) {}
+      returns(google.protobuf.Empty) {}
   rpc UpdateChannelOrder(UpdateChannelOrderRequest)
-      returns (google.protobuf.Empty) {}
-  rpc UpdateMessage(UpdateMessageRequest) returns (google.protobuf.Empty) {}
+      returns(google.protobuf.Empty) {}
+  rpc UpdateMessage(UpdateMessageRequest) returns(google.protobuf.Empty) {}
 
-  rpc DeleteGuild(DeleteGuildRequest) returns (google.protobuf.Empty) {}
-  rpc DeleteInvite(DeleteInviteRequest) returns (google.protobuf.Empty) {}
-  rpc DeleteChannel(DeleteChannelRequest) returns (google.protobuf.Empty) {}
-  rpc DeleteMessage(DeleteMessageRequest) returns (google.protobuf.Empty) {}
+  rpc DeleteGuild(DeleteGuildRequest) returns(google.protobuf.Empty) {}
+  rpc DeleteInvite(DeleteInviteRequest) returns(google.protobuf.Empty) {}
+  rpc DeleteChannel(DeleteChannelRequest) returns(google.protobuf.Empty) {}
+  rpc DeleteMessage(DeleteMessageRequest) returns(google.protobuf.Empty) {}
 
-  rpc JoinGuild(JoinGuildRequest) returns (JoinGuildResponse) {}
-  rpc LeaveGuild(LeaveGuildRequest) returns (google.protobuf.Empty) {}
+  rpc JoinGuild(JoinGuildRequest) returns(JoinGuildResponse) {}
+  rpc LeaveGuild(LeaveGuildRequest) returns(google.protobuf.Empty) {}
 
-  rpc TriggerAction(TriggerActionRequest) returns (google.protobuf.Empty) {}
+  rpc TriggerAction(TriggerActionRequest) returns(google.protobuf.Empty) {}
 
-  rpc SendMessage(SendMessageRequest) returns (google.protobuf.Empty) {}
+  rpc SendMessage(SendMessageRequest) returns(SendMessageResponse) {}
 
-  rpc StreamGuildEvents(StreamGuildEventsRequest) returns (stream GuildEvent) {}
+  rpc StreamGuildEvents(StreamGuildEventsRequest) returns(stream GuildEvent) {}
   rpc StreamActionEvents(StreamActionEventsRequest)
-      returns (stream ActionEvent) {}
+      returns(stream ActionEvent) {}
   rpc StreamHomeserverEvents(StreamHomeserverEventsRequest)
-      returns (stream HomeserverEvent) {}
+      returns(stream HomeserverEvent) {}
 }
