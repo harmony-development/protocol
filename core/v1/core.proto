@@ -243,6 +243,8 @@ message GuildEvent {
     bool update_actions = 8;
     repeated string attachments = 9;
     bool update_attachments = 10;
+    Override overrides = 11;
+    bool update_overrides = 12;
   }
   message MessageDeleted { Location location = 1; }
   message ChannelCreated {
