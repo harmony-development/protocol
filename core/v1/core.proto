@@ -23,8 +23,7 @@ message Override {
   oneof reason {
     string user_defined = 3;
     google.protobuf.Empty webhook = 4;
-    google.protobuf.Empty system_plurality =
-        5; // plurality, not system as in computer
+    google.protobuf.Empty system_plurality = 5; // plurality, not system as in computer
     google.protobuf.Empty system_message = 6;
     google.protobuf.Empty bridge = 7;
   }
@@ -210,6 +209,8 @@ message UpdateMessageRequest {
   bool update_actions = 7;
   repeated string attachments = 8;
   bool update_attachments = 9;
+  Override overrides = 10;
+  bool update_overrides = 11;
 }
 
 // DELETE
