@@ -192,7 +192,7 @@ message GetEmotePacksResponse {
     repeated string emotes = 2;
   }
 
-  repeated EmotePack = 1;
+  repeated EmotePack packs = 1;
 }
 
 // UPDATE
