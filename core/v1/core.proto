@@ -23,7 +23,8 @@ message Override {
   oneof reason {
     string user_defined = 3;
     google.protobuf.Empty webhook = 4;
-    google.protobuf.Empty system_plurality = 5; // plurality, not system as in computer
+    google.protobuf.Empty system_plurality =
+        5; // plurality, not system as in computer
     google.protobuf.Empty system_message = 6;
     google.protobuf.Empty bridge = 7;
   }
@@ -125,6 +126,9 @@ message CreateChannelRequest {
 }
 message CreateChannelResponse { uint64 channel_id = 1 [jstype = JS_STRING]; }
 
+message CreateEmotePackRequest { string pack_name = 1; }
+message CreateEmotePackResponse { uint64 pack_id = 1 [jstype = JS_STRING]; }
+
 // READ
 
 message GetGuildListRequest {}
@@ -181,6 +185,16 @@ message GetChannelMessagesResponse { repeated Message messages = 1; }
 message GetMessageRequest { Location location = 1; }
 message GetMessageResponse { Message message = 1; }
 
+message GetEmotePacksRequest {}
+message GetEmotePacksResponse {
+  message EmotePack {
+    uint64 pack_id = 1 [jstype = JS_STRING];
+    repeated string emotes = 2;
+  }
+
+  repeated EmotePack = 1;
+}
+
 // UPDATE
 
 message UpdateGuildNameRequest {
@@ -213,6 +227,11 @@ message UpdateMessageRequest {
   bool update_overrides = 11;
 }
 
+message AddEmoteToPackRequest {
+  uint64 pack_id = 1 [jstype = JS_STRING];
+  string image_id = 2;
+}
+
 // DELETE
 
 message DeleteGuildRequest { Location location = 1; }
@@ -225,6 +244,13 @@ message DeleteInviteRequest {
 message DeleteChannelRequest { Location location = 1; }
 
 message DeleteMessageRequest { Location location = 1; }
+
+message DeleteEmoteFromPackRequest {
+  uint64 pack_id = 1 [jstype = JS_STRING];
+  string image_id = 2;
+}
+
+message DeleteEmotePackRequest { uint64 pack_id = 1 [jstype = JS_STRING]; }
 
 // STREAMS
 
@@ -355,6 +381,8 @@ service CoreService {
   rpc CreateGuild(CreateGuildRequest) returns(CreateGuildResponse) {}
   rpc CreateInvite(CreateInviteRequest) returns(CreateInviteResponse) {}
   rpc CreateChannel(CreateChannelRequest) returns(CreateChannelResponse) {}
+  rpc CreateEmotePack(CreateEmotePackRequest) returns(CreateEmotePackResponse) {
+  }
 
   rpc GetGuildList(GetGuildListRequest) returns(GetGuildListResponse) {}
   rpc AddGuildToGuildList(AddGuildToGuildListRequest)
@@ -372,6 +400,7 @@ service CoreService {
   rpc GetChannelMessages(GetChannelMessagesRequest)
       returns(GetChannelMessagesResponse) {}
   rpc GetMessage(GetMessageRequest) returns(GetMessageResponse) {}
+  rpc GetEmotePacks(GetEmotePacksRequest) returns(GetEmotePacksResponse) {}
 
   rpc UpdateGuildName(UpdateGuildNameRequest) returns(google.protobuf.Empty) {}
   rpc UpdateChannelName(UpdateChannelNameRequest)
@@ -379,11 +408,15 @@ service CoreService {
   rpc UpdateChannelOrder(UpdateChannelOrderRequest)
       returns(google.protobuf.Empty) {}
   rpc UpdateMessage(UpdateMessageRequest) returns(google.protobuf.Empty) {}
+  rpc AddEmoteToPack(AddEmoteToPackRequest) returns(google.protobuf.Empty) {}
 
   rpc DeleteGuild(DeleteGuildRequest) returns(google.protobuf.Empty) {}
   rpc DeleteInvite(DeleteInviteRequest) returns(google.protobuf.Empty) {}
   rpc DeleteChannel(DeleteChannelRequest) returns(google.protobuf.Empty) {}
   rpc DeleteMessage(DeleteMessageRequest) returns(google.protobuf.Empty) {}
+  rpc DeleteEmoteFromPack(DeleteEmoteFromPackRequest)
+      returns(google.protobuf.Empty) {}
+  rpc DeleteEmotePack(DeleteEmotePackRequest) returns(google.protobuf.Empty) {}
 
   rpc JoinGuild(JoinGuildRequest) returns(JoinGuildResponse) {}
   rpc LeaveGuild(LeaveGuildRequest) returns(google.protobuf.Empty) {}
