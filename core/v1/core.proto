@@ -189,10 +189,17 @@ message GetEmotePacksRequest {}
 message GetEmotePacksResponse {
   message EmotePack {
     uint64 pack_id = 1 [jstype = JS_STRING];
-    repeated string emotes = 2;
+    uint64 pack_owner = 2 [jstype = JS_STRING];
+    string pack_name = 3;
   }
 
   repeated EmotePack packs = 1;
+}
+
+message GetEmotePackEmotesRequest { uint64 pack_id = 1 [jstype = JS_STRING]; }
+message GetEmotePackEmotesResponse {
+  string image_id = 1;
+  string name = 2;
 }
 
 // UPDATE
@@ -230,6 +237,7 @@ message UpdateMessageRequest {
 message AddEmoteToPackRequest {
   uint64 pack_id = 1 [jstype = JS_STRING];
   string image_id = 2;
+  string name = 3;
 }
 
 // DELETE
@@ -401,6 +409,8 @@ service CoreService {
       returns(GetChannelMessagesResponse) {}
   rpc GetMessage(GetMessageRequest) returns(GetMessageResponse) {}
   rpc GetEmotePacks(GetEmotePacksRequest) returns(GetEmotePacksResponse) {}
+  rpc GetEmotePackEmotes(GetEmotePackEmotesRequest)
+      returns(GetEmotePackEmotesResponse) {}
 
   rpc UpdateGuildName(UpdateGuildNameRequest) returns(google.protobuf.Empty) {}
   rpc UpdateChannelName(UpdateChannelNameRequest)
