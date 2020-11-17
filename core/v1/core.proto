@@ -198,8 +198,12 @@ message GetEmotePacksResponse {
 
 message GetEmotePackEmotesRequest { uint64 pack_id = 1 [jstype = JS_STRING]; }
 message GetEmotePackEmotesResponse {
-  string image_id = 1;
-  string name = 2;
+  message Emote {
+    string image_id = 1;
+    string name = 2;
+  }
+
+  repeated Emote emotes = 1;
 }
 
 // UPDATE
