@@ -264,6 +264,8 @@ message DeleteEmoteFromPackRequest {
 
 message DeleteEmotePackRequest { uint64 pack_id = 1 [jstype = JS_STRING]; }
 
+message DequipEmotePackRequest { uint64 pack_id = 1 [jstype = JS_STRING]; }
+
 // STREAMS
 
 message StreamGuildEventsRequest { Location location = 1; }
@@ -431,6 +433,7 @@ service CoreService {
   rpc DeleteEmoteFromPack(DeleteEmoteFromPackRequest)
       returns(google.protobuf.Empty) {}
   rpc DeleteEmotePack(DeleteEmotePackRequest) returns(google.protobuf.Empty) {}
+  rpc DequipEmotePack(DequipEmotePackRequest) returns(google.protobuf.Empty) {}
 
   rpc JoinGuild(JoinGuildRequest) returns(JoinGuildResponse) {}
   rpc LeaveGuild(LeaveGuildRequest) returns(google.protobuf.Empty) {}
