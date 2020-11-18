@@ -281,41 +281,54 @@ message StreamEventsRequest {
 }
 
 message Event {
-  message MessageSent { Message message = 1; }
-  message MessageUpdated {
-    Location location = 1;
-    google.protobuf.Timestamp edited_at = 2;
-    string content = 3;
-    bool update_content = 4;
-    repeated Embed embeds = 5;
-    bool update_embeds = 6;
-    repeated Action actions = 7;
-    bool update_actions = 8;
-    repeated string attachments = 9;
-    bool update_attachments = 10;
-    Override overrides = 11;
-    bool update_overrides = 12;
+  message MessageSent {
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    Message message = 2;
   }
-  message MessageDeleted { Location location = 1; }
+  message MessageUpdated {
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    Location location = 2;
+    google.protobuf.Timestamp edited_at = 3;
+    string content = 4;
+    bool update_content = 5;
+    repeated Embed embeds = 6;
+    bool update_embeds = 7;
+    repeated Action actions = 8;
+    bool update_actions = 9;
+    repeated string attachments = 10;
+    bool update_attachments = 11;
+    Override overrides = 12;
+    bool update_overrides = 13;
+  }
+  message MessageDeleted {
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    Location location = 2;
+  }
   message ChannelCreated {
-    Location location = 1;
-    string name = 2;
-    uint64 previous_id = 3 [jstype = JS_STRING];
-    uint64 next_id = 4 [jstype = JS_STRING];
-    bool is_category = 5;
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    Location location = 2;
+    string name = 3;
+    uint64 previous_id = 4 [jstype = JS_STRING];
+    uint64 next_id = 5 [jstype = JS_STRING];
+    bool is_category = 6;
   }
   message ChannelUpdated {
-    Location location = 1;
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    Location location = 2;
+    string name = 3;
+    bool update_name = 4;
+    uint64 previous_id = 5 [jstype = JS_STRING];
+    uint64 next_id = 6 [jstype = JS_STRING];
+    bool update_order = 7;
+  }
+  message ChannelDeleted {
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    Location location = 2;
+  }
+  message GuildUpdated {
+    uint64 guild_id = 1 [jstype = JS_STRING];
     string name = 2;
     bool update_name = 3;
-    uint64 previous_id = 5 [jstype = JS_STRING];
-    uint64 next_id = 4 [jstype = JS_STRING];
-    bool update_order = 6;
-  }
-  message ChannelDeleted { Location location = 1; }
-  message GuildUpdated {
-    string name = 1;
-    bool update_name = 2;
   }
   message GuildDeleted {}
   message MemberJoined { uint64 member_id = 1 [jstype = JS_STRING]; }
