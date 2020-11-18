@@ -330,7 +330,7 @@ message Event {
     string name = 2;
     bool update_name = 3;
   }
-  message GuildDeleted {}
+  message GuildDeleted { unit64 guild_id = 1 [jstype = JS_STRING]; }
   message MemberJoined { uint64 member_id = 1 [jstype = JS_STRING]; }
   message MemberLeft { uint64 member_id = 1 [jstype = JS_STRING]; }
   message GuildAddedToList {
