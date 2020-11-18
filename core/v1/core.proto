@@ -269,9 +269,15 @@ message DequipEmotePackRequest { uint64 pack_id = 1 [jstype = JS_STRING]; }
 // STREAMS
 
 message StreamEventsRequest {
-  message StreamGuildEventsRequest { Location location = 1; }
+  message SubscribeToGuild { Location location = 1; }
+  message SubscribeToActions {}
+  message SubscribeToHomeserverEvents {}
 
-  oneof request { StreamGuildEventsRequest subscribe_to_guild = 1; }
+  oneof request {
+    SubscribeToGuild subscribe_to_guild = 1;
+    SubscribeToActions subscribe_to_actions = 2;
+    SubscribeToHomeserverEvents subscribe_to_homeserver_events = 3;
+  }
 }
 
 message Event {
