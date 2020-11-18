@@ -268,9 +268,13 @@ message DequipEmotePackRequest { uint64 pack_id = 1 [jstype = JS_STRING]; }
 
 // STREAMS
 
-message StreamGuildEventsRequest { Location location = 1; }
+message StreamEventsRequest {
+  message StreamGuildEventsRequest { Location location = 1; }
 
-message GuildEvent {
+  oneof request { StreamGuildEventsRequest subscribe_to_guild = 1; }
+}
+
+message Event {
   message MessageSent { Message message = 1; }
   message MessageUpdated {
     Location location = 1;
@@ -310,21 +314,6 @@ message GuildEvent {
   message GuildDeleted {}
   message MemberJoined { uint64 member_id = 1 [jstype = JS_STRING]; }
   message MemberLeft { uint64 member_id = 1 [jstype = JS_STRING]; }
-  oneof event {
-    MessageSent sent_message = 1;
-    MessageUpdated edited_message = 2;
-    MessageDeleted deleted_message = 3;
-    ChannelCreated created_channel = 4;
-    ChannelUpdated edited_channel = 5;
-    ChannelDeleted deleted_channel = 6;
-    GuildUpdated edited_guild = 7;
-    GuildDeleted deleted_guild = 8;
-    MemberJoined joined_member = 9;
-    MemberLeft left_member = 10;
-  }
-}
-
-message HomeserverEvent {
   message GuildAddedToList {
     uint64 guild_id = 1 [jstype = JS_STRING];
     string homeserver = 2;
@@ -333,22 +322,27 @@ message HomeserverEvent {
     uint64 guild_id = 1 [jstype = JS_STRING];
     string homeserver = 2;
   }
-  oneof event {
-    GuildAddedToList guild_added_to_list = 1;
-    GuildRemovedFromList guild_removed_from_list = 2;
-  }
-}
-message StreamHomeserverEventsRequest {}
-
-message StreamActionEventsRequest {}
-
-message ActionEvent {
-  message Action {
+  message ActionPerformed {
     Location location = 1;
     string action_id = 2;
     string action_data = 3;
   }
-  oneof event { Action action = 1; }
+
+  oneof event {
+    GuildAddedToList guild_added_to_list = 1;
+    GuildRemovedFromList guild_removed_from_list = 2;
+    ActionPerformed action_performed = 3;
+    MessageSent sent_message = 4;
+    MessageUpdated edited_message = 5;
+    MessageDeleted deleted_message = 6;
+    ChannelCreated created_channel = 7;
+    ChannelUpdated edited_channel = 8;
+    ChannelDeleted deleted_channel = 9;
+    GuildUpdated edited_guild = 10;
+    GuildDeleted deleted_guild = 11;
+    MemberJoined joined_member = 12;
+    MemberLeft left_member = 13;
+  }
 }
 
 // MEMBERSHIP
@@ -442,9 +436,5 @@ service CoreService {
 
   rpc SendMessage(SendMessageRequest) returns(SendMessageResponse) {}
 
-  rpc StreamGuildEvents(StreamGuildEventsRequest) returns(stream GuildEvent) {}
-  rpc StreamActionEvents(StreamActionEventsRequest)
-      returns(stream ActionEvent) {}
-  rpc StreamHomeserverEvents(StreamHomeserverEventsRequest)
-      returns(stream HomeserverEvent) {}
+  rpc StreamEvents(stream StreamEventsRequest) returns(stream Event) {}
 }
