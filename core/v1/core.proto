@@ -331,8 +331,14 @@ message Event {
     bool update_name = 3;
   }
   message GuildDeleted { uint64 guild_id = 1 [jstype = JS_STRING]; }
-  message MemberJoined { uint64 member_id = 1 [jstype = JS_STRING]; }
-  message MemberLeft { uint64 member_id = 1 [jstype = JS_STRING]; }
+  message MemberJoined {
+    uint64 member_id = 1 [jstype = JS_STRING];
+    uint64 guild_id = 2 [jstype = JS_STRING];
+  }
+  message MemberLeft {
+    uint64 member_id = 1 [jstype = JS_STRING];
+    uint64 guild_id = 2 [jstype = JS_STRING];
+  }
   message GuildAddedToList {
     uint64 guild_id = 1 [jstype = JS_STRING];
     string homeserver = 2;
