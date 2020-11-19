@@ -299,17 +299,17 @@ message Event {
     uint64 guild_id = 1 [jstype = JS_STRING];
     uint64 channel_id = 2 [jstype = JS_STRING];
     uint64 message_id = 3 [jstype = JS_STRING];
-    google.protobuf.Timestamp edited_at = 3;
-    string content = 4;
-    bool update_content = 5;
-    repeated Embed embeds = 6;
-    bool update_embeds = 7;
-    repeated Action actions = 8;
-    bool update_actions = 9;
-    repeated string attachments = 10;
-    bool update_attachments = 11;
-    Override overrides = 12;
-    bool update_overrides = 13;
+    google.protobuf.Timestamp edited_at = 4;
+    string content = 5;
+    bool update_content = 6;
+    repeated Embed embeds = 7;
+    bool update_embeds = 8;
+    repeated Action actions = 9;
+    bool update_actions = 10;
+    repeated string attachments = 11;
+    bool update_attachments = 12;
+    Override overrides = 13;
+    bool update_overrides = 14;
   }
   message MessageDeleted {
     uint64 guild_id = 1 [jstype = JS_STRING];
