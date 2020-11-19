@@ -8,14 +8,6 @@ package protocol.core.v1;
 
 option go_package = "core;corev1";
 
-// Location is a special type that is added in for RPCs that need to check
-// permissions
-message Location {
-  uint64 guild_id = 1 [jstype = JS_STRING];
-  uint64 channel_id = 2 [jstype = JS_STRING];
-  uint64 message_id = 3 [jstype = JS_STRING];
-}
-
 // OVERRIDES
 message Override {
   string name = 1;
@@ -90,16 +82,18 @@ message Embed {
 // TYPES
 
 message Message {
-  Location location = 1;
-  uint64 author_id = 2 [jstype = JS_STRING];
-  google.protobuf.Timestamp created_at = 3;
-  google.protobuf.Timestamp edited_at = 4;
-  string content = 5;
-  repeated Embed embeds = 6;
-  repeated Action actions = 7;
-  repeated string attachments = 8;
-  uint64 in_reply_to = 9 [jstype = JS_STRING];
-  Override overrides = 10;
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 message_id = 3 [jstype = JS_STRING];
+  uint64 author_id = 4 [jstype = JS_STRING];
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp edited_at = 6;
+  string content = 7;
+  repeated Embed embeds = 8;
+  repeated Action actions = 9;
+  repeated string attachments = 10;
+  uint64 in_reply_to = 11 [jstype = JS_STRING];
+  Override overrides = 12;
 }
 
 // CREATE
@@ -111,14 +105,14 @@ message CreateGuildRequest {
 message CreateGuildResponse { uint64 guild_id = 1 [jstype = JS_STRING]; }
 
 message CreateInviteRequest {
-  Location location = 1;
+  uint64 guild_id = 1 [jstype = JS_STRING];
   string name = 2;
   int32 possible_uses = 3;
 }
 message CreateInviteResponse { string name = 1; }
 
 message CreateChannelRequest {
-  Location location = 1 [(validate.rules).message.required = true];
+  uint64 guild_id = 1 [jstype = JS_STRING];
   string channel_name = 2 [(validate.rules).string.min_len = 1];
   bool is_category = 3;
   uint64 previous_id = 5 [jstype = JS_STRING];
@@ -142,14 +136,14 @@ message GetGuildListResponse {
   repeated GuildListEntry guilds = 1;
 }
 
-message GetGuildRequest { Location location = 1; }
+message GetGuildRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
 message GetGuildResponse {
   string guild_name = 1;
   uint64 guild_owner = 2 [jstype = JS_STRING];
   string guild_picture = 3;
 }
 
-message GetGuildInvitesRequest { Location location = 1; }
+message GetGuildInvitesRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
 message GetGuildInvitesResponse {
   message Invite {
     string invite_id = 1;
@@ -159,12 +153,12 @@ message GetGuildInvitesResponse {
   repeated Invite invites = 1;
 }
 
-message GetGuildMembersRequest { Location location = 1; }
+message GetGuildMembersRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
 message GetGuildMembersResponse {
   repeated uint64 members = 1 [jstype = JS_STRING];
 }
 
-message GetGuildChannelsRequest { Location location = 1; }
+message GetGuildChannelsRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
 message GetGuildChannelsResponse {
   message Channel {
     uint64 channel_id = 1 [jstype = JS_STRING];
@@ -177,12 +171,17 @@ message GetGuildChannelsResponse {
 }
 
 message GetChannelMessagesRequest {
-  Location location = 1;
-  uint64 before_message = 2 [jstype = JS_STRING];
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 before_message = 3 [jstype = JS_STRING];
 }
 message GetChannelMessagesResponse { repeated Message messages = 1; }
 
-message GetMessageRequest { Location location = 1; }
+message GetMessageRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 message_id = 3 [jstype = JS_STRING];
+}
 message GetMessageResponse { Message message = 1; }
 
 message GetEmotePacksRequest {}
@@ -209,33 +208,37 @@ message GetEmotePackEmotesResponse {
 // UPDATE
 
 message UpdateGuildNameRequest {
-  Location location = 1;
+  uint64 guild_id = 1 [jstype = JS_STRING];
   string new_guild_name = 2;
 }
 
 message UpdateChannelNameRequest {
-  Location location = 1;
-  string new_channel_name = 2;
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  string new_channel_name = 3;
 }
 
 message UpdateChannelOrderRequest {
-  Location location = 1;
-  uint64 previous_id = 2 [jstype = JS_STRING];
-  uint64 next_id = 3 [jstype = JS_STRING];
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 previous_id = 3 [jstype = JS_STRING];
+  uint64 next_id = 4 [jstype = JS_STRING];
 }
 
 message UpdateMessageRequest {
-  Location location = 1;
-  string content = 2;
-  bool update_content = 3;
-  repeated Embed embeds = 4;
-  bool update_embeds = 5;
-  repeated Action actions = 6;
-  bool update_actions = 7;
-  repeated string attachments = 8;
-  bool update_attachments = 9;
-  Override overrides = 10;
-  bool update_overrides = 11;
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 message_id = 3 [jstype = JS_STRING];
+  string content = 4;
+  bool update_content = 5;
+  repeated Embed embeds = 6;
+  bool update_embeds = 7;
+  repeated Action actions = 8;
+  bool update_actions = 9;
+  repeated string attachments = 10;
+  bool update_attachments = 11;
+  Override overrides = 12;
+  bool update_overrides = 13;
 }
 
 message AddEmoteToPackRequest {
@@ -246,16 +249,23 @@ message AddEmoteToPackRequest {
 
 // DELETE
 
-message DeleteGuildRequest { Location location = 1; }
+message DeleteGuildRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
 
 message DeleteInviteRequest {
-  Location location = 1;
+  uint64 guild_id = 1 [jstype = JS_STRING];
   string invite_id = 2;
 }
 
-message DeleteChannelRequest { Location location = 1; }
+message DeleteChannelRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+}
 
-message DeleteMessageRequest { Location location = 1; }
+message DeleteMessageRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 message_id = 3 [jstype = JS_STRING];
+}
 
 message DeleteEmoteFromPackRequest {
   uint64 pack_id = 1 [jstype = JS_STRING];
@@ -269,7 +279,7 @@ message DequipEmotePackRequest { uint64 pack_id = 1 [jstype = JS_STRING]; }
 // STREAMS
 
 message StreamEventsRequest {
-  message SubscribeToGuild { Location location = 1; }
+  message SubscribeToGuild { uint64 guild_id = 1 [jstype = JS_STRING]; }
   message SubscribeToActions {}
   message SubscribeToHomeserverEvents {}
 
@@ -287,7 +297,8 @@ message Event {
   }
   message MessageUpdated {
     uint64 guild_id = 1 [jstype = JS_STRING];
-    Location location = 2;
+    uint64 channel_id = 2 [jstype = JS_STRING];
+    uint64 message_id = 3 [jstype = JS_STRING];
     google.protobuf.Timestamp edited_at = 3;
     string content = 4;
     bool update_content = 5;
@@ -302,11 +313,12 @@ message Event {
   }
   message MessageDeleted {
     uint64 guild_id = 1 [jstype = JS_STRING];
-    Location location = 2;
+    uint64 channel_id = 2 [jstype = JS_STRING];
+    uint64 message_id = 3 [jstype = JS_STRING];
   }
   message ChannelCreated {
     uint64 guild_id = 1 [jstype = JS_STRING];
-    Location location = 2;
+    uint64 channel_id = 2 [jstype = JS_STRING];
     string name = 3;
     uint64 previous_id = 4 [jstype = JS_STRING];
     uint64 next_id = 5 [jstype = JS_STRING];
@@ -314,7 +326,7 @@ message Event {
   }
   message ChannelUpdated {
     uint64 guild_id = 1 [jstype = JS_STRING];
-    Location location = 2;
+    uint64 channel_id = 2 [jstype = JS_STRING];
     string name = 3;
     bool update_name = 4;
     uint64 previous_id = 5 [jstype = JS_STRING];
@@ -323,7 +335,7 @@ message Event {
   }
   message ChannelDeleted {
     uint64 guild_id = 1 [jstype = JS_STRING];
-    Location location = 2;
+    uint64 channel_id = 2 [jstype = JS_STRING];
   }
   message GuildUpdated {
     uint64 guild_id = 1 [jstype = JS_STRING];
@@ -348,9 +360,11 @@ message Event {
     string homeserver = 2;
   }
   message ActionPerformed {
-    Location location = 1;
-    string action_id = 2;
-    string action_data = 3;
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    uint64 channel_id = 2 [jstype = JS_STRING];
+    uint64 message_id = 3 [jstype = JS_STRING];
+    string action_id = 4;
+    string action_data = 5;
   }
 
   oneof event {
@@ -373,27 +387,30 @@ message Event {
 // MEMBERSHIP
 
 message JoinGuildRequest { string invite_id = 1; }
-message JoinGuildResponse { Location location = 1; }
+message JoinGuildResponse { uint64 guild_id = 1 [jstype = JS_STRING]; }
 
-message LeaveGuildRequest { Location location = 1; }
+message LeaveGuildRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
 
 // TRIGGERS
 
 message TriggerActionRequest {
-  Location location = 1;
-  string action_id = 2;
-  string action_data = 3;
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 message_id = 3 [jstype = JS_STRING];
+  string action_id = 4;
+  string action_data = 5;
 }
 
 // SendMessage
 message SendMessageRequest {
-  Location location = 1;
-  string content = 2;
-  repeated Action actions = 3;
-  repeated Embed embeds = 4;
-  repeated string attachments = 5;
-  uint64 in_reply_to = 6;
-  Override overrides = 7;
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  string content = 3;
+  repeated Action actions = 4;
+  repeated Embed embeds = 5;
+  repeated string attachments = 6;
+  uint64 in_reply_to = 7;
+  Override overrides = 8;
 }
 message SendMessageResponse { uint64 message_id = 1 [jstype = JS_STRING]; }
 
