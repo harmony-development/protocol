@@ -492,6 +492,22 @@ message DeleteGuildRoleRequest {
   uint64 role_id = 2;
 }
 
+message ManageUserRolesRequest {
+  uint64 guild_id = 1;
+  uint64 user_id = 2;
+  repeated uint64 give_role_ids = 3;
+  repeated uint64 take_role_ids = 4;
+}
+
+message GetUserRolesRequest {
+  uint64 guild_id = 1;
+  uint64 user_id = 2;
+}
+
+message GetUserRolesResponse {
+  repeated uint64 roles = 1;
+}
+
 service CoreService {
   // This doesn't require any permissions.
   rpc CreateGuild(CreateGuildRequest) returns(CreateGuildResponse) {}
@@ -577,6 +593,12 @@ service CoreService {
 
   // This requires the "roles.manage.delete" permission.
   rpc DeleteGuildRole (DeleteGuildRoleRequest) returns (google.protobuf.Empty) {}
+
+  // This requires the "roles.users.manage" permission.
+  rpc ManageUserRoles (ManageUserRolesRequest) returns (google.protobuf.Empty) {}
+
+  // This requires the "roles.users.get" permission.
+  rpc GetUserRoles (GetUserRolesRequest) returns (GetUserRolesResponse) {}
 
   rpc StreamEvents(stream StreamEventsRequest) returns(stream Event) {}
 }
