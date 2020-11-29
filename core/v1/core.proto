@@ -175,7 +175,10 @@ message GetChannelMessagesRequest {
   uint64 channel_id = 2 [jstype = JS_STRING];
   uint64 before_message = 3 [jstype = JS_STRING];
 }
-message GetChannelMessagesResponse { repeated Message messages = 1; }
+message GetChannelMessagesResponse {
+  bool reached_top = 1;
+  repeated Message messages = 2;
+}
 
 message GetMessageRequest {
   uint64 guild_id = 1 [jstype = JS_STRING];
@@ -426,66 +429,51 @@ message RemoveGuildFromGuildListResponse {}
 
 // Permissions
 message QueryPermissionsRequest {
-  uint64 guild_id = 1 [ jstype = JS_STRING ];
-  uint64 channel_id = 2 [ jstype = JS_STRING ];
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
   string check_for = 3;
   uint64 as = 4;
 }
-message QueryPermissionsResponse {
-  bool ok = 1;
-}
+message QueryPermissionsResponse { bool ok = 1; }
 
 message Permission {
-  enum Mode {
-    Allow = 0;
-    Deny = 1;
-  }
+  enum Mode { Allow = 0; Deny = 1; }
   string matches = 1;
   Mode mode = 2;
 }
 
-message PermissionList {
-  repeated Permission permissions = 1;
-}
+message PermissionList { repeated Permission permissions = 1; }
 
 message SetPermissionsRequest {
-  uint64 guild_id = 1 [ jstype = JS_STRING ];
-  uint64 channel_id = 2 [ jstype = JS_STRING ];
-  uint64 role_id = 3 [ jstype = JS_STRING ];
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 role_id = 3 [jstype = JS_STRING];
   PermissionList perms = 4;
 }
 
 message GetPermissionsRequest {
-  uint64 guild_id = 1 [ jstype = JS_STRING ];
-  uint64 channel_id = 2 [ jstype = JS_STRING ];
-  uint64 role_id = 3 [ jstype = JS_STRING ];
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 role_id = 3 [jstype = JS_STRING];
 }
-message GetPermissionsResponse {
-  PermissionList perms = 1;
-}
+message GetPermissionsResponse { PermissionList perms = 1; }
 
 message Role {
-  uint64 role_id = 1 [ jstype = JS_STRING ];
+  uint64 role_id = 1 [jstype = JS_STRING];
   string name = 2;
   int32 color = 3;
   bool hoist = 4;
   bool pingable = 5;
 }
 
-message GetGuildRolesRequest {
-  uint64 guild_id = 1 [ jstype = JS_STRING ];
-}
-message GetGuildRolesResponse {
-  repeated Role roles = 1;
-}
+message GetGuildRolesRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
+message GetGuildRolesResponse { repeated Role roles = 1; }
 
 message AddGuildRoleRequest {
-  uint64 guild_id = 1 [ jstype = JS_STRING ];
+  uint64 guild_id = 1 [jstype = JS_STRING];
   Role role = 2;
 }
-message AddGuildRoleResponse {
-  uint64 role_id = 1 [ jstype = JS_STRING ];
-}
+message AddGuildRoleResponse { uint64 role_id = 1 [jstype = JS_STRING]; }
 
 message DeleteGuildRoleRequest {
   uint64 guild_id = 1;
@@ -504,9 +492,7 @@ message GetUserRolesRequest {
   uint64 user_id = 2;
 }
 
-message GetUserRolesResponse {
-  repeated uint64 roles = 1;
-}
+message GetUserRolesResponse { repeated uint64 roles = 1; }
 
 service CoreService {
   // This doesn't require any permissions.
@@ -517,25 +503,26 @@ service CoreService {
   rpc CreateChannel(CreateChannelRequest) returns(CreateChannelResponse) {}
   rpc CreateEmotePack(CreateEmotePackRequest) returns(CreateEmotePackResponse) {
   }
-  
+
   rpc GetGuildList(GetGuildListRequest) returns(GetGuildListResponse) {}
   rpc AddGuildToGuildList(AddGuildToGuildListRequest)
-  returns(AddGuildToGuildListResponse) {}
+      returns(AddGuildToGuildListResponse) {}
   rpc RemoveGuildFromGuildList(RemoveGuildFromGuildListRequest)
-  returns(RemoveGuildFromGuildListResponse) {}
-  
+      returns(RemoveGuildFromGuildListResponse) {}
+
   rpc GetGuild(GetGuildRequest) returns(GetGuildResponse) {}
   // This requires the "invites.view" permission.
   rpc GetGuildInvites(GetGuildInvitesRequest) returns(GetGuildInvitesResponse) {
   }
   rpc GetGuildMembers(GetGuildMembersRequest) returns(GetGuildMembersResponse) {
   }
-  // You will only be informed of channels you have the "messages.view" permission for.
+  // You will only be informed of channels you have the "messages.view"
+  // permission for.
   rpc GetGuildChannels(GetGuildChannelsRequest)
-  returns(GetGuildChannelsResponse) {}
+      returns(GetGuildChannelsResponse) {}
   // This requires the "messages.view" permission.
   rpc GetChannelMessages(GetChannelMessagesRequest)
-  returns(GetChannelMessagesResponse) {}
+      returns(GetChannelMessagesResponse) {}
   // This requires the "messages.view" permission.
   rpc GetMessage(GetMessageRequest) returns(GetMessageResponse) {}
   rpc GetEmotePacks(GetEmotePacksRequest) returns(GetEmotePacksResponse) {}
@@ -549,7 +536,7 @@ service CoreService {
       returns(google.protobuf.Empty) {}
   // This requires the "channels.manage.move" permission.
   rpc UpdateChannelOrder(UpdateChannelOrderRequest)
-  returns(google.protobuf.Empty) {}
+      returns(google.protobuf.Empty) {}
   // This requires the "messages.send" permission.
   rpc UpdateMessage(UpdateMessageRequest) returns(google.protobuf.Empty) {}
   rpc AddEmoteToPack(AddEmoteToPackRequest) returns(google.protobuf.Empty) {}
@@ -560,45 +547,48 @@ service CoreService {
   rpc DeleteInvite(DeleteInviteRequest) returns(google.protobuf.Empty) {}
   // This requires the "channels.manage.delete" permission.
   rpc DeleteChannel(DeleteChannelRequest) returns(google.protobuf.Empty) {}
-  // This requires the "messages.manage.delete" permission if you are not the message author.
+  // This requires the "messages.manage.delete" permission if you are not the
+  // message author.
   rpc DeleteMessage(DeleteMessageRequest) returns(google.protobuf.Empty) {}
   rpc DeleteEmoteFromPack(DeleteEmoteFromPackRequest)
-  returns(google.protobuf.Empty) {}
+      returns(google.protobuf.Empty) {}
   rpc DeleteEmotePack(DeleteEmotePackRequest) returns(google.protobuf.Empty) {}
   rpc DequipEmotePack(DequipEmotePackRequest) returns(google.protobuf.Empty) {}
-  
+
   rpc JoinGuild(JoinGuildRequest) returns(JoinGuildResponse) {}
   rpc LeaveGuild(LeaveGuildRequest) returns(google.protobuf.Empty) {}
-  
+
   // This requires the "actions.trigger" permission.
   rpc TriggerAction(TriggerActionRequest) returns(google.protobuf.Empty) {}
-  
+
   // This requires the "messages.send" permission.
   rpc SendMessage(SendMessageRequest) returns(SendMessageResponse) {}
-  
-  // This requires the "permissions.query" permission if you specify the As field.
-  rpc QueryHasPermission (QueryPermissionsRequest) returns (QueryPermissionsResponse) {}
-  
+
+  // This requires the "permissions.query" permission if you specify the As
+  // field.
+  rpc QueryHasPermission(QueryPermissionsRequest)
+      returns(QueryPermissionsResponse) {}
+
   // This requires the "permissions.manage.set" permission.
-  rpc SetPermissions (SetPermissionsRequest) returns (google.protobuf.Empty) {}
+  rpc SetPermissions(SetPermissionsRequest) returns(google.protobuf.Empty) {}
 
   // This requires the "permissions.manage.get" permission.
-  rpc GetPermissions (GetPermissionsRequest) returns (GetPermissionsResponse) {}
+  rpc GetPermissions(GetPermissionsRequest) returns(GetPermissionsResponse) {}
 
   // This requires the "roles.get" permission.
-  rpc GetGuildRoles (GetGuildRolesRequest) returns (GetGuildRolesResponse) {}
+  rpc GetGuildRoles(GetGuildRolesRequest) returns(GetGuildRolesResponse) {}
 
   // This requires the "roles.manage.create" permission.
-  rpc AddGuildRole (AddGuildRoleRequest) returns (AddGuildRoleResponse) {}
+  rpc AddGuildRole(AddGuildRoleRequest) returns(AddGuildRoleResponse) {}
 
   // This requires the "roles.manage.delete" permission.
-  rpc DeleteGuildRole (DeleteGuildRoleRequest) returns (google.protobuf.Empty) {}
+  rpc DeleteGuildRole(DeleteGuildRoleRequest) returns(google.protobuf.Empty) {}
 
   // This requires the "roles.users.manage" permission.
-  rpc ManageUserRoles (ManageUserRolesRequest) returns (google.protobuf.Empty) {}
+  rpc ManageUserRoles(ManageUserRolesRequest) returns(google.protobuf.Empty) {}
 
   // This requires the "roles.users.get" permission.
-  rpc GetUserRoles (GetUserRolesRequest) returns (GetUserRolesResponse) {}
+  rpc GetUserRoles(GetUserRolesRequest) returns(GetUserRolesResponse) {}
 
   rpc StreamEvents(stream StreamEventsRequest) returns(stream Event) {}
 }
