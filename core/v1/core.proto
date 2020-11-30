@@ -466,6 +466,14 @@ message Role {
   bool pingable = 5;
 }
 
+message MoveRoleRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 role_id = 2 [jstype = JS_STRING];
+  uint64 before_id = 3 [jstype = JS_STRING];
+  uint64 after_id = 4 [jstype = JS_STRING];
+}
+message MoveRoleResponse {}
+
 message GetGuildRolesRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
 message GetGuildRolesResponse { repeated Role roles = 1; }
 
@@ -574,6 +582,9 @@ service CoreService {
 
   // This requires the "permissions.manage.get" permission.
   rpc GetPermissions(GetPermissionsRequest) returns(GetPermissionsResponse) {}
+
+  // TODO add permission for this
+  rpc MoveRole(MoveRoleRequest) returns(MoveRoleResponse) {}
 
   // This requires the "roles.get" permission.
   rpc GetGuildRoles(GetGuildRolesRequest) returns(GetGuildRolesResponse) {}
