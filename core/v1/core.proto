@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
-import "validate/validate.proto";
+// import "validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 
 package protocol.core.v1;
@@ -113,7 +113,7 @@ message CreateInviteResponse { string name = 1; }
 
 message CreateChannelRequest {
   uint64 guild_id = 1 [jstype = JS_STRING];
-  string channel_name = 2 [(validate.rules).string.min_len = 1];
+  string channel_name = 2; //  [(validate.rules).string.min_len = 1]
   bool is_category = 3;
   uint64 previous_id = 5 [jstype = JS_STRING];
   uint64 next_id = 4 [jstype = JS_STRING];
@@ -489,8 +489,12 @@ message AddGuildRoleRequest {
 message AddGuildRoleResponse { uint64 role_id = 1 [jstype = JS_STRING]; }
 
 message DeleteGuildRoleRequest {
-  uint64 guild_id = 1;
-  uint64 role_id = 2;
+	uint64 guild_id = 1 [jstype = JS_STRING];
+	uint64 role_id = 2 [jstype = JS_STRING];
+}
+message ModifyGuildRoleRequest {
+	uint64 guild_id = 1 [jstype = JS_STRING];
+	Role role = 2;
 }
 
 message ManageUserRolesRequest {
@@ -588,16 +592,19 @@ service CoreService {
   // This requires the "permissions.manage.get" permission.
   rpc GetPermissions(GetPermissionsRequest) returns(GetPermissionsResponse) {}
 
-  // This requires the "roles.move" permission.
+  // This requires the "roles.manage" permission.
   rpc MoveRole(MoveRoleRequest) returns(MoveRoleResponse) {}
 
   // This requires the "roles.get" permission.
   rpc GetGuildRoles(GetGuildRolesRequest) returns(GetGuildRolesResponse) {}
 
-  // This requires the "roles.manage.create" permission.
+  // This requires the "roles.manage" permission.
   rpc AddGuildRole(AddGuildRoleRequest) returns(AddGuildRoleResponse) {}
 
-  // This requires the "roles.manage.delete" permission.
+  // This requires the "roles.manage" permission.
+  rpc ModifyGuildRole(ModifyGuildRoleRequest) returns(google.protobuf.Empty) {}
+
+  // This requires the "roles.manage" permission.
   rpc DeleteGuildRole(DeleteGuildRoleRequest) returns(google.protobuf.Empty) {}
 
   // This requires the "roles.users.manage" permission.
