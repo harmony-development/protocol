@@ -493,8 +493,12 @@ message DeleteGuildRoleRequest {
 	uint64 role_id = 2 [jstype = JS_STRING];
 }
 message ModifyGuildRoleRequest {
-	uint64 guild_id = 1 [jstype = JS_STRING];
-	Role role = 2;
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  Role role = 2;
+  bool modify_name = 3;
+  bool modify_color = 4;
+  bool modify_hoist = 5;
+  bool modify_pingable = 6;
 }
 
 message ManageUserRolesRequest {
