@@ -366,6 +366,10 @@ message Event {
     string action_id = 4;
     string action_data = 5;
   }
+  message RoleMoved {
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    uint64 role_id = 2 [jstype = JS_STRING];
+  }
 
   oneof event {
     GuildAddedToList guild_added_to_list = 1;
@@ -381,6 +385,7 @@ message Event {
     GuildDeleted deleted_guild = 11;
     MemberJoined joined_member = 12;
     MemberLeft left_member = 13;
+    RoleMoved role_moved = 14;
   }
 }
 
@@ -583,7 +588,7 @@ service CoreService {
   // This requires the "permissions.manage.get" permission.
   rpc GetPermissions(GetPermissionsRequest) returns(GetPermissionsResponse) {}
 
-  // TODO add permission for this
+  // This requires the "roles.move" permission.
   rpc MoveRole(MoveRoleRequest) returns(MoveRoleResponse) {}
 
   // This requires the "roles.get" permission.
