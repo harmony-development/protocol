@@ -489,8 +489,8 @@ message AddGuildRoleRequest {
 message AddGuildRoleResponse { uint64 role_id = 1 [jstype = JS_STRING]; }
 
 message DeleteGuildRoleRequest {
-	uint64 guild_id = 1 [jstype = JS_STRING];
-	uint64 role_id = 2 [jstype = JS_STRING];
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 role_id = 2 [jstype = JS_STRING];
 }
 message ModifyGuildRoleRequest {
   uint64 guild_id = 1 [jstype = JS_STRING];
@@ -502,18 +502,18 @@ message ModifyGuildRoleRequest {
 }
 
 message ManageUserRolesRequest {
-  uint64 guild_id = 1;
-  uint64 user_id = 2;
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 user_id = 2 [jstype = JS_STRING];
   repeated uint64 give_role_ids = 3;
   repeated uint64 take_role_ids = 4;
 }
 
 message GetUserRolesRequest {
-  uint64 guild_id = 1;
-  uint64 user_id = 2;
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 user_id = 2 [jstype = JS_STRING];
 }
 
-message GetUserRolesResponse { repeated uint64 roles = 1; }
+message GetUserRolesResponse { repeated uint64 roles = 1 [jstype = JS_STRING]; }
 
 service CoreService {
   // This doesn't require any permissions.
