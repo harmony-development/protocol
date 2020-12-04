@@ -82,6 +82,11 @@ message Embed {
 // TYPES
 
 message Message {
+  message Attachment {
+    string id = 1;
+    string type = 2;
+  }
+
   uint64 guild_id = 1 [jstype = JS_STRING];
   uint64 channel_id = 2 [jstype = JS_STRING];
   uint64 message_id = 3 [jstype = JS_STRING];
@@ -91,7 +96,7 @@ message Message {
   string content = 7;
   repeated Embed embeds = 8;
   repeated Action actions = 9;
-  repeated string attachments = 10;
+  repeated Attachment attachments = 10;
   uint64 in_reply_to = 11 [jstype = JS_STRING];
   Override overrides = 12;
 }
