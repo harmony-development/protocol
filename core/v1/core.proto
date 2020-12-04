@@ -504,8 +504,8 @@ message ModifyGuildRoleRequest {
 message ManageUserRolesRequest {
   uint64 guild_id = 1 [jstype = JS_STRING];
   uint64 user_id = 2 [jstype = JS_STRING];
-  repeated uint64 give_role_ids = 3;
-  repeated uint64 take_role_ids = 4;
+  repeated uint64 give_role_ids = 3 [jstype = JS_STRING];
+  repeated uint64 take_role_ids = 4 [jstype = JS_STRING];
 }
 
 message GetUserRolesRequest {
