@@ -84,7 +84,9 @@ message Embed {
 message Message {
   message Attachment {
     string id = 1;
-    string type = 2;
+    string name = 2;
+    string type = 3;
+    int32 size = 4;
   }
 
   uint64 guild_id = 1 [jstype = JS_STRING];
