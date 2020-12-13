@@ -80,15 +80,14 @@ message Embed {
 }
 
 // TYPES
+message Attachment {
+  string id = 1;
+  string name = 2;
+  string type = 3;
+  int32 size = 4;
+}
 
 message Message {
-  message Attachment {
-    string id = 1;
-    string name = 2;
-    string type = 3;
-    int32 size = 4;
-  }
-
   uint64 guild_id = 1 [jstype = JS_STRING];
   uint64 channel_id = 2 [jstype = JS_STRING];
   uint64 message_id = 3 [jstype = JS_STRING];
@@ -313,7 +312,7 @@ message Event {
     bool update_embeds = 8;
     repeated Action actions = 9;
     bool update_actions = 10;
-    repeated string attachments = 11;
+    repeated Attachment attachments = 11;
     bool update_attachments = 12;
     Override overrides = 13;
     bool update_overrides = 14;
