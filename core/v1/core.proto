@@ -311,7 +311,10 @@ message StreamEventsRequest {
 }
 
 message Event {
-  message MessageSent { Message message = 2; }
+  message MessageSent {
+    uint64 echo_id = 1;
+    Message message = 2;
+  }
   message MessageUpdated {
     uint64 guild_id = 1 [jstype = JS_STRING];
     uint64 channel_id = 2 [jstype = JS_STRING];
@@ -433,6 +436,7 @@ message SendMessageRequest {
   repeated string attachments = 6;
   uint64 in_reply_to = 7;
   Override overrides = 8;
+  uint64 echo_id = 9;
 }
 message SendMessageResponse { uint64 message_id = 1 [jstype = JS_STRING]; }
 
