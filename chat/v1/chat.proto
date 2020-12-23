@@ -1,0 +1,127 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+// import "validate/validate.proto";
+import "harmonytypes/v1/types.proto";
+import "chat/v1/profile.proto";
+import "chat/v1/guilds.proto";
+import "chat/v1/channels.proto";
+import "chat/v1/messages.proto";
+import "chat/v1/emotes.proto";
+import "chat/v1/permissions.proto";
+import "chat/v1/streaming.proto";
+
+package protocol.chat.v1;
+
+option go_package = "github.com/harmony-development/legato/gen/chat/v1";
+
+service ChatService {
+  // This doesn't require any permissions.
+  rpc CreateGuild(CreateGuildRequest) returns(CreateGuildResponse) {}
+  // This requires the "invites.manage.create" permission.
+  rpc CreateInvite(CreateInviteRequest) returns(CreateInviteResponse) {}
+  // This requires the "channels.manage.create" permission.
+  rpc CreateChannel(CreateChannelRequest) returns(CreateChannelResponse) {}
+  rpc CreateEmotePack(CreateEmotePackRequest) returns(CreateEmotePackResponse) {
+  }
+
+  rpc GetGuildList(GetGuildListRequest) returns(GetGuildListResponse) {}
+  rpc AddGuildToGuildList(AddGuildToGuildListRequest)
+      returns(AddGuildToGuildListResponse) {}
+  rpc RemoveGuildFromGuildList(RemoveGuildFromGuildListRequest)
+      returns(RemoveGuildFromGuildListResponse) {}
+
+  rpc GetGuild(GetGuildRequest) returns(GetGuildResponse) {}
+  // This requires the "invites.view" permission.
+  rpc GetGuildInvites(GetGuildInvitesRequest) returns(GetGuildInvitesResponse) {
+  }
+  rpc GetGuildMembers(GetGuildMembersRequest) returns(GetGuildMembersResponse) {
+  }
+  // You will only be informed of channels you have the "messages.view"
+  // permission for.
+  rpc GetGuildChannels(GetGuildChannelsRequest)
+      returns(GetGuildChannelsResponse) {}
+  // This requires the "messages.view" permission.
+  rpc GetChannelMessages(GetChannelMessagesRequest)
+      returns(GetChannelMessagesResponse) {}
+  // This requires the "messages.view" permission.
+  rpc GetMessage(GetMessageRequest) returns(GetMessageResponse) {}
+  rpc GetEmotePacks(GetEmotePacksRequest) returns(GetEmotePacksResponse) {}
+  rpc GetEmotePackEmotes(GetEmotePackEmotesRequest)
+      returns(GetEmotePackEmotesResponse) {}
+
+  // This requires the "guild.manage.change-name" permission.
+  rpc UpdateGuildName(UpdateGuildNameRequest) returns(google.protobuf.Empty) {}
+  // This requires the "channels.manage.change-name" permission.
+  rpc UpdateChannelName(UpdateChannelNameRequest)
+      returns(google.protobuf.Empty) {}
+  // This requires the "channels.manage.move" permission.
+  rpc UpdateChannelOrder(UpdateChannelOrderRequest)
+      returns(google.protobuf.Empty) {}
+  // This requires the "messages.send" permission.
+  rpc UpdateMessage(UpdateMessageRequest) returns(google.protobuf.Empty) {}
+  rpc AddEmoteToPack(AddEmoteToPackRequest) returns(google.protobuf.Empty) {}
+
+  // This requires the "guild.manage.delete" permission.
+  rpc DeleteGuild(DeleteGuildRequest) returns(google.protobuf.Empty) {}
+  // This requires the "invites.manage.delete" permission.
+  rpc DeleteInvite(DeleteInviteRequest) returns(google.protobuf.Empty) {}
+  // This requires the "channels.manage.delete" permission.
+  rpc DeleteChannel(DeleteChannelRequest) returns(google.protobuf.Empty) {}
+  // This requires the "messages.manage.delete" permission if you are not the
+  // message author.
+  rpc DeleteMessage(DeleteMessageRequest) returns(google.protobuf.Empty) {}
+  rpc DeleteEmoteFromPack(DeleteEmoteFromPackRequest)
+      returns(google.protobuf.Empty) {}
+  rpc DeleteEmotePack(DeleteEmotePackRequest) returns(google.protobuf.Empty) {}
+  rpc DequipEmotePack(DequipEmotePackRequest) returns(google.protobuf.Empty) {}
+
+  rpc JoinGuild(JoinGuildRequest) returns(JoinGuildResponse) {}
+  rpc LeaveGuild(LeaveGuildRequest) returns(google.protobuf.Empty) {}
+
+  // This requires the "actions.trigger" permission.
+  rpc TriggerAction(TriggerActionRequest) returns(google.protobuf.Empty) {}
+
+  // This requires the "messages.send" permission.
+  rpc SendMessage(SendMessageRequest) returns(SendMessageResponse) {}
+
+  // This requires the "permissions.query" permission if you specify the As
+  // field.
+  rpc QueryHasPermission(QueryPermissionsRequest)
+      returns(QueryPermissionsResponse) {}
+
+  // This requires the "permissions.manage.set" permission.
+  rpc SetPermissions(SetPermissionsRequest) returns(google.protobuf.Empty) {}
+
+  // This requires the "permissions.manage.get" permission.
+  rpc GetPermissions(GetPermissionsRequest) returns(GetPermissionsResponse) {}
+
+  // This requires the "roles.manage" permission.
+  rpc MoveRole(MoveRoleRequest) returns(MoveRoleResponse) {}
+
+  // This requires the "roles.get" permission.
+  rpc GetGuildRoles(GetGuildRolesRequest) returns(GetGuildRolesResponse) {}
+
+  // This requires the "roles.manage" permission.
+  rpc AddGuildRole(AddGuildRoleRequest) returns(AddGuildRoleResponse) {}
+
+  // This requires the "roles.manage" permission.
+  rpc ModifyGuildRole(ModifyGuildRoleRequest) returns(google.protobuf.Empty) {}
+
+  // This requires the "roles.manage" permission.
+  rpc DeleteGuildRole(DeleteGuildRoleRequest) returns(google.protobuf.Empty) {}
+
+  // This requires the "roles.users.manage" permission.
+  rpc ManageUserRoles(ManageUserRolesRequest) returns(google.protobuf.Empty) {}
+
+  // This requires the "roles.users.get" permission.
+  rpc GetUserRoles(GetUserRolesRequest) returns(GetUserRolesResponse) {}
+
+  rpc StreamEvents(stream StreamEventsRequest) returns(stream Event) {}
+
+  rpc GetUser(GetUserRequest) returns(GetUserResponse) {}
+  rpc GetUserMetadata(GetUserMetadataRequest) returns(GetUserMetadataResponse) {
+  }
+
+  rpc ProfileUpdate(ProfileUpdateRequest) returns(google.protobuf.Empty) {}
+}

@@ -1,12 +1,10 @@
 syntax = "proto3";
 
-// import "validate/validate.proto";
-import "google/protobuf/empty.proto";
+package protocol.chat.v1;
+
 import "harmonytypes/v1/types.proto";
 
-package protocol.profile.v1;
-
-option go_package = "profile;profilev1";
+option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
 message GetUserRequest { uint64 user_id = 1 [jstype = JS_STRING]; }
 message GetUserResponse {
@@ -33,12 +31,4 @@ message ProfileUpdateRequest {
   bool update_avatar = 4;
   UserStatus new_status = 5;
   bool update_status = 6;
-}
-
-service ProfileService {
-  rpc GetUser(GetUserRequest) returns(GetUserResponse) {}
-  rpc GetUserMetadata(GetUserMetadataRequest) returns(GetUserMetadataResponse) {
-  }
-
-  rpc ProfileUpdate(ProfileUpdateRequest) returns(google.protobuf.Empty) {}
 }

@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package protocol.chat.v1;
+
+import "harmonytypes/v1/types.proto";
+
+option go_package = "github.com/harmony-development/legato/gen/chat/v1";
+
+message GetChannelMessagesRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 before_message = 3 [jstype = JS_STRING];
+}
+message GetChannelMessagesResponse {
+  bool reached_top = 1;
+  repeated Message messages = 2;
+}
+
+message GetMessageRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 message_id = 3 [jstype = JS_STRING];
+}
+message GetMessageResponse { Message message = 1; }
+
+message UpdateMessageRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 message_id = 3 [jstype = JS_STRING];
+  string content = 4;
+  bool update_content = 5;
+  repeated Embed embeds = 6;
+  bool update_embeds = 7;
+  repeated Action actions = 8;
+  bool update_actions = 9;
+  repeated string attachments = 10;
+  bool update_attachments = 11;
+  Override overrides = 12;
+  bool update_overrides = 13;
+}
+
+message DeleteMessageRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 message_id = 3 [jstype = JS_STRING];
+}
+
+// TRIGGERS
+
+message TriggerActionRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 message_id = 3 [jstype = JS_STRING];
+  string action_id = 4;
+  string action_data = 5;
+}
+
+// SendMessage
+message SendMessageRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  string content = 3;
+  repeated Action actions = 4;
+  repeated Embed embeds = 5;
+  repeated string attachments = 6;
+  uint64 in_reply_to = 7;
+  Override overrides = 8;
+  uint64 echo_id = 9;
+}
+message SendMessageResponse { uint64 message_id = 1 [jstype = JS_STRING]; }

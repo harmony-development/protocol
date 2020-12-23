@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+package protocol.chat.v1;
+
+import "harmonytypes/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/harmony-development/legato/gen/chat/v1";
+
+message StreamEventsRequest {
+  message SubscribeToGuild { uint64 guild_id = 1 [jstype = JS_STRING]; }
+  message SubscribeToActions {}
+  message SubscribeToHomeserverEvents {}
+
+  oneof request {
+    SubscribeToGuild subscribe_to_guild = 1;
+    SubscribeToActions subscribe_to_actions = 2;
+    SubscribeToHomeserverEvents subscribe_to_homeserver_events = 3;
+  }
+}
+
+message Event {
+  message MessageSent {
+    uint64 echo_id = 1;
+    Message message = 2;
+  }
+  message MessageUpdated {
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    uint64 channel_id = 2 [jstype = JS_STRING];
+    uint64 message_id = 3 [jstype = JS_STRING];
+    google.protobuf.Timestamp edited_at = 4;
+    string content = 5;
+    bool update_content = 6;
+    repeated Embed embeds = 7;
+    bool update_embeds = 8;
+    repeated Action actions = 9;
+    bool update_actions = 10;
+    repeated Attachment attachments = 11;
+    bool update_attachments = 12;
+    Override overrides = 13;
+    bool update_overrides = 14;
+  }
+  message MessageDeleted {
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    uint64 channel_id = 2 [jstype = JS_STRING];
+    uint64 message_id = 3 [jstype = JS_STRING];
+  }
+  message ChannelCreated {
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    uint64 channel_id = 2 [jstype = JS_STRING];
+    string name = 3;
+    uint64 previous_id = 4 [jstype = JS_STRING];
+    uint64 next_id = 5 [jstype = JS_STRING];
+    bool is_category = 6;
+  }
+  message ChannelUpdated {
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    uint64 channel_id = 2 [jstype = JS_STRING];
+    string name = 3;
+    bool update_name = 4;
+    uint64 previous_id = 5 [jstype = JS_STRING];
+    uint64 next_id = 6 [jstype = JS_STRING];
+    bool update_order = 7;
+  }
+  message ChannelDeleted {
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    uint64 channel_id = 2 [jstype = JS_STRING];
+  }
+  message GuildUpdated {
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    string name = 2;
+    bool update_name = 3;
+  }
+  message GuildDeleted { uint64 guild_id = 1 [jstype = JS_STRING]; }
+  message MemberJoined {
+    uint64 member_id = 1 [jstype = JS_STRING];
+    uint64 guild_id = 2 [jstype = JS_STRING];
+  }
+  message MemberLeft {
+    uint64 member_id = 1 [jstype = JS_STRING];
+    uint64 guild_id = 2 [jstype = JS_STRING];
+  }
+  message GuildAddedToList {
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    string homeserver = 2;
+  }
+  message GuildRemovedFromList {
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    string homeserver = 2;
+  }
+  message ActionPerformed {
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    uint64 channel_id = 2 [jstype = JS_STRING];
+    uint64 message_id = 3 [jstype = JS_STRING];
+    string action_id = 4;
+    string action_data = 5;
+  }
+  message RoleMoved {
+    uint64 guild_id = 1 [jstype = JS_STRING];
+    uint64 role_id = 2 [jstype = JS_STRING];
+  }
+  message ProfileUpdated {
+    string new_username = 1;
+    bool update_username = 2;
+    string new_avatar = 3;
+    bool update_avatar = 4;
+    UserStatus new_status = 5;
+    bool update_status = 6;
+  }
+
+  oneof event {
+    GuildAddedToList guild_added_to_list = 1;
+    GuildRemovedFromList guild_removed_from_list = 2;
+    ActionPerformed action_performed = 3;
+    MessageSent sent_message = 4;
+    MessageUpdated edited_message = 5;
+    MessageDeleted deleted_message = 6;
+    ChannelCreated created_channel = 7;
+    ChannelUpdated edited_channel = 8;
+    ChannelDeleted deleted_channel = 9;
+    GuildUpdated edited_guild = 10;
+    GuildDeleted deleted_guild = 11;
+    MemberJoined joined_member = 12;
+    MemberLeft left_member = 13;
+    RoleMoved role_moved = 14;
+    ProfileUpdated profile_updated = 15;
+  }
+}

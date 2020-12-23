@@ -3,9 +3,9 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 
-package protocol.foundation.v1;
+package protocol.auth.v1;
 
-option go_package = "foundation;foundationv1";
+option go_package = "github.com/harmony-development/legato/gen/auth/v1";
 
 // Connection
 message FederateRequest { string target = 1; }
@@ -38,16 +38,16 @@ message RegisterRequest {
 }
 
 message Session {
-  uint64 user_id = 1 [ jstype = JS_STRING ];
+  uint64 user_id = 1 [jstype = JS_STRING];
   string session_token = 2;
 }
 
 message GetConfigResponse { bool require_2fa = 1; }
 
-service FoundationService {
-  rpc Federate(FederateRequest) returns (FederateReply);
-  rpc Key(KeyRequest) returns (KeyReply);
-  rpc Login(LoginRequest) returns (Session);
-  rpc Register(RegisterRequest) returns (Session);
-  rpc GetConfig(google.protobuf.Empty) returns (GetConfigResponse);
+service AuthService {
+  rpc Federate(FederateRequest) returns(FederateReply);
+  rpc Key(KeyRequest) returns(KeyReply);
+  rpc Login(LoginRequest) returns(Session);
+  rpc Register(RegisterRequest) returns(Session);
+  rpc GetConfig(google.protobuf.Empty) returns(GetConfigResponse);
 }

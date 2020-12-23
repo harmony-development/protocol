@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package protocol.chat.v1;
+
+option go_package = "github.com/harmony-development/legato/gen/chat/v1";
+
+message QueryPermissionsRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  string check_for = 3;
+  uint64 as = 4;
+}
+message QueryPermissionsResponse { bool ok = 1; }
+
+message Permission {
+  enum Mode { Allow = 0; Deny = 1; }
+  string matches = 1;
+  Mode mode = 2;
+}
+
+message PermissionList { repeated Permission permissions = 1; }
+
+message SetPermissionsRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 role_id = 3 [jstype = JS_STRING];
+  PermissionList perms = 4;
+}
+
+message GetPermissionsRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 role_id = 3 [jstype = JS_STRING];
+}
+message GetPermissionsResponse { PermissionList perms = 1; }
+
+message Role {
+  uint64 role_id = 1 [jstype = JS_STRING];
+  string name = 2;
+  int32 color = 3;
+  bool hoist = 4;
+  bool pingable = 5;
+}
+
+message MoveRoleRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 role_id = 2 [jstype = JS_STRING];
+  uint64 before_id = 3 [jstype = JS_STRING];
+  uint64 after_id = 4 [jstype = JS_STRING];
+}
+message MoveRoleResponse {}
+
+message GetGuildRolesRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
+message GetGuildRolesResponse { repeated Role roles = 1; }
+
+message AddGuildRoleRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  Role role = 2;
+}
+message AddGuildRoleResponse { uint64 role_id = 1 [jstype = JS_STRING]; }
+
+message DeleteGuildRoleRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 role_id = 2 [jstype = JS_STRING];
+}
+message ModifyGuildRoleRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  Role role = 2;
+  bool modify_name = 3;
+  bool modify_color = 4;
+  bool modify_hoist = 5;
+  bool modify_pingable = 6;
+}
+
+message ManageUserRolesRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 user_id = 2 [jstype = JS_STRING];
+  repeated uint64 give_role_ids = 3 [jstype = JS_STRING];
+  repeated uint64 take_role_ids = 4 [jstype = JS_STRING];
+}
+
+message GetUserRolesRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 user_id = 2 [jstype = JS_STRING];
+}
+
+message GetUserRolesResponse { repeated uint64 roles = 1 [jstype = JS_STRING]; }

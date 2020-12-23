@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package protocol.chat.v1;
+
+option go_package = "github.com/harmony-development/legato/gen/chat/v1";
+
+// Channel Kinds:
+//
+// Channel kinds specified in an official Harmony protocol will start with a
+// "h." prefix. Third-party extensions should not use the "h." prefix. If no
+// kind is specified, the channel is a text channel.
+//
+// Kinds indicate additional functionality a channel may have: for example,
+// h.voice can indicate that a channel has voice functionalities alongside
+// the usual text fare.
+//
+message CreateChannelRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  string channel_name = 2; //  [(validate.rules).string.min_len = 1]
+  bool is_category = 3;
+  uint64 previous_id = 5 [jstype = JS_STRING];
+  uint64 next_id = 4 [jstype = JS_STRING];
+  string channel_kind = 6;
+}
+message CreateChannelResponse { uint64 channel_id = 1 [jstype = JS_STRING]; }
+
+message GetGuildChannelsRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
+message GetGuildChannelsResponse {
+  message Channel {
+    uint64 channel_id = 1 [jstype = JS_STRING];
+    string channel_name = 2;
+    bool is_category = 3;
+    string kind = 4;
+  }
+
+  repeated Channel channels = 1;
+}
+
+message UpdateChannelNameRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  string new_channel_name = 3;
+}
+
+message UpdateChannelOrderRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 previous_id = 3 [jstype = JS_STRING];
+  uint64 next_id = 4 [jstype = JS_STRING];
+}
+
+message DeleteChannelRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+}
