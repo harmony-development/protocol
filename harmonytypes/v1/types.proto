@@ -3,6 +3,8 @@ syntax = "proto3";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 
+package protocol.harmonytypes.v1;
+
 option go_package = "github.com/harmony-development/legato/gen/harmonytypes/v1";
 
 enum UserStatus {
