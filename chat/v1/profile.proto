@@ -10,7 +10,7 @@ message GetUserRequest { uint64 user_id = 1 [jstype = JS_STRING]; }
 message GetUserResponse {
   string user_name = 1;
   string user_avatar = 2;
-  UserStatus user_status = 3;
+  harmonytypes.v1.UserStatus user_status = 3;
 }
 
 message GetUserMetadataRequest { string app_id = 1; }
@@ -22,13 +22,13 @@ message LocalAvatarUpdateRequest { string id = 1; }
 
 message AvatarUpdateRequest { string origin = 1; }
 
-message StatusUpdateRequest { UserStatus new_status = 1; }
+message StatusUpdateRequest { harmonytypes.v1.UserStatus new_status = 1; }
 
 message ProfileUpdateRequest {
   string new_username = 1;
   bool update_username = 2;
   string new_avatar = 3;
   bool update_avatar = 4;
-  UserStatus new_status = 5;
+  harmonytypes.v1.UserStatus new_status = 5;
   bool update_status = 6;
 }

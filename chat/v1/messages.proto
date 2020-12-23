@@ -13,7 +13,7 @@ message GetChannelMessagesRequest {
 }
 message GetChannelMessagesResponse {
   bool reached_top = 1;
-  repeated Message messages = 2;
+  repeated harmonytypes.v1.Message messages = 2;
 }
 
 message GetMessageRequest {
@@ -21,7 +21,7 @@ message GetMessageRequest {
   uint64 channel_id = 2 [jstype = JS_STRING];
   uint64 message_id = 3 [jstype = JS_STRING];
 }
-message GetMessageResponse { Message message = 1; }
+message GetMessageResponse { harmonytypes.v1.Message message = 1; }
 
 message UpdateMessageRequest {
   uint64 guild_id = 1 [jstype = JS_STRING];
@@ -29,13 +29,13 @@ message UpdateMessageRequest {
   uint64 message_id = 3 [jstype = JS_STRING];
   string content = 4;
   bool update_content = 5;
-  repeated Embed embeds = 6;
+  repeated harmonytypes.v1.Embed embeds = 6;
   bool update_embeds = 7;
-  repeated Action actions = 8;
+  repeated harmonytypes.v1.Action actions = 8;
   bool update_actions = 9;
   repeated string attachments = 10;
   bool update_attachments = 11;
-  Override overrides = 12;
+  harmonytypes.v1.Override overrides = 12;
   bool update_overrides = 13;
 }
 
@@ -60,11 +60,11 @@ message SendMessageRequest {
   uint64 guild_id = 1 [jstype = JS_STRING];
   uint64 channel_id = 2 [jstype = JS_STRING];
   string content = 3;
-  repeated Action actions = 4;
-  repeated Embed embeds = 5;
+  repeated harmonytypes.v1.Action actions = 4;
+  repeated harmonytypes.v1.Embed embeds = 5;
   repeated string attachments = 6;
   uint64 in_reply_to = 7;
-  Override overrides = 8;
+  harmonytypes.v1.Override overrides = 8;
   uint64 echo_id = 9;
 }
 message SendMessageResponse { uint64 message_id = 1 [jstype = JS_STRING]; }

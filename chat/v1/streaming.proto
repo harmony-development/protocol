@@ -22,7 +22,7 @@ message StreamEventsRequest {
 message Event {
   message MessageSent {
     uint64 echo_id = 1;
-    Message message = 2;
+    harmonytypes.v1.Message message = 2;
   }
   message MessageUpdated {
     uint64 guild_id = 1 [jstype = JS_STRING];
@@ -31,13 +31,13 @@ message Event {
     google.protobuf.Timestamp edited_at = 4;
     string content = 5;
     bool update_content = 6;
-    repeated Embed embeds = 7;
+    repeated harmonytypes.v1.Embed embeds = 7;
     bool update_embeds = 8;
-    repeated Action actions = 9;
+    repeated harmonytypes.v1.Action actions = 9;
     bool update_actions = 10;
-    repeated Attachment attachments = 11;
+    repeated harmonytypes.v1.Attachment attachments = 11;
     bool update_attachments = 12;
-    Override overrides = 13;
+    harmonytypes.v1.Override overrides = 13;
     bool update_overrides = 14;
   }
   message MessageDeleted {
@@ -104,7 +104,7 @@ message Event {
     bool update_username = 2;
     string new_avatar = 3;
     bool update_avatar = 4;
-    UserStatus new_status = 5;
+    harmonytypes.v1.UserStatus new_status = 5;
     bool update_status = 6;
   }
 
