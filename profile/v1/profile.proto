@@ -2,20 +2,13 @@ syntax = "proto3";
 
 // import "validate/validate.proto";
 import "google/protobuf/empty.proto";
+import "harmonytypes/v1/types.proto";
 
 package protocol.profile.v1;
 
 option go_package = "profile;profilev1";
 
-enum UserStatus {
-  USER_STATUS_ONLINE_UNSPECIFIED = 0;
-  USER_STATUS_STREAMING = 1;
-  USER_STATUS_DO_NOT_DISTURB = 2;
-  USER_STATUS_IDLE = 3;
-  USER_STATUS_OFFLINE = 4;
-}
-
-message GetUserRequest { uint64 user_id = 1 [ jstype = JS_STRING ]; }
+message GetUserRequest { uint64 user_id = 1 [jstype = JS_STRING]; }
 message GetUserResponse {
   string user_name = 1;
   string user_avatar = 2;
@@ -27,13 +20,25 @@ message GetUserMetadataResponse { string metadata = 1; }
 
 message UsernameUpdateRequest { string user_name = 1; }
 
+message LocalAvatarUpdateRequest { string id = 1; }
+
+message AvatarUpdateRequest { string origin = 1; }
+
 message StatusUpdateRequest { UserStatus new_status = 1; }
 
-service ProfileService {
-  rpc GetUser(GetUserRequest) returns (GetUserResponse) {}
-  rpc GetUserMetadata(GetUserMetadataRequest)
-      returns (GetUserMetadataResponse) {}
+message ProfileUpdateRequest {
+  string new_username = 1;
+  bool update_username = 2;
+  string new_avatar = 3;
+  bool update_avatar = 4;
+  UserStatus new_status = 5;
+  bool update_status = 6;
+}
 
-  rpc UsernameUpdate(UsernameUpdateRequest) returns (google.protobuf.Empty) {}
-  rpc StatusUpdate(StatusUpdateRequest) returns (google.protobuf.Empty) {}
+service ProfileService {
+  rpc GetUser(GetUserRequest) returns(GetUserResponse) {}
+  rpc GetUserMetadata(GetUserMetadataRequest) returns(GetUserMetadataResponse) {
+  }
+
+  rpc ProfileUpdate(ProfileUpdateRequest) returns(google.protobuf.Empty) {}
 }

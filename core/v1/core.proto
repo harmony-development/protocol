@@ -3,104 +3,11 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 // import "validate/validate.proto";
 import "google/protobuf/timestamp.proto";
+import "harmonytypes/v1/types.proto";
 
 package protocol.core.v1;
 
 option go_package = "core;corev1";
-
-// OVERRIDES
-message Override {
-  string name = 1;
-  string avatar = 2;
-  oneof reason {
-    string user_defined = 3;
-    google.protobuf.Empty webhook = 4;
-    google.protobuf.Empty system_plurality =
-        5; // plurality, not system as in computer
-    google.protobuf.Empty system_message = 6;
-    google.protobuf.Empty bridge = 7;
-  }
-}
-
-// EMBEDS AND ACTIONS
-
-enum ActionType { Normal = 0; Primary = 1; Destructive = 2; }
-
-enum ActionPresentation {
-  Button = 0; Dropdown = 1; Menu = 2; SmallEntry = 3; LargeEntry = 4;
-}
-
-enum FieldPresentation { Data = 0; CaptionedImage = 1; Row = 2; }
-
-// Rules on actions:
-// Actions without a type are assumed to be Button actions or Menu actions when
-// nested. Button actions can only have Menu actions as children. Dropdown
-// actions can only have non-recursive Menu actions as children. Menu actions
-// can only have other Menu actions as children. SmallEntry and LargeActions
-// cannot have children.
-message Action {
-  string text = 1;
-  string url = 2;
-  string id = 3;
-  ActionType type = 4;
-  ActionPresentation presentation = 5;
-  repeated Action children = 6;
-}
-
-message EmbedHeading {
-  string text = 1;
-  string subtext = 2;
-  string url = 3;
-  string icon = 4;
-}
-
-message EmbedField {
-  string title = 1;
-  string subtitle = 2;
-  string body = 3;
-
-  string image_url = 4;
-
-  FieldPresentation presentation = 5;
-
-  repeated Action actions = 6;
-}
-
-message Embed {
-  string title = 1;
-  string body = 2;
-
-  int64 color = 3;
-
-  EmbedHeading header = 4;
-  EmbedHeading footer = 5;
-
-  repeated EmbedField fields = 6;
-  repeated Action actions = 7;
-}
-
-// TYPES
-message Attachment {
-  string id = 1;
-  string name = 2;
-  string type = 3;
-  int32 size = 4;
-}
-
-message Message {
-  uint64 guild_id = 1 [jstype = JS_STRING];
-  uint64 channel_id = 2 [jstype = JS_STRING];
-  uint64 message_id = 3 [jstype = JS_STRING];
-  uint64 author_id = 4 [jstype = JS_STRING];
-  google.protobuf.Timestamp created_at = 5;
-  google.protobuf.Timestamp edited_at = 6;
-  string content = 7;
-  repeated Embed embeds = 8;
-  repeated Action actions = 9;
-  repeated Attachment attachments = 10;
-  uint64 in_reply_to = 11 [jstype = JS_STRING];
-  Override overrides = 12;
-}
 
 // CREATE
 
