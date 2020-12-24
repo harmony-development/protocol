@@ -100,12 +100,13 @@ message Event {
     uint64 role_id = 2 [jstype = JS_STRING];
   }
   message ProfileUpdated {
-    string new_username = 1;
-    bool update_username = 2;
-    string new_avatar = 3;
-    bool update_avatar = 4;
-    harmonytypes.v1.UserStatus new_status = 5;
-    bool update_status = 6;
+    uint64 user_id = 1 [jstype = JS_STRING];
+    string new_username = 2;
+    bool update_username = 3;
+    string new_avatar = 4;
+    bool update_avatar = 5;
+    harmonytypes.v1.UserStatus new_status = 6;
+    bool update_status = 7;
   }
 
   oneof event {
