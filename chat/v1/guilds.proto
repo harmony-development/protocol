@@ -55,6 +55,11 @@ message UpdateGuildNameRequest {
   string new_guild_name = 2;
 }
 
+message UpdateGuildPictureRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  string new_guild_picture = 2;
+};
+
 message DeleteGuildRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
 
 message DeleteInviteRequest {
