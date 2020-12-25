@@ -50,15 +50,13 @@ message GetGuildMembersResponse {
   repeated uint64 members = 1 [jstype = JS_STRING];
 }
 
-message UpdateGuildNameRequest {
+message UpdateGuildInformationRequest {
   uint64 guild_id = 1 [jstype = JS_STRING];
   string new_guild_name = 2;
+  bool update_guild_name = 3;
+  string new_guild_picture = 4;
+  bool update_guild_picture = 5;
 }
-
-message UpdateGuildPictureRequest {
-  uint64 guild_id = 1 [jstype = JS_STRING];
-  string new_guild_picture = 2;
-};
 
 message DeleteGuildRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
 
