@@ -51,7 +51,7 @@ service ChatService {
       returns(GetEmotePackEmotesResponse) {}
 
   // This requires the "guild.manage.change-information" permission.
-  rpc UpdateGuildName(UpdateGuildInformationRequest) returns(google.protobuf.Empty) {}
+  rpc UpdateGuildInformation(UpdateGuildInformationRequest) returns(google.protobuf.Empty) {}
   // This requires the "channels.manage.change-name" permission.
   rpc UpdateChannelName(UpdateChannelNameRequest)
       returns(google.protobuf.Empty) {}
