@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package protocol.mediaproxy.v1;
+
+option go_package = "github.com/harmony-development/legato/gen/mediaproxy/v1";
+
+message SiteMetadata {
+    string title = 1;
+    string kind = 2;
+    string description = 3;
+    string url = 4;
+    string image = 5;
+}
+
+message FetchLinkMetadataRequest {
+    string url = 1;
+}
+
+message InstantViewRequest {
+    string url = 1;
+}
+message InstantViewResponse {
+    SiteMetadata metadata = 1;
+    string content = 2;
+}
+
+service MediaProxyService {
+    rpc FetchLinkMetadata(FetchLinkMetadataRequest) returns (SiteMetadata);
+    rpc InstantView(InstantViewRequest) returns (InstantViewResponse);
+}
