@@ -5,11 +5,12 @@ package protocol.mediaproxy.v1;
 option go_package = "github.com/harmony-development/legato/gen/mediaproxy/v1";
 
 message SiteMetadata {
-    string title = 1;
-    string kind = 2;
-    string description = 3;
-    string url = 4;
-    string image = 5;
+    string site_title = 1;
+    string page_title = 2;
+    string kind = 3;
+    string description = 4;
+    string url = 5;
+    string image = 6;
 }
 
 message FetchLinkMetadataRequest {
