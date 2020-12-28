@@ -2,9 +2,13 @@ syntax = "proto3";
 
 package protocol.chat.v1;
 
+import "harmonytypes/v1/types.proto";
+
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
 message CreateGuildRequest {
+  harmonytypes.v1.Metadata metadata = 3;
+
   string guild_name = 1;
   string picture_url = 2;
 }
@@ -30,6 +34,8 @@ message GetGuildListResponse {
 
 message GetGuildRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
 message GetGuildResponse {
+  harmonytypes.v1.Metadata metadata = 4;
+
   string guild_name = 1;
   uint64 guild_owner = 2 [jstype = JS_STRING];
   string guild_picture = 3;
@@ -56,6 +62,8 @@ message UpdateGuildInformationRequest {
   bool update_guild_name = 3;
   string new_guild_picture = 4;
   bool update_guild_picture = 5;
+  harmonytypes.v1.Metadata metadata = 6;
+  bool update_metadata = 7;
 }
 
 message DeleteGuildRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }

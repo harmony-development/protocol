@@ -2,6 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
 
 package protocol.harmonytypes.v1;
 
@@ -93,7 +94,14 @@ message Attachment {
   int32 size = 4;
 }
 
+message Metadata {
+  string kind = 1;
+  map<string,google.protobuf.Any> extension = 2;
+}
+
 message Message {
+  Metadata metadata = 13;
+
   uint64 guild_id = 1 [jstype = JS_STRING];
   uint64 channel_id = 2 [jstype = JS_STRING];
   uint64 message_id = 3 [jstype = JS_STRING];
