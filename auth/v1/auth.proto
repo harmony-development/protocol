@@ -27,6 +27,11 @@ message AuthStep {
   }
 }
 
+message Session {
+  uint64 user_id = 1 [jstype = JS_STRING];
+  string session_token = 2;
+}
+
 message NextStepRequest {
   string auth_id = 1;
 
@@ -36,6 +41,7 @@ message NextStepRequest {
   oneof step {
     ChoiceResponse choice_response = 2;
     FormResponse form_response = 3;
+    Session session = 4;
   }
 }
 
@@ -53,11 +59,6 @@ message KeyReply { string key = 1; }
 message LoginFederatedRequest {
   string auth_token = 1;
   string domain = 2;
-}
-
-message Session {
-  uint64 user_id = 1 [jstype = JS_STRING];
-  string session_token = 2;
 }
 
 service AuthService {
