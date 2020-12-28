@@ -11,6 +11,11 @@ option go_package = "github.com/harmony-development/legato/gen/auth/v1";
 
 message BeginAuthResponse { string auth_id = 1; }
 
+message Session {
+  uint64 user_id = 1 [jstype = JS_STRING];
+  string session_token = 2;
+}
+
 message AuthStep {
   message FormField {
     string name = 1;
@@ -24,12 +29,8 @@ message AuthStep {
   oneof step {
     Choice choice = 2;
     Form form = 3;
+    Session session = 4;
   }
-}
-
-message Session {
-  uint64 user_id = 1 [jstype = JS_STRING];
-  string session_token = 2;
 }
 
 message NextStepRequest {
@@ -41,7 +42,6 @@ message NextStepRequest {
   oneof step {
     ChoiceResponse choice_response = 2;
     FormResponse form_response = 3;
-    Session session = 4;
   }
 }
 
