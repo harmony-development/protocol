@@ -2,10 +2,35 @@ syntax = "proto3";
 
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
+import "harmonytypes/v1/types.proto";
 
 package protocol.auth.v1;
 
 option go_package = "github.com/harmony-development/legato/gen/auth/v1";
+
+message BeginAuthResponse { string auth_id = 1; }
+
+message AuthStep {
+  message FormField {
+    string name = 1;
+    string type = 2;
+  }
+
+  message Form { repeated FormField fields = 1; }
+
+  string fallback_url = 1;
+  oneof step { Form form = 1; }
+}
+
+message NextStepRequest {
+  string auth_id = 1;
+
+  message FormResponse { repeated google.protobuf.Any fields = 1; }
+
+  oneof step { FormResponse form_response = 1; }
+}
+
+message StreamStepsRequest { string auth_id = 1; }
 
 // Connection
 message FederateRequest { string target = 1; }
@@ -14,27 +39,11 @@ message FederateReply {
   string nonce = 2;
 }
 
-message KeyRequest {}
 message KeyReply { string key = 1; }
 
 message LoginRequest {
-  message Federated {
-    string auth_token = 1;
-    string domain = 2;
-  }
-  message Local {
-    string email = 1;
-    bytes password = 2;
-  }
-  oneof login {
-    Federated federated = 1;
-    Local local = 2;
-  }
-}
-message RegisterRequest {
-  string email = 1;
-  string username = 2;
-  bytes password = 3;
+  string auth_token = 1;
+  string domain = 2;
 }
 
 message Session {
@@ -42,12 +51,11 @@ message Session {
   string session_token = 2;
 }
 
-message GetConfigResponse { bool require_2fa = 1; }
-
 service AuthService {
   rpc Federate(FederateRequest) returns(FederateReply);
-  rpc Key(KeyRequest) returns(KeyReply);
-  rpc Login(LoginRequest) returns(Session);
-  rpc Register(RegisterRequest) returns(Session);
-  rpc GetConfig(google.protobuf.Empty) returns(GetConfigResponse);
+  rpc LoginFederated(LoginFederatedRequest) returns(Session);
+  rpc Key(google.protobuf.Empty) returns(KeyReply);
+  rpc BeginAuth(google.protobuf.Empty) returns(BeginAuthResponse);
+  rpc NextStep(NextStepRequest) returns(AuthStep);
+  rpc StreamSteps(StreamStepsRequest) returns(stream AuthStep);
 }
