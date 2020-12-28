@@ -22,8 +22,16 @@ message AuthStep {
     string type = 2;
   }
 
-  message Choice { repeated string options = 1; }
-  message Form { repeated FormField fields = 2; }
+  message Choice {
+    string label = 1;
+    string title = 2;
+    repeated string options = 3;
+  }
+  message Form {
+    string name = 1;
+    string title = 2;
+    repeated FormField fields = 3;
+  }
 
   string fallback_url = 1;
   oneof step {
@@ -36,12 +44,12 @@ message AuthStep {
 message NextStepRequest {
   string auth_id = 1;
 
-  message ChoiceResponse { string choice = 1; }
-  message FormResponse { repeated google.protobuf.Any fields = 1; }
+  message Choice { string choice = 1; }
+  message Form { repeated google.protobuf.Any fields = 1; }
 
   oneof step {
-    ChoiceResponse choice_response = 2;
-    FormResponse form_response = 3;
+    Choice choice = 2;
+    Form form = 3;
   }
 }
 
