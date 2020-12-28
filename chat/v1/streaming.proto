@@ -110,6 +110,10 @@ message Event {
     harmonytypes.v1.UserStatus new_status = 6;
     bool update_status = 7;
   }
+  message Typing {
+    uint64 user_id = 1 [jstype = JS_STRING];
+    uint64 channel_id = 1 [jstype = JS_STRING];
+  }
 
   oneof event {
     GuildAddedToList guild_added_to_list = 1;
@@ -127,5 +131,6 @@ message Event {
     MemberLeft left_member = 13;
     RoleMoved role_moved = 14;
     ProfileUpdated profile_updated = 15;
+    Typing typing = 16;
   }
 }

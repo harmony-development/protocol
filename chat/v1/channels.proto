@@ -53,3 +53,8 @@ message DeleteChannelRequest {
   uint64 guild_id = 1 [jstype = JS_STRING];
   uint64 channel_id = 2 [jstype = JS_STRING];
 }
+
+message TypingRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+}
