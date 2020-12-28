@@ -39,6 +39,8 @@ message Event {
     bool update_attachments = 12;
     harmonytypes.v1.Override overrides = 13;
     bool update_overrides = 14;
+    harmonytypes.v1.Metadata metadata = 15;
+    bool update_metadata = 16;
   }
   message MessageDeleted {
     uint64 guild_id = 1 [jstype = JS_STRING];
@@ -52,6 +54,7 @@ message Event {
     uint64 previous_id = 4 [jstype = JS_STRING];
     uint64 next_id = 5 [jstype = JS_STRING];
     bool is_category = 6;
+    harmonytypes.v1.Metadata metadata = 7;
   }
   message ChannelUpdated {
     uint64 guild_id = 1 [jstype = JS_STRING];
@@ -61,6 +64,8 @@ message Event {
     uint64 previous_id = 5 [jstype = JS_STRING];
     uint64 next_id = 6 [jstype = JS_STRING];
     bool update_order = 7;
+    harmonytypes.v1.Metadata metadata = 8;
+    bool update_metadata = 9;
   }
   message ChannelDeleted {
     uint64 guild_id = 1 [jstype = JS_STRING];
@@ -72,6 +77,8 @@ message Event {
     bool update_name = 3;
     string picture = 4;
     bool update_picture = 5;
+    harmonytypes.v1.Metadata metadata = 6;
+    bool update_metadata = 7;
   }
   message GuildDeleted { uint64 guild_id = 1 [jstype = JS_STRING]; }
   message MemberJoined {

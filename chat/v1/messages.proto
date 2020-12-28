@@ -37,6 +37,8 @@ message UpdateMessageRequest {
   bool update_attachments = 11;
   harmonytypes.v1.Override overrides = 12;
   bool update_overrides = 13;
+  harmonytypes.v1.Metadata metadata = 14;
+  bool update_metadata = 15;
 }
 
 message DeleteMessageRequest {
@@ -66,5 +68,6 @@ message SendMessageRequest {
   uint64 in_reply_to = 7;
   harmonytypes.v1.Override overrides = 8;
   uint64 echo_id = 9;
+  harmonytypes.v1.Metadata metadata = 10;
 }
 message SendMessageResponse { uint64 message_id = 1 [jstype = JS_STRING]; }
