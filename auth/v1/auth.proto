@@ -18,13 +18,8 @@ message Session {
 
 message AuthStep {
   message Choice {
-    message Option {
-      string id = 3;
-      string label = 1;
-    }
-
     string title = 1;
-    repeated Option options = 2;
+    repeated string options = 2;
   }
 
   message Form {
