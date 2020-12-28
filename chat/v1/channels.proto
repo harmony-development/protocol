@@ -29,12 +29,11 @@ message CreateChannelResponse { uint64 channel_id = 1 [jstype = JS_STRING]; }
 message GetGuildChannelsRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
 message GetGuildChannelsResponse {
   message Channel {
-    harmonytypes.v1.Metadata metadata = 5;
+    harmonytypes.v1.Metadata metadata = 4;
   
     uint64 channel_id = 1 [jstype = JS_STRING];
     string channel_name = 2;
     bool is_category = 3;
-    string kind = 4;
   }
 
   repeated Channel channels = 1;
