@@ -17,20 +17,24 @@ message Session {
 }
 
 message AuthStep {
-  message FormField {
-    string name = 1;
-    string type = 2;
+  message Choice {
+    message Option {
+      string id = 3;
+      string label = 1;
+    }
+
+    string title = 1;
+    repeated Option options = 2;
   }
 
-  message Choice {
-    string label = 1;
-    string title = 2;
-    repeated string options = 3;
-  }
   message Form {
-    string name = 1;
-    string title = 2;
-    repeated FormField fields = 3;
+    message FormField {
+      string name = 1;
+      string type = 2;
+    }
+
+    string title = 1;
+    repeated FormField fields = 2;
   }
 
   string fallback_url = 1;
