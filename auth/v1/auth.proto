@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 import "harmonytypes/v1/types.proto";
 
@@ -21,8 +22,8 @@ message AuthStep {
 
   string fallback_url = 1;
   oneof step {
-    Choice choice = 1;
-    Form form = 2;
+    Choice choice = 2;
+    Form form = 3;
   }
 }
 
@@ -33,8 +34,8 @@ message NextStepRequest {
   message FormResponse { repeated google.protobuf.Any fields = 1; }
 
   oneof step {
-    ChoiceResponse choice_response = 1;
-    FormResponse form_response = 2;
+    ChoiceResponse choice_response = 2;
+    FormResponse form_response = 3;
   }
 }
 
@@ -49,7 +50,7 @@ message FederateReply {
 
 message KeyReply { string key = 1; }
 
-message LoginRequest {
+message LoginFederatedRequest {
   string auth_token = 1;
   string domain = 2;
 }
