@@ -23,4 +23,6 @@ message ProfileUpdateRequest {
   bool update_avatar = 4;
   harmonytypes.v1.UserStatus new_status = 5;
   bool update_status = 6;
+  bool is_bot = 7;
+  bool update_is_bot = 8;
 }
