@@ -32,11 +32,17 @@ message AuthStep {
     repeated FormField fields = 2;
   }
 
+  message Waiting {
+    string title = 1;
+    string description = 2;
+  }
+
   string fallback_url = 1;
   oneof step {
     Choice choice = 2;
     Form form = 3;
     Session session = 4;
+    Waiting waiting = 5;
   }
 }
 
@@ -58,6 +64,8 @@ message NextStepRequest {
     Form form = 3;
   }
 }
+
+message StepBackRequest { string auth_id = 1; }
 
 message StreamStepsRequest { string auth_id = 1; }
 
@@ -81,5 +89,6 @@ service AuthService {
   rpc Key(google.protobuf.Empty) returns(KeyReply);
   rpc BeginAuth(google.protobuf.Empty) returns(BeginAuthResponse);
   rpc NextStep(NextStepRequest) returns(AuthStep);
+  rpc StepBack(StepBackRequest) returns(AuthStep);
   rpc StreamSteps(StreamStepsRequest) returns(stream AuthStep);
 }
