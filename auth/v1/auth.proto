@@ -44,7 +44,14 @@ message NextStepRequest {
   string auth_id = 1;
 
   message Choice { string choice = 1; }
-  message Form { repeated google.protobuf.Any fields = 1; }
+  message FormFields {
+    oneof field {
+      bytes bytes = 1;
+      string string = 2;
+      int64 number = 3;
+    }
+  }
+  message Form { repeated FormFields fields = 1; }
 
   oneof step {
     Choice choice = 2;
