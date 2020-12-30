@@ -38,7 +38,11 @@ message AuthStep {
     // A field in the form, containing information on how it should
     // be rendered
     // Here is a list of form types that need to be supported:
-    // email, text, password, number
+    // email: a field type that has to contain a valid email
+    // password: a field type that has to contain a password
+    // new-password: a field type for new passwords
+    // text: a field type that has to contain text
+    // number: a field type that has to contain a number
     message FormField {
       string name = 1;
       string type = 2;
