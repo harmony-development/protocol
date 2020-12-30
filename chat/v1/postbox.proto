@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package protocol.chat.v1;
+
+option go_package = "github.com/harmony-development/legato/gen/chat/v1";
+
+message SyncRequest {
+  string token = 1;
+  string host = 2;
+}
+
+message SyncEvent {
+  message DMInvite {
+    string name = 1;
+    string avatar = 2;
+  }
+
+  oneof event { DMInvite dm_invite = 1; }
+}

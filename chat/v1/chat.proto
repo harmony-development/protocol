@@ -10,6 +10,7 @@ import "chat/v1/messages.proto";
 import "chat/v1/emotes.proto";
 import "chat/v1/permissions.proto";
 import "chat/v1/streaming.proto";
+import "chat/v1/postbox.proto";
 
 package protocol.chat.v1;
 
@@ -119,6 +120,8 @@ service ChatService {
   rpc GetUserRoles(GetUserRolesRequest) returns(GetUserRolesResponse) {}
 
   rpc StreamEvents(stream StreamEventsRequest) returns(stream Event) {}
+
+  rpc Sync(SyncRequest) returns(stream SyncEvent) {}
 
   rpc GetUser(GetUserRequest) returns(GetUserResponse) {}
   rpc GetUserMetadata(GetUserMetadataRequest) returns(GetUserMetadataResponse) {
