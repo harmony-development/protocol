@@ -58,11 +58,13 @@ message AuthStep {
   }
 
   string fallback_url = 1;
+  bool can_go_back = 2;
+
   oneof step {
-    Choice choice = 2;
-    Form form = 3;
-    Session session = 4;
-    Waiting waiting = 5;
+    Choice choice = 3;
+    Form form = 4;
+    Session session = 5;
+    Waiting waiting = 6;
   }
 }
 
