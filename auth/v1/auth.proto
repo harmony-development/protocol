@@ -16,13 +16,33 @@ message Session {
   string session_token = 2;
 }
 
+// AuthStep
+// A step in the authentication process
+// Contains a variety of different types of views
+// It is recommended to have a fallback_url specified
+// For non-trivial authentication procedures (such as captchas)
 message AuthStep {
+  // Choice
+  // A step which allows the user to choose from a range of options
+  // Allows you to show a heading by specifying title
   message Choice {
     string title = 1;
     repeated string options = 2;
   }
 
+  // Form
+  // A step which requires the user to input information
+  // Allows you to show a heading by specifying title
   message Form {
+    // FormField
+    // A field in the form, containing information on how it should
+    // be rendered
+    // Here is a list of form types that need to be supported:
+    // email: a field type that has to contain a valid email
+    // password: a field type that has to contain a password
+    // new-password: a field type for new passwords
+    // text: a field type that has to contain text
+    // number: a field type that has to contain a number
     message FormField {
       string name = 1;
       string type = 2;
@@ -32,6 +52,10 @@ message AuthStep {
     repeated FormField fields = 2;
   }
 
+  // Waiting
+  // A step which requires the user to perform an external action
+  // The title and description should explain to the user
+  // what they should do to complete this step
   message Waiting {
     string title = 1;
     string description = 2;
@@ -48,10 +72,17 @@ message AuthStep {
   }
 }
 
+// NextStepRequest
+// contains the client's response to the server's challenge
+// This needs to be called first with no arguments to
+// receive the first step
 message NextStepRequest {
   string auth_id = 1;
 
+  // A simple choice string indicating which option the user chose
   message Choice { string choice = 1; }
+
+  // Form fields can either be bytes, string, or int64.
   message FormFields {
     oneof field {
       bytes bytes = 1;
@@ -59,6 +90,8 @@ message NextStepRequest {
       int64 number = 3;
     }
   }
+
+  // An array of form fields, in the same order they came in from the server
   message Form { repeated FormFields fields = 1; }
 
   oneof step {
@@ -67,8 +100,13 @@ message NextStepRequest {
   }
 }
 
+// StepBackRequest
+// A request to go back 1 step
 message StepBackRequest { string auth_id = 1; }
 
+// StreamStepsRequest
+// Required to be initiated by all authenticating clients
+// Allows the server to send steps
 message StreamStepsRequest { string auth_id = 1; }
 
 // Connection
