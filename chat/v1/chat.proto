@@ -127,4 +127,6 @@ service ChatService {
   rpc ProfileUpdate(ProfileUpdateRequest) returns(google.protobuf.Empty) {}
 
   rpc Typing(TypingRequest) returns(google.protobuf.Empty) {}
+
+  rpc PreviewGuild(PreviewGuildRequest) returns (PreviewGuildResponse);
 }
