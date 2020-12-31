@@ -82,7 +82,7 @@ message PreviewGuildRequest {
 message PreviewGuildResponse {
   string name = 1;
   string avatar = 2;
-  uint64 memeber_count = 3 [ jstype = JS_STRING ];
+  uint64 member_count = 3 [ jstype = JS_STRING ];
 }
 
 message LeaveGuildRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
