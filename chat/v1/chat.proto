@@ -80,6 +80,8 @@ service ChatService {
   rpc JoinGuild(JoinGuildRequest) returns(JoinGuildResponse) {}
   rpc LeaveGuild(LeaveGuildRequest) returns(google.protobuf.Empty) {}
 
+  rpc GetAuditLog(GetAuditLogRequest) returns (GetAuditLogResponse) {}
+
   // This requires the "actions.trigger" permission.
   rpc TriggerAction(TriggerActionRequest) returns(google.protobuf.Empty) {}
 

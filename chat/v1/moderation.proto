@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package protocol.chat.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/harmony-development/legato/gen/chat/v1";
+
+message GetAuditLogRequest {
+  uint64 guild_id = 1 [ jstype = JS_STRING ];
+  uint64 before_entry = 2 [ jstype = JS_STRING ];
+}
+message GetAuditLogResponse {
+  bool reached_top = 1;
+  repeated AuditLogEntry entries = 2;
+}
+
+message AuditLogEntry {
+  uint64 done_by = 1 [ jstype = JS_STRING ];
+  string reason = 2;
+  google.protobuf.Timestamp performed_at = 3;
+  google.protobuf.Timestamp expires_at = 4;
+
+  message Kick { uint64 user_id = 1 [ jstype = JS_STRING ]; }
+  message Ban { uint64 user_id = 1 [ jstype = JS_STRING ]; }
+
+  oneof entry {
+    Kick kick = 5;
+    Ban ban = 6;
+  }
+}
