@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package protocol.voice.v1;
+
+option go_package = "github.com/harmony-development/legato/gen/voice/v1";
+
+message ClientSignal {
+  message Answer { string answer = 1; }
+  message Candidate { string candidate = 1; }
+
+  oneof event {
+    Answer answer = 1;
+    Candidate candidate = 2;
+  }
+}
+
+message Signal {
+  message ICECandidate { string candidate = 1; }
+  message Offer { string offer = 1; }
+
+  oneof event {
+    ICECandidate candidate = 1;
+    Offer offer = 2;
+  }
+}
+
+service VoiceService {
+  rpc Connect(stream ClientSignal) returns (stream Signal) {};
+}

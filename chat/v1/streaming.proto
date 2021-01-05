@@ -116,6 +116,8 @@ message Event {
     bool update_avatar = 5;
     harmonytypes.v1.UserStatus new_status = 6;
     bool update_status = 7;
+    bool is_bot = 8;
+    bool update_is_bot = 9;
   }
   message Typing {
     uint64 user_id = 1 [jstype = JS_STRING];
