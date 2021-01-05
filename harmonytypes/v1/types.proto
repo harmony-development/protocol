@@ -11,13 +11,13 @@ option go_package = "github.com/harmony-development/legato/gen/harmonytypes/v1";
 import "google/protobuf/descriptor.proto";
 
 message HarmonyMethodMetadata {
-  optional bool requires_authentication = 1;
-  optional bool requires_local = 2;
-  optional string requires_permission_node = 3;
+  bool requires_authentication = 1;
+  bool requires_local = 2;
+  string requires_permission_node = 3;
 }
 
 extend google.protobuf.MethodOptions {
-  optional HarmonyMethodMetadata metadata = 1091;
+  HarmonyMethodMetadata metadata = 1091;
 }
 
 enum UserStatus {
