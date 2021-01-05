@@ -11,16 +11,21 @@ import (
 	"strings"
 )
 
+func splitHostPort(in string) (string, string) {
+	host, port, err := net.SplitHostPort(in)
+	if err != nil && !strings.Contains(err.Error(), "missing port in address") {
+		log.Fatalf("%+v\n", err)
+	} else if err != nil {
+		host = in
+	}
+
+	return host, port
+}
+
 func main() {
 	toResolve := os.Args[1]
 
-	host, port, err := net.SplitHostPort(toResolve)
-	if err != nil && !strings.Contains(err.Error(), "missing port in address") {
-		log.Fatalf("%+v", err)
-	} else if err != nil {
-		host = toResolve
-	}
-
+	host, port := splitHostPort(toResolve)
 	ip := net.ParseIP(host)
 
 	// if this is an IP...
@@ -55,14 +60,10 @@ func main() {
 			log.Fatalf("error reading JSON: %+v\n", err)
 		}
 
-		host, port, err = net.SplitHostPort(toResolve)
-		if err != nil && !strings.Contains(err.Error(), "missing port in address") {
-			log.Fatalf("%+v", err)
-		} else if err != nil {
-			host = toResolve
+		host, port = splitHostPort(toResolve)
+		if port == "" {
 			port = "2289"
 		}
-
 		ip = net.ParseIP(host)
 
 		// if this is an IP...
