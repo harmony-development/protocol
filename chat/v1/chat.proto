@@ -10,6 +10,7 @@ import "chat/v1/messages.proto";
 import "chat/v1/emotes.proto";
 import "chat/v1/permissions.proto";
 import "chat/v1/streaming.proto";
+import "chat/v1/postbox.proto";
 
 package protocol.chat.v1;
 
@@ -195,9 +196,12 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  rpc Sync(SyncRequest) returns(stream SyncEvent) {}
+
   rpc GetUser(GetUserRequest) returns(GetUserResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
+  
   rpc GetUserMetadata(GetUserMetadataRequest) returns(GetUserMetadataResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
