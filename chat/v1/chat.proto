@@ -189,7 +189,10 @@ service ChatService {
 
   rpc GetUserRoles(GetUserRolesRequest) returns(GetUserRolesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "roles.user.get";
+    // This permissions node is only required if you are trying to get the roles
+    // of someone other than yourself.
+    //
+    // option (harmonytypes.v1.metadata).requires_permission_node = "roles.user.get";
   }
 
   rpc StreamEvents(stream StreamEventsRequest) returns(stream Event) {
