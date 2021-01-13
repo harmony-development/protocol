@@ -2,7 +2,7 @@
 
 ## Preparing for E2EE
 
-Clients should generate a 4096-bit RSA public and private key.
+Clients should generate a Ed25519 public and private key.
 
 ### Public Key
 
