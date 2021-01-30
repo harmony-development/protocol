@@ -1,4 +1,6 @@
-# Formatting
+---
+title: Formatting
+---
 
 Clients are expected to support the Commonmark specification for all message text, with the following changes:
 

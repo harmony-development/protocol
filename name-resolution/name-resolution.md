@@ -1,4 +1,6 @@
-# Names
+---
+title: Names
+---
 
 Every Harmony homeserver is identified by a "server name." A server name uniquely identifies a server, regardless of whether the resolved IP address changes or not. Two server names pointing to the same IP address would be considered two different homeservers.
 
