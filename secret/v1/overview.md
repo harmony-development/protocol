@@ -19,27 +19,26 @@ Whenever the user signs in with a new client, the new client should fetch the en
 ## Creating an E2EE chat
 
 A client that wants to create an E2EE chat should call the GenerateChannelPair request on their homeserver's SecretService. This will generate two event streams, one for messages and one for room state.
-The client *must* generate two 256-bit AES keys, and assign one to the message stream and the other to the state stream.
-These will become the initial keys used to encrypt and decrypt messages.
+The client *must* generate two cryptographically secure random 128-bit numbers. These will be used to seed two olm ratchets, and assigned to the two streams by the client.
 
 ## Inviting users to the chat
 
 The client should look up the public key of the user it wants to invite, and post a TrustKey event to the state stream.
-Afterwards, it should post a new key event to both the message and the state stream.
 
 Afterwards, it should encrypt the following information using the user's public key and send it to the new user:
-- Event IDs of the required new key events for the message and state streams
-- Current state stream key
-- Current message stream key
+- Current keys & counts of the olm ratchets for state & message stream, from where the client would like the other client to see history from.
+  Typically this will either be from the start of when the inviting client was able to see history or from the point which the TrustKey event was sent.
 - An initial room state that should include:
   - Room name
   - Room photo
   - Trusted users
 
-## Posting messages to the chat
+## Posting messages to a stream
 
-Anyone with the room key can post events to the message and state stream, encrypting it using the current key of the stream.
+When a client wishes to post a message to a stream, it should advance its olm ratchet by one.
+The new current key of the olm ratchet will be used to encrypt the message being sent.
+The EncryptedMessage should be equivalent to the client's current olm ratchet counter, in order to allow other clients to increment theirs as necessary.
 
-## Receiving messages from the chat
+## Receiving messages to a stream
 
-Clients should decrypt incoming events using their current key for the stream. If the incoming message is a valid new_key event or contains a fanout, it should update its current key for the stream and use it for events coming afterwards.
+Clients should decrypt incoming events using their olm ratchet; incrementing it according to the incrementing ID.
