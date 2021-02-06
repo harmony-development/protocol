@@ -127,3 +127,9 @@ message Message {
   uint64 in_reply_to = 11 [jstype = JS_STRING];
   Override overrides = 12;
 }
+
+message Error {
+  string identifier = 1;
+  string human_message = 2;
+  bytes more_details = 3;
+}
