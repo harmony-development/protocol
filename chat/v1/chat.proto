@@ -17,208 +17,263 @@ package protocol.chat.v1;
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
 service ChatService {
-  rpc CreateGuild(CreateGuildRequest) returns(CreateGuildResponse) {
+  rpc CreateGuild(CreateGuildRequest) returns (CreateGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "";
   }
 
-  rpc CreateInvite(CreateInviteRequest) returns(CreateInviteResponse) {
+  rpc CreateInvite(CreateInviteRequest) returns (CreateInviteResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "invites.manage.create";
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "invites.manage.create";
   }
 
-  rpc CreateChannel(CreateChannelRequest) returns(CreateChannelResponse) {
+  rpc CreateChannel(CreateChannelRequest) returns (CreateChannelResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "channels.manage.create";
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "channels.manage.create";
   }
-  rpc CreateEmotePack(CreateEmotePackRequest) returns(CreateEmotePackResponse) {
+  rpc CreateEmotePack(CreateEmotePackRequest)
+      returns (CreateEmotePackResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
-  rpc GetGuildList(GetGuildListRequest) returns(GetGuildListResponse) {
+  rpc GetGuildList(GetGuildListRequest) returns (GetGuildListResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
-  rpc AddGuildToGuildList(AddGuildToGuildListRequest) returns(AddGuildToGuildListResponse) {
+  rpc AddGuildToGuildList(AddGuildToGuildListRequest)
+      returns (AddGuildToGuildListResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_local = true;
   }
-  rpc RemoveGuildFromGuildList(RemoveGuildFromGuildListRequest) returns(RemoveGuildFromGuildListResponse) {
+  rpc RemoveGuildFromGuildList(RemoveGuildFromGuildListRequest)
+      returns (RemoveGuildFromGuildListResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_local = true;
   }
 
-  rpc GetGuild(GetGuildRequest) returns(GetGuildResponse) {
+  rpc GetGuild(GetGuildRequest) returns (GetGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
   // This requires the "invites.view" permission.
-  rpc GetGuildInvites(GetGuildInvitesRequest) returns(GetGuildInvitesResponse) {
+  rpc GetGuildInvites(GetGuildInvitesRequest)
+      returns (GetGuildInvitesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "invites.view";
   }
-  rpc GetGuildMembers(GetGuildMembersRequest) returns(GetGuildMembersResponse) {
+  rpc GetGuildMembers(GetGuildMembersRequest)
+      returns (GetGuildMembersResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
-  // You will only be informed of channels you have the "messages.view" permission for.
-  rpc GetGuildChannels(GetGuildChannelsRequest) returns(GetGuildChannelsResponse) {}
+  // You will only be informed of channels you have the "messages.view"
+  // permission for.
+  rpc GetGuildChannels(GetGuildChannelsRequest)
+      returns (GetGuildChannelsResponse) {}
 
-  rpc GetChannelMessages(GetChannelMessagesRequest) returns(GetChannelMessagesResponse) {
+  rpc GetChannelMessages(GetChannelMessagesRequest)
+      returns (GetChannelMessagesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "messages.view";
-  }
-
-  rpc GetMessage(GetMessageRequest) returns(GetMessageResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "messages.view";
-  }
-  rpc GetEmotePacks(GetEmotePacksRequest) returns(GetEmotePacksResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-  rpc GetEmotePackEmotes(GetEmotePackEmotesRequest) returns(GetEmotePackEmotesResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "messages.view";
   }
 
-  rpc UpdateGuildInformation(UpdateGuildInformationRequest) returns(google.protobuf.Empty) {
+  rpc GetMessage(GetMessageRequest) returns (GetMessageResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "guild.manage.change-information";
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "messages.view";
   }
-  rpc UpdateChannelInformation(UpdateChannelInformationRequest) returns(google.protobuf.Empty) {
+  rpc GetEmotePacks(GetEmotePacksRequest) returns (GetEmotePacksResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "channels.manage.change-information";
   }
-  rpc UpdateChannelOrder(UpdateChannelOrderRequest) returns(google.protobuf.Empty) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "channels.manage.move";
-  }
-  rpc UpdateMessage(UpdateMessageRequest) returns(google.protobuf.Empty) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "messages.send";
-  }
-  rpc AddEmoteToPack(AddEmoteToPackRequest) returns(google.protobuf.Empty) {
+  rpc GetEmotePackEmotes(GetEmotePackEmotesRequest)
+      returns (GetEmotePackEmotesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
-  rpc DeleteGuild(DeleteGuildRequest) returns(google.protobuf.Empty) {
+  rpc UpdateGuildInformation(UpdateGuildInformationRequest)
+      returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "guild.manage.delete";
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "guild.manage.change-information";
   }
-  rpc DeleteInvite(DeleteInviteRequest) returns(google.protobuf.Empty) {
+  rpc UpdateChannelInformation(UpdateChannelInformationRequest)
+      returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "invites.manage.delete";
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "channels.manage.change-information";
   }
-  rpc DeleteChannel(DeleteChannelRequest) returns(google.protobuf.Empty) {
+  rpc UpdateChannelOrder(UpdateChannelOrderRequest)
+      returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "channels.manage.delete";
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "channels.manage.move";
+  }
+  rpc UpdateMessage(UpdateMessageRequest) returns (google.protobuf.Empty) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "messages.send";
+  }
+  rpc AddEmoteToPack(AddEmoteToPackRequest) returns (google.protobuf.Empty) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+
+  rpc DeleteGuild(DeleteGuildRequest) returns (google.protobuf.Empty) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "guild.manage.delete";
+  }
+  rpc DeleteInvite(DeleteInviteRequest) returns (google.protobuf.Empty) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "invites.manage.delete";
+  }
+  rpc DeleteChannel(DeleteChannelRequest) returns (google.protobuf.Empty) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "channels.manage.delete";
   }
   // This requires the "messages.manage.delete" permission if you are not the
   // message author.
-  rpc DeleteMessage(DeleteMessageRequest) returns(google.protobuf.Empty) {
+  rpc DeleteMessage(DeleteMessageRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
-  rpc DeleteEmoteFromPack(DeleteEmoteFromPackRequest) returns(google.protobuf.Empty) {
+  rpc DeleteEmoteFromPack(DeleteEmoteFromPackRequest)
+      returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
-  rpc DeleteEmotePack(DeleteEmotePackRequest) returns(google.protobuf.Empty) {
+  rpc DeleteEmotePack(DeleteEmotePackRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
-  rpc DequipEmotePack(DequipEmotePackRequest) returns(google.protobuf.Empty) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
-  rpc JoinGuild(JoinGuildRequest) returns(JoinGuildResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-  rpc LeaveGuild(LeaveGuildRequest) returns(google.protobuf.Empty) {
+  rpc DequipEmotePack(DequipEmotePackRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
-  rpc TriggerAction(TriggerActionRequest) returns(google.protobuf.Empty) {
+  rpc JoinGuild(JoinGuildRequest) returns (JoinGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "actions.trigger";
+  }
+  rpc LeaveGuild(LeaveGuildRequest) returns (google.protobuf.Empty) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
-  rpc SendMessage(SendMessageRequest) returns(SendMessageResponse) {
+  rpc TriggerAction(TriggerActionRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "messages.send";
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "actions.trigger";
   }
 
-  rpc QueryHasPermission(QueryPermissionsRequest) returns(QueryPermissionsResponse) {
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "permissions.query";
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "messages.send";
   }
 
-  rpc SetPermissions(SetPermissionsRequest) returns(google.protobuf.Empty) {
+  rpc QueryHasPermission(QueryPermissionsRequest)
+      returns (QueryPermissionsResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "permissions.manage.set";
+    // This permissions node is only required if you're trying
+    // to see if someone besides yourself has a permission.
+    //
+    // option (harmonytypes.v1.metadata).requires_permission_node =
+    //     "permissions.query";
   }
 
-  rpc GetPermissions(GetPermissionsRequest) returns(GetPermissionsResponse) {
+  rpc SetPermissions(SetPermissionsRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "permissions.manage.get";
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "permissions.manage.set";
   }
 
-  rpc MoveRole(MoveRoleRequest) returns(MoveRoleResponse) {
+  rpc GetPermissions(GetPermissionsRequest) returns (GetPermissionsResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "permissions.manage.get";
+  }
+
+  rpc MoveRole(MoveRoleRequest) returns (MoveRoleResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "roles.manage";
   }
 
-  rpc GetGuildRoles(GetGuildRolesRequest) returns(GetGuildRolesResponse) {
+  rpc GetGuildRoles(GetGuildRolesRequest) returns (GetGuildRolesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "roles.get";
   }
 
-  rpc AddGuildRole(AddGuildRoleRequest) returns(AddGuildRoleResponse) {
+  rpc AddGuildRole(AddGuildRoleRequest) returns (AddGuildRoleResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "roles.manage";
   }
 
-  rpc ModifyGuildRole(ModifyGuildRoleRequest) returns(google.protobuf.Empty) {
+  rpc ModifyGuildRole(ModifyGuildRoleRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "roles.manage";
   }
 
-  rpc DeleteGuildRole(DeleteGuildRoleRequest) returns(google.protobuf.Empty) {
+  rpc DeleteGuildRole(DeleteGuildRoleRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "roles.manage";
   }
 
-  rpc ManageUserRoles(ManageUserRolesRequest) returns(google.protobuf.Empty) {
+  rpc ManageUserRoles(ManageUserRolesRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "roles.user.manage";
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "roles.user.manage";
   }
 
-  rpc GetUserRoles(GetUserRolesRequest) returns(GetUserRolesResponse) {
+  rpc GetUserRoles(GetUserRolesRequest) returns (GetUserRolesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     // This permissions node is only required if you are trying to get the roles
     // of someone other than yourself.
     //
-    // option (harmonytypes.v1.metadata).requires_permission_node = "roles.user.get";
+    // option (harmonytypes.v1.metadata).requires_permission_node =
+    // "roles.user.get";
   }
 
-  rpc StreamEvents(stream StreamEventsRequest) returns(stream Event) {
+  rpc StreamEvents(stream StreamEventsRequest) returns (stream Event) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
-  rpc Sync(SyncRequest) returns(stream SyncEvent) {}
+  rpc Sync(SyncRequest) returns (stream SyncEvent) {}
 
-  rpc GetUser(GetUserRequest) returns(GetUserResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-  
-  rpc GetUserMetadata(GetUserMetadataRequest) returns(GetUserMetadataResponse) {
+  rpc GetUser(GetUserRequest) returns (GetUserResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
-  rpc ProfileUpdate(ProfileUpdateRequest) returns(google.protobuf.Empty) {
+  rpc GetUserMetadata(GetUserMetadataRequest)
+      returns (GetUserMetadataResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
-  rpc Typing(TypingRequest) returns(google.protobuf.Empty) {
+  rpc ProfileUpdate(ProfileUpdateRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "messages.send";
+  }
+
+  rpc Typing(TypingRequest) returns (google.protobuf.Empty) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "messages.send";
   }
 
   rpc PreviewGuild(PreviewGuildRequest) returns (PreviewGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = false;
+  }
+
+  rpc BanUser(BanUserRequest) returns (google.protobuf.Empty) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "user.manage.ban";
+  }
+
+  rpc KickUser(KickUserRequest) returns (google.protobuf.Empty) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "user.manage.kick";
+  }
+
+  rpc UnbanUser(UnbanUserRequest) returns (google.protobuf.Empty) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "user.manage.unban";
   }
 }
