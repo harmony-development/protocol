@@ -13,9 +13,19 @@ message SiteMetadata {
     string url = 5;
     string image = 6;
 }
+message MediaMetadata {
+    string mimetype = 1;
+    string filename = 2;
+}
 
 message FetchLinkMetadataRequest {
     string url = 1;
+}
+message FetchLinkMetadataResponse {
+    oneof data {
+        SiteMetadata is_site = 1;
+        MediaMetadata is_media = 2;
+    }
 }
 
 message InstantViewRequest {
@@ -31,7 +41,7 @@ message CanInstantViewResponse {
 }
 
 service MediaProxyService {
-    rpc FetchLinkMetadata(FetchLinkMetadataRequest) returns (SiteMetadata) {
+    rpc FetchLinkMetadata(FetchLinkMetadataRequest) returns (FetchLinkMetadataResponse) {
         option (harmonytypes.v1.metadata).requires_authentication = true;
     }
     rpc InstantView(InstantViewRequest) returns (InstantViewResponse) {
