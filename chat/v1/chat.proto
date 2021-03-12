@@ -240,6 +240,10 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  rpc GetUserBulk(GetUserBulkRequest) returns (GetUserBulkResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+
   rpc GetUserMetadata(GetUserMetadataRequest)
       returns (GetUserMetadataResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;

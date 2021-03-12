@@ -6,13 +6,16 @@ import "harmonytypes/v1/types.proto";
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
-message GetUserRequest { uint64 user_id = 1 [jstype = JS_STRING]; }
+message GetUserRequest { uint64 user_id = 1; }
 message GetUserResponse {
   string user_name = 1;
   string user_avatar = 2;
   harmonytypes.v1.UserStatus user_status = 3;
   bool is_bot = 4;
 }
+
+message GetUserBulkRequest { repeated uint64 user_ids = 1; }
+message GetUserBulkResponse { repeated GetUserResponse users = 1; }
 
 message GetUserMetadataRequest { string app_id = 1; }
 message GetUserMetadataResponse { string metadata = 1; }

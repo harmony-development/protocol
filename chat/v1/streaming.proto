@@ -8,7 +8,7 @@ import "google/protobuf/timestamp.proto";
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
 message StreamEventsRequest {
-  message SubscribeToGuild { uint64 guild_id = 1 [ jstype = JS_STRING ]; }
+  message SubscribeToGuild { uint64 guild_id = 1; }
   message SubscribeToActions {}
   message SubscribeToHomeserverEvents {}
 
@@ -30,9 +30,9 @@ message Event {
     harmonytypes.v1.Message message = 2;
   }
   message MessageUpdated {
-    uint64 guild_id = 1 [ jstype = JS_STRING ];
-    uint64 channel_id = 2 [ jstype = JS_STRING ];
-    uint64 message_id = 3 [ jstype = JS_STRING ];
+    uint64 guild_id = 1;
+    uint64 channel_id = 2;
+    uint64 message_id = 3;
     google.protobuf.Timestamp edited_at = 4;
     string content = 5;
     bool update_content = 6;
@@ -48,36 +48,36 @@ message Event {
     bool update_metadata = 16;
   }
   message MessageDeleted {
-    uint64 guild_id = 1 [ jstype = JS_STRING ];
-    uint64 channel_id = 2 [ jstype = JS_STRING ];
-    uint64 message_id = 3 [ jstype = JS_STRING ];
+    uint64 guild_id = 1;
+    uint64 channel_id = 2;
+    uint64 message_id = 3;
   }
   message ChannelCreated {
-    uint64 guild_id = 1 [ jstype = JS_STRING ];
-    uint64 channel_id = 2 [ jstype = JS_STRING ];
+    uint64 guild_id = 1;
+    uint64 channel_id = 2;
     string name = 3;
-    uint64 previous_id = 4 [ jstype = JS_STRING ];
-    uint64 next_id = 5 [ jstype = JS_STRING ];
+    uint64 previous_id = 4;
+    uint64 next_id = 5;
     bool is_category = 6;
     harmonytypes.v1.Metadata metadata = 7;
   }
   message ChannelUpdated {
-    uint64 guild_id = 1 [ jstype = JS_STRING ];
-    uint64 channel_id = 2 [ jstype = JS_STRING ];
+    uint64 guild_id = 1;
+    uint64 channel_id = 2;
     string name = 3;
     bool update_name = 4;
-    uint64 previous_id = 5 [ jstype = JS_STRING ];
-    uint64 next_id = 6 [ jstype = JS_STRING ];
+    uint64 previous_id = 5;
+    uint64 next_id = 6;
     bool update_order = 7;
     harmonytypes.v1.Metadata metadata = 8;
     bool update_metadata = 9;
   }
   message ChannelDeleted {
-    uint64 guild_id = 1 [ jstype = JS_STRING ];
-    uint64 channel_id = 2 [ jstype = JS_STRING ];
+    uint64 guild_id = 1;
+    uint64 channel_id = 2;
   }
   message GuildUpdated {
-    uint64 guild_id = 1 [ jstype = JS_STRING ];
+    uint64 guild_id = 1;
     string name = 2;
     bool update_name = 3;
     string picture = 4;
@@ -85,37 +85,37 @@ message Event {
     harmonytypes.v1.Metadata metadata = 6;
     bool update_metadata = 7;
   }
-  message GuildDeleted { uint64 guild_id = 1 [ jstype = JS_STRING ]; }
+  message GuildDeleted { uint64 guild_id = 1; }
   message MemberJoined {
-    uint64 member_id = 1 [ jstype = JS_STRING ];
-    uint64 guild_id = 2 [ jstype = JS_STRING ];
+    uint64 member_id = 1;
+    uint64 guild_id = 2;
   }
   message MemberLeft {
-    uint64 member_id = 1 [ jstype = JS_STRING ];
-    uint64 guild_id = 2 [ jstype = JS_STRING ];
+    uint64 member_id = 1;
+    uint64 guild_id = 2;
     LeaveReason leave_reason = 3;
   }
   message GuildAddedToList {
-    uint64 guild_id = 1 [ jstype = JS_STRING ];
+    uint64 guild_id = 1;
     string homeserver = 2;
   }
   message GuildRemovedFromList {
-    uint64 guild_id = 1 [ jstype = JS_STRING ];
+    uint64 guild_id = 1;
     string homeserver = 2;
   }
   message ActionPerformed {
-    uint64 guild_id = 1 [ jstype = JS_STRING ];
-    uint64 channel_id = 2 [ jstype = JS_STRING ];
-    uint64 message_id = 3 [ jstype = JS_STRING ];
+    uint64 guild_id = 1;
+    uint64 channel_id = 2;
+    uint64 message_id = 3;
     string action_id = 4;
     string action_data = 5;
   }
   message RoleMoved {
-    uint64 guild_id = 1 [ jstype = JS_STRING ];
-    uint64 role_id = 2 [ jstype = JS_STRING ];
+    uint64 guild_id = 1;
+    uint64 role_id = 2;
   }
   message ProfileUpdated {
-    uint64 user_id = 1 [ jstype = JS_STRING ];
+    uint64 user_id = 1;
     string new_username = 2;
     bool update_username = 3;
     string new_avatar = 4;
@@ -126,9 +126,9 @@ message Event {
     bool update_is_bot = 9;
   }
   message Typing {
-    uint64 user_id = 1 [ jstype = JS_STRING ];
-    uint64 guild_id = 2 [ jstype = JS_STRING ];
-    uint64 channel_id = 3 [ jstype = JS_STRING ];
+    uint64 user_id = 1;
+    uint64 guild_id = 2;
+    uint64 channel_id = 3;
   }
 
   oneof event {
