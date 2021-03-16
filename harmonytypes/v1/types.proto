@@ -104,8 +104,11 @@ message Message {
     string content = 1;
   }
   message PhotoMessage {
-    Attachment photo = 1;
-    string caption = 2;
+    message Photo {
+      Attachment photo = 1;
+      string caption = 2;
+    }
+    repeated Photo photos = 1;
   }
   message EmbedMessage {
     repeated Embed embeds = 1;
