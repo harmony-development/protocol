@@ -112,20 +112,41 @@ message Metadata {
 }
 
 message Message {
-  Metadata metadata = 13;
+  message TextMessage {
+    string content = 1;
+  }
+  message PhotoMessage {
+    message Photo {
+      Attachment photo = 1;
+      string caption = 2;
+    }
+    repeated Photo photos = 1;
+  }
+  message EmbedMessage {
+    repeated Embed embeds = 1;
+  }
+  message FilesMessage {
+    repeated Attachment attachments = 1;
+  }
 
-  uint64 guild_id = 1 [jstype = JS_STRING];
-  uint64 channel_id = 2 [jstype = JS_STRING];
-  uint64 message_id = 3 [jstype = JS_STRING];
-  uint64 author_id = 4 [jstype = JS_STRING];
-  google.protobuf.Timestamp created_at = 5;
-  google.protobuf.Timestamp edited_at = 6;
-  string content = 7;
-  repeated Embed embeds = 8;
+  Metadata metadata = 1;
+  Override overrides = 2;
+
+  uint64 guild_id = 3 [jstype = JS_STRING];
+  uint64 channel_id = 4 [jstype = JS_STRING];
+  uint64 message_id = 5 [jstype = JS_STRING];
+  uint64 author_id = 6 [jstype = JS_STRING];
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp edited_at = 8;
   repeated Action actions = 9;
-  repeated Attachment attachments = 10;
-  uint64 in_reply_to = 11 [jstype = JS_STRING];
-  Override overrides = 12;
+  uint64 in_reply_to = 10 [jstype = JS_STRING];
+
+  oneof content {
+    TextMessage text_message = 100;
+    PhotoMessage photo_message = 101;
+    EmbedMessage embed_message = 102;
+    FilesMessage files_message = 103;
+  }
 }
 
 message Error {
