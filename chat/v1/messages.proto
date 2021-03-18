@@ -23,24 +23,6 @@ message GetMessageRequest {
 }
 message GetMessageResponse { harmonytypes.v1.Message message = 1; }
 
-message UpdateMessageRequest {
-  uint64 guild_id = 1 [jstype = JS_STRING];
-  uint64 channel_id = 2 [jstype = JS_STRING];
-  uint64 message_id = 3 [jstype = JS_STRING];
-  string content = 4;
-  bool update_content = 5;
-  repeated harmonytypes.v1.Embed embeds = 6;
-  bool update_embeds = 7;
-  repeated harmonytypes.v1.Action actions = 8;
-  bool update_actions = 9;
-  repeated string attachments = 10;
-  bool update_attachments = 11;
-  harmonytypes.v1.Override overrides = 12;
-  bool update_overrides = 13;
-  harmonytypes.v1.Metadata metadata = 14;
-  bool update_metadata = 15;
-}
-
 message DeleteMessageRequest {
   uint64 guild_id = 1 [jstype = JS_STRING];
   uint64 channel_id = 2 [jstype = JS_STRING];
@@ -61,13 +43,15 @@ message TriggerActionRequest {
 message SendMessageRequest {
   uint64 guild_id = 1 [jstype = JS_STRING];
   uint64 channel_id = 2 [jstype = JS_STRING];
-  string content = 3;
-  repeated harmonytypes.v1.Action actions = 4;
-  repeated harmonytypes.v1.Embed embeds = 5;
-  repeated string attachments = 6;
-  uint64 in_reply_to = 7;
-  harmonytypes.v1.Override overrides = 8;
-  uint64 echo_id = 9;
-  harmonytypes.v1.Metadata metadata = 10;
+  repeated harmonytypes.v1.Content content = 3;
+  uint64 echo_id = 4;
+  harmonytypes.v1.Metadata metadata = 5;
 }
 message SendMessageResponse { uint64 message_id = 1 [jstype = JS_STRING]; }
+
+message UpdateMessageTextRequest {
+  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 message_id = 3 [jstype = JS_STRING];
+  string new_content = 4;
+}

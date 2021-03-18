@@ -111,24 +111,35 @@ message Metadata {
   map<string,google.protobuf.Any> extension = 2;
 }
 
-message Message {
-  message TextMessage {
-    string content = 1;
-  }
-  message PhotoMessage {
-    message Photo {
-      Attachment photo = 1;
-      string caption = 2;
-    }
-    repeated Photo photos = 1;
-  }
-  message EmbedMessage {
-    repeated Embed embeds = 1;
-  }
-  message FilesMessage {
-    repeated Attachment attachments = 1;
-  }
+message contentText {
+  string content = 1;
+}
+message Photo {
+  Attachment photo = 1;
+  string caption = 2;
+}
+message contentPhoto {
+  repeated Photo photos = 1;
+}
+message contentEmbed {
+  repeated Embed embeds = 1;
+}
+message contentFiles {
+  repeated Attachment attachments = 1;
+}
 
+message Content {
+  repeated Action actions = 1;
+
+  oneof content {
+    contentText text_message = 2;
+    contentPhoto photo_message = 3;
+    contentEmbed embed_message = 4;
+    contentFiles files_message = 5;
+  }
+}
+
+message Message {
   Metadata metadata = 1;
   Override overrides = 2;
 
@@ -138,15 +149,8 @@ message Message {
   uint64 author_id = 6 [jstype = JS_STRING];
   google.protobuf.Timestamp created_at = 7;
   google.protobuf.Timestamp edited_at = 8;
-  repeated Action actions = 9;
-  uint64 in_reply_to = 10 [jstype = JS_STRING];
-
-  oneof content {
-    TextMessage text_message = 100;
-    PhotoMessage photo_message = 101;
-    EmbedMessage embed_message = 102;
-    FilesMessage files_message = 103;
-  }
+  uint64 in_reply_to = 9 [jstype = JS_STRING];
+  Content content = 10;
 }
 
 message Error {
