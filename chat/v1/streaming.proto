@@ -35,17 +35,6 @@ message Event {
     uint64 message_id = 3;
     google.protobuf.Timestamp edited_at = 4;
     string content = 5;
-    bool update_content = 6;
-    repeated harmonytypes.v1.Embed embeds = 7;
-    bool update_embeds = 8;
-    repeated harmonytypes.v1.Action actions = 9;
-    bool update_actions = 10;
-    repeated harmonytypes.v1.Attachment attachments = 11;
-    bool update_attachments = 12;
-    harmonytypes.v1.Override overrides = 13;
-    bool update_overrides = 14;
-    harmonytypes.v1.Metadata metadata = 15;
-    bool update_metadata = 16;
   }
   message MessageDeleted {
     uint64 guild_id = 1;
