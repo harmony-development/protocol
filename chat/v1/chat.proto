@@ -108,7 +108,7 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_permission_node =
         "channels.manage.move";
   }
-  rpc UpdateMessage(UpdateMessageTextRequest) returns (google.protobuf.Empty) {
+  rpc UpdateMessageText(UpdateMessageTextRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "messages.send";

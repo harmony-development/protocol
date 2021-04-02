@@ -46,6 +46,8 @@ message SendMessageRequest {
   harmonytypes.v1.Content content = 3;
   uint64 echo_id = 4;
   harmonytypes.v1.Metadata metadata = 5;
+  harmonytypes.v1.Override overrides = 6;
+  uint64 in_reply_to = 7 [jstype = JS_STRING];
 }
 message SendMessageResponse { uint64 message_id = 1 [jstype = JS_STRING]; }
 
