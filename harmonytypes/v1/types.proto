@@ -42,39 +42,32 @@ message Override {
 
 // EMBEDS AND ACTIONS
 
-enum ActionType {
-  Normal = 0;
-  Primary = 1;
-  Destructive = 2;
-}
-
-enum ActionPresentation {
-  Button = 0;
-  Dropdown = 1;
-  Menu = 2;
-  SmallEntry = 3;
-  LargeEntry = 4;
-}
-
-enum FieldPresentation {
-  Data = 0;
-  CaptionedImage = 1;
-  Row = 2;
-}
-
-// Rules on actions:
-// Actions without a type are assumed to be Button actions or Menu actions when
-// nested. Button actions can only have Menu actions as children. Dropdown
-// actions can only have non-recursive Menu actions as children. Menu actions
-// can only have other Menu actions as children. SmallEntry and LargeActions
-// cannot have children.
 message Action {
-  string text = 1;
-  string url = 2;
-  string id = 3;
-  ActionType type = 4;
-  ActionPresentation presentation = 5;
-  repeated Action children = 6;
+  enum Type {
+    Normal = 0;
+    Primary = 1;
+    Destructive = 2;
+  }
+  message Button {
+    string text = 1;
+    string url = 2;
+  }
+  message Dropdown {
+    string text = 1;
+    repeated string options = 2;
+  }
+  message Input {
+    string label = 1;
+    bool wide = 2;
+  }
+
+  Type action_type = 1;
+  string id = 2;
+  oneof kind {
+    Button button = 3;
+    Dropdown dropdown = 4;
+    Input input = 5;
+  }
 }
 
 message EmbedHeading {
@@ -85,13 +78,18 @@ message EmbedHeading {
 }
 
 message EmbedField {
+  enum Presentation {
+    Data = 0;
+    CaptionedImage = 1;
+    Row = 2;
+  }
   string title = 1;
   string subtitle = 2;
   string body = 3;
 
   string image_url = 4;
 
-  FieldPresentation presentation = 5;
+  Presentation presentation = 5;
 
   repeated Action actions = 6;
 }
@@ -106,7 +104,6 @@ message Embed {
   EmbedHeading footer = 5;
 
   repeated EmbedField fields = 6;
-  repeated Action actions = 7;
 }
 
 // TYPES
@@ -124,12 +121,10 @@ message Metadata {
 }
 
 message contentText { string content = 1; }
-message contentEmbed { repeated Embed embeds = 1; }
+message contentEmbed { Embed embeds = 1; }
 message contentFiles { repeated Attachment attachments = 1; }
 
 message Content {
-  repeated Action actions = 1;
-
   oneof content {
     contentText text_message = 2;
     contentEmbed embed_message = 4;
