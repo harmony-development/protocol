@@ -42,12 +42,6 @@ message Override {
 
 // EMBEDS AND ACTIONS
 
-enum FieldPresentation {
-  Data = 0;
-  CaptionedImage = 1;
-  Row = 2;
-}
-
 message Action {
   enum Type {
     Normal = 0;
@@ -84,13 +78,18 @@ message EmbedHeading {
 }
 
 message EmbedField {
+  enum Presentation {
+    Data = 0;
+    CaptionedImage = 1;
+    Row = 2;
+  }
   string title = 1;
   string subtitle = 2;
   string body = 3;
 
   string image_url = 4;
 
-  FieldPresentation presentation = 5;
+  Presentation presentation = 5;
 
   repeated Action actions = 6;
 }
@@ -105,7 +104,6 @@ message Embed {
   EmbedHeading footer = 5;
 
   repeated EmbedField fields = 6;
-  repeated Action actions = 7;
 }
 
 // TYPES
@@ -123,12 +121,10 @@ message Metadata {
 }
 
 message contentText { string content = 1; }
-message contentEmbed { repeated Embed embeds = 1; }
+message contentEmbed { Embed embeds = 1; }
 message contentFiles { repeated Attachment attachments = 1; }
 
 message Content {
-  repeated Action actions = 1;
-
   oneof content {
     contentText text_message = 2;
     contentEmbed embed_message = 4;
