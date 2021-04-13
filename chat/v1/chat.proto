@@ -68,7 +68,9 @@ service ChatService {
   // You will only be informed of channels you have the "messages.view"
   // permission for.
   rpc GetGuildChannels(GetGuildChannelsRequest)
-      returns (GetGuildChannelsResponse) {}
+      returns (GetGuildChannelsResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
 
   rpc GetChannelMessages(GetChannelMessagesRequest)
       returns (GetChannelMessagesResponse) {
