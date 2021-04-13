@@ -120,15 +120,15 @@ message Metadata {
   map<string, google.protobuf.Any> extension = 2;
 }
 
-message contentText { string content = 1; }
-message contentEmbed { Embed embeds = 1; }
-message contentFiles { repeated Attachment attachments = 1; }
+message ContentText { string content = 1; }
+message ContentEmbed { Embed embeds = 1; }
+message ContentFiles { repeated Attachment attachments = 1; }
 
 message Content {
   oneof content {
-    contentText text_message = 2;
-    contentEmbed embed_message = 4;
-    contentFiles files_message = 5;
+    ContentText text_message = 2;
+    ContentEmbed embed_message = 4;
+    ContentFiles files_message = 5;
   }
 }
 
