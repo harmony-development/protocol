@@ -8,18 +8,18 @@ package protocol.sync.v1;
 option go_package = "github.com/harmony-development/legato/gen/sync/v1";
 
 message SyncRequest {
-    string token = 1;
-    string host = 2;
+  string token = 1;
+  string host = 2;
 }
-  
-message PostboxEvent { google.protobuf.Any event = 1; }
-  
+
+message PostBoxEvent { google.protobuf.Any event = 1; }
+
 message PostEventRequest {
-    SyncRequest sync_request = 1;
-    PostBoxEvent event = 2;
+  SyncRequest sync_request = 1;
+  PostBoxEvent event = 2;
 }
-  
+
 service PostboxService {
-    rpc Sync(SyncRequest) returns (stream PostboxEvent) {}
-    rpc PostEvent(PostEventRequest) returns (google.protobuf.Empty) {}
+  rpc Sync(SyncRequest) returns (stream PostboxEvent) {}
+  rpc PostEvent(PostEventRequest) returns (google.protobuf.Empty) {}
 }
