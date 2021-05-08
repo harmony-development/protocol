@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
+import "harmonytypes/v1/types.proto";
 
 package protocol.auth.v1;
 
@@ -128,4 +129,8 @@ service AuthService {
   rpc NextStep(NextStepRequest) returns(AuthStep);
   rpc StepBack(StepBackRequest) returns(AuthStep);
   rpc StreamSteps(StreamStepsRequest) returns(stream AuthStep);
+  rpc CheckLoggedIn(google.protobuf.Empty) returns(google.protobuf.Empty) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node = "";
+  }
 }
