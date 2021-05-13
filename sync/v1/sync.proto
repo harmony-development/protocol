@@ -20,6 +20,6 @@ message PostEventRequest {
 }
 
 service PostboxService {
-  rpc Sync(SyncRequest) returns (stream PostboxEvent) {}
+  rpc Sync(SyncRequest) returns (stream PostBoxEvent) {}
   rpc PostEvent(PostEventRequest) returns (google.protobuf.Empty) {}
 }
