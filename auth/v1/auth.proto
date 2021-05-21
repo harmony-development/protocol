@@ -121,6 +121,38 @@ message LoginFederatedRequest {
   string domain = 2;
 }
 
+// # Federation
+//
+// Servers should generate and persist an RSA public and private
+// key. These will be referred to later on simply as the public
+// and private keys of the server.
+//
+// Federate is the core of Harmony's federation model.
+// The client sends the server name of the foreignserver
+// to its homeserver using the Federate method.
+//
+// The homeserver generates a JWT, signed using SHA-RSA-256 and the homeserver's private key,
+// containing the following fields, described using Golang's JSON semantics:
+// ```
+// UserID   uint64
+// Target   string
+// Username string
+// Avatar   string
+// ```
+//
+// The target should be the foreignserver's server name.
+// The user ID should be the client's user ID on the homeserver.
+// The username and avatar should be the client's username and avatar,
+// so the foreignserver knows what username and avatar to give them.
+//
+// The return should be the stringified form of that JWT.
+//
+// The client will use this token in a LoginFederatedRequest request
+// and send it to the foreignserver as the auth_token field, with the
+// domain field filled out to the server name of the homeserver.
+//
+// TODO: finish
+
 service AuthService {
   rpc Federate(FederateRequest) returns(FederateReply);
   rpc LoginFederated(LoginFederatedRequest) returns(Session);
