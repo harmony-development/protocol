@@ -52,7 +52,6 @@ message Syn {
 // ```
 // Self string
 // Time uint53
-// Rand string
 // ```
 //
 // Self is the server name of the server initiating the transaction. For Pull,
@@ -63,9 +62,6 @@ message Syn {
 // Time is the UNIX time in seconds of when the request is started. Servers should reject
 // JWTs with a time too far from the current time, at their discretion. A recommended
 // variance is 1 minute.
-//
-// Rand is a random string. Servers must reject requests that re-use a Rand after
-// a request has already used it.
 //
 // ## Events
 //
@@ -88,6 +84,17 @@ message Syn {
 // It is emptied by Pull requests. When the receiver initiates a Pull, the sender
 // sends up to 100 Syns in sequential order before waiting on Acks. Events sent
 // as a Syn but without an Ack are considered in-flight.
+//
+// An event will be taken out of flight if it is Acked by the receiver.
+//
+// If the Pull is cancelled or errors out before the sender receives an Ack for
+// an event in-flight, it will be returned to the queue to be sent when the receiver
+// performs another Pull.
+//
+// When an event is Acked and removed from flight, an older event from the queue should be
+// sent.
+//
+// In essence, the queue is a LIFO stack. Newer events should be sent and acked before older events.
 //
 service PostboxService {
   rpc Pull(stream Ack) returns (stream Syn) {}
