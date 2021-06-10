@@ -1,25 +1,107 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
-import "google/protobuf/any.proto";
 
 package protocol.sync.v1;
 
 option go_package = "github.com/harmony-development/legato/gen/sync/v1";
 
-message SyncRequest {
-  string token = 1;
-  string host = 2;
-}
+message Event {
+  message UserRemovedFromGuild {
+    uint64 user_id = 1;
+    uint64 guild_id = 2;
+  }
+  message UserAddedToGuild {
+  	uint64 user_id = 1;
+  	uint64 guild_id = 2;
+  }
 
-message PostBoxEvent { google.protobuf.Any event = 1; }
+  oneof kind {
+    UserRemovedFromGuild user_removed_from_guild = 1;
+    UserAddedToGuild user_added_to_guild = 2;
+  }
+}
 
 message PostEventRequest {
-  SyncRequest sync_request = 1;
-  PostBoxEvent event = 2;
+  Event event = 1;
 }
 
+// Acknowledgement of an event pulled using Pull.
+message Ack {
+  uint64 event_id = 1;
+}
+
+// A synchronisation message pulled using Pull.
+message Syn {
+  uint64 event_id = 1;
+  Event event = 2;
+}
+
+// # Postbox
+//
+// The postbox service forms the core of Harmony's server <-> server communications.
+//
+// It concerns the transfer of Events between servers, as well as ensuring reliable
+// delivery of them.
+//
+// The semantics of events are documented in the event types. The postbox service
+// is solely reliable for reliable pushing and pulling.
+//
+// ## Authorisation
+//
+// Requests are authorised using a JWT token in the Authorization HTTP header.
+//
+// The JWT token is signed using SHA-RSA-256 with the homeserver's private key,
+//
+// It contains the following fields, described using Go JSON semantics:
+// ```
+// Self string
+// Time uint53
+// ```
+//
+// Self is the server name of the server initiating the transaction. For Pull,
+// this tells the server being connected to which homeservers' events it should send.
+// For Push, this tells the server being connected to which homeservers' events it is
+// receiving.
+//
+// Time is the UTC UNIX time in seconds of when the request is started. Servers should reject
+// JWTs with a time too far from the current time, at their discretion. A recommended
+// variance is 1 minute.
+//
+// ## Events
+//
+// In this section, we will use sender and recipient to refer to the servers
+// sending the events and the server receiving the events respectively.
+//
+// When an event that a recipient would be interested in receiving occurs, the
+// sender should check whether or not there is an active Pull by the receiver.
+// If there is one, the server should dispatch the event to its queue as described
+// later in this document.
+// If there is not an active Pull by the receiver, the sender will attempt to Push
+// to the receiver. If the Push RPC fails, the event will be dispatched to the
+// sender's queue for the receiver.
+//
+// ### The Event Queue
+//
+// The event queue is an abstract data structure. It is filled by a sender when
+// a Push fails.
+//
+// It is emptied by Pull requests. When the receiver initiates a Pull, the sender
+// sends up to 100 Syns in sequential order before waiting on Acks. Events sent
+// as a Syn but without an Ack are considered in-flight.
+//
+// An event will be taken out of flight if it is Acked by the receiver.
+//
+// If the Pull is cancelled or errors out before the sender receives an Ack for
+// an event in-flight, it will be returned to the queue to be sent when the receiver
+// performs another Pull.
+//
+// When an event is Acked and removed from flight, an older event from the queue should be
+// sent.
+//
+// In essence, the queue is a LIFO stack. Newer events should be sent and acked before older events.
+//
 service PostboxService {
-  rpc Sync(SyncRequest) returns (stream PostBoxEvent) {}
-  rpc PostEvent(PostEventRequest) returns (google.protobuf.Empty) {}
+  rpc Pull(stream Ack) returns (stream Syn) {}
+  rpc Push(Event) returns (google.protobuf.Empty) {}
 }
