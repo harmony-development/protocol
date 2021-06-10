@@ -11,9 +11,14 @@ message Event {
     uint64 user_id = 1;
     uint64 guild_id = 2;
   }
+  message UserAddedToGuild {
+  	uint64 user_id = 1;
+  	uint64 guild_id = 2;
+  }
 
   oneof kind {
     UserRemovedFromGuild user_removed_from_guild = 1;
+    UserAddedToGuild user_added_to_guild = 2;
   }
 }
 
@@ -59,7 +64,7 @@ message Syn {
 // For Push, this tells the server being connected to which homeservers' events it is
 // receiving.
 //
-// Time is the UNIX time in seconds of when the request is started. Servers should reject
+// Time is the UTC UNIX time in seconds of when the request is started. Servers should reject
 // JWTs with a time too far from the current time, at their discretion. A recommended
 // variance is 1 minute.
 //
