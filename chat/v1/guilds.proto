@@ -84,17 +84,6 @@ message PreviewGuildResponse {
 message LeaveGuildRequest { uint64 guild_id = 1; }
 
 // GUILD LIST
-message AddGuildToGuildListRequest {
-  uint64 guild_id = 1;
-  string homeserver = 2;
-}
-message AddGuildToGuildListResponse {}
-
-message RemoveGuildFromGuildListRequest {
-  uint64 guild_id = 1;
-  string homeserver = 2;
-}
-message RemoveGuildFromGuildListResponse {}
 
 message BanUserRequest {
   uint64 guild_id = 1;

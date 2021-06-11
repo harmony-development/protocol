@@ -40,16 +40,6 @@ service ChatService {
   rpc GetGuildList(GetGuildListRequest) returns (GetGuildListResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
-  rpc AddGuildToGuildList(AddGuildToGuildListRequest)
-      returns (AddGuildToGuildListResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_local = true;
-  }
-  rpc RemoveGuildFromGuildList(RemoveGuildFromGuildListRequest)
-      returns (RemoveGuildFromGuildListResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_local = true;
-  }
 
   rpc GetGuild(GetGuildRequest) returns (GetGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
