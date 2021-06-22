@@ -64,7 +64,8 @@ message Syn {
 // ## Authorisation
 //
 // Requests are authorised using a serialized `token.v1.Token` in the Authorization HTTP header.
-// The `data` field of the token will be a serialized `AuthData` protobuf message.
+// The `data` field of the token will be a serialized `AuthData` message.
+// The private key used to sign is the homeserver's private key.
 //
 // ## Events
 //

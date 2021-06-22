@@ -111,6 +111,7 @@ message StreamStepsRequest { string auth_id = 1; }
 // Connection
 message FederateRequest { string target = 1; }
 message FederateReply {
+  // A `token.v1.Token` whose `data` field is a serialized `TokenData` message.
   Token token = 1;
   string nonce = 2;
 }
@@ -118,6 +119,7 @@ message FederateReply {
 message KeyReply { string key = 1; }
 
 message LoginFederatedRequest {
+  // A `token.v1.Token` whose `data` field is a serialized `TokenData` message.
   Token auth_token = 1;
   string domain = 2;
 }
@@ -146,7 +148,8 @@ message TokenData {
 // to its homeserver using the Federate method.
 //
 // The homeserver generates a `token.v1.Token`, where the `data` field
-// contains a serialized `TokenData` protobuf message.
+// contains a serialized `TokenData` message.
+// The private key used to sign is the homeserver's private key.
 //
 // The target should be the foreignserver's server name.
 // The user ID should be the client's user ID on the homeserver.

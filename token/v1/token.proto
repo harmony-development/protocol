@@ -6,7 +6,9 @@ option go_package = "github.com/harmony-development/legato/gen/token/v1";
 
 // Token that will be used for authentication.
 message Token {
-  // Ed25519 signature of the following serialized protobuf data.
+  // Ed25519 signature of the following serialized protobuf data, signed
+  // with a private key.
+  //
   // Has to be 64 bytes long, otherwise it will be rejected.
   bytes sig = 1;
   // Serialized protobuf data.
