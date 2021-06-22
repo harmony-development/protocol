@@ -112,6 +112,7 @@ message StreamStepsRequest { string auth_id = 1; }
 message FederateRequest { string target = 1; }
 message FederateReply {
   // A `token.v1.Token` whose `data` field is a serialized `TokenData` message.
+  // It is signed with the homeserver's private key.
   Token token = 1;
   string nonce = 2;
 }
@@ -120,6 +121,7 @@ message KeyReply { string key = 1; }
 
 message LoginFederatedRequest {
   // A `token.v1.Token` whose `data` field is a serialized `TokenData` message.
+  // It is signed with the homeserver's private key.
   Token auth_token = 1;
   string domain = 2;
 }
