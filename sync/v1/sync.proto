@@ -64,7 +64,7 @@ message Syn {
 // ## Authorisation
 //
 // Requests are authorised using a serialized `token.v1.Token` in the Authorization HTTP header.
-// See `AuthData` for the information needed for authorization.
+// The `data` field of the token will be a serialized `AuthData` protobuf message.
 //
 // ## Events
 //
