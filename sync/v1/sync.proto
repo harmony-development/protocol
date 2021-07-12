@@ -1,10 +1,24 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
+import "harmonytypes/v1/types.proto";
 
 package protocol.sync.v1;
 
 option go_package = "github.com/harmony-development/legato/gen/sync/v1";
+
+// Authentication data that will be sent in a `harmonytypes.v1.Token`.
+message AuthData {
+  // The server name of the server initiating the transaction. For Pull,
+  // this tells the server being connected to which homeservers' events it should send.
+  // For Push, this tells the server being connected to which homeservers' events it is
+  // receiving.
+  string host = 1;
+  // The UTC UNIX time in seconds of when the request is started. Servers should reject
+  // tokens with a time too far from the current time, at their discretion. A recommended
+  // variance is 1 minute.
+  uint64 time = 2;
+}
 
 message Event {
   message UserRemovedFromGuild {
@@ -49,24 +63,9 @@ message Syn {
 //
 // ## Authorisation
 //
-// Requests are authorised using a JWT token in the Authorization HTTP header.
-//
-// The JWT token is signed using SHA-RSA-256 with the homeserver's private key,
-//
-// It contains the following fields, described using Go JSON semantics:
-// ```
-// Self string
-// Time uint53
-// ```
-//
-// Self is the server name of the server initiating the transaction. For Pull,
-// this tells the server being connected to which homeservers' events it should send.
-// For Push, this tells the server being connected to which homeservers' events it is
-// receiving.
-//
-// Time is the UTC UNIX time in seconds of when the request is started. Servers should reject
-// JWTs with a time too far from the current time, at their discretion. A recommended
-// variance is 1 minute.
+// Requests are authorised using a serialized `harmonytypes.v1.Token` in the Authorization HTTP header.
+// The `data` field of the token will be a serialized `AuthData` message.
+// The private key used to sign is the homeserver's private key.
 //
 // ## Events
 //

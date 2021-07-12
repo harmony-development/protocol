@@ -110,20 +110,37 @@ message StreamStepsRequest { string auth_id = 1; }
 // Connection
 message FederateRequest { string target = 1; }
 message FederateReply {
-  string token = 1;
+  // A `harmonytypes.v1.Token` whose `data` field is a serialized `TokenData` message.
+  // It is signed with the homeserver's private key.
+  Token token = 1;
   string nonce = 2;
 }
 
 message KeyReply { string key = 1; }
 
 message LoginFederatedRequest {
-  string auth_token = 1;
+  // A `harmonytypes.v1.Token` whose `data` field is a serialized `TokenData` message.
+  // It is signed with the homeserver's private key.
+  Token auth_token = 1;
   string domain = 2;
+}
+
+// Information sent by a client's homeserver, in a `harmonytypes.v1.Token`.
+// It will be sent to a foreignserver by the client.
+message TokenData {
+  // The client's user ID on the homeserver.
+  uint64 user_id = 1;
+  // The foreignserver's server name.
+  string target = 2;
+  // The username of the client.
+  string username = 3;
+  // The avatar of the client.
+  string avatar = 4;
 }
 
 // # Federation
 //
-// Servers should generate and persist an RSA public and private
+// Servers should generate and persist an Ed25519 public and private
 // key. These will be referred to later on simply as the public
 // and private keys of the server.
 //
@@ -131,21 +148,14 @@ message LoginFederatedRequest {
 // The client sends the server name of the foreignserver
 // to its homeserver using the Federate method.
 //
-// The homeserver generates a JWT, signed using SHA-RSA-256 and the homeserver's private key,
-// containing the following fields, described using Golang's JSON semantics:
-// ```
-// UserID   uint64
-// Target   string
-// Username string
-// Avatar   string
-// ```
+// The homeserver generates a `harmonytypes.v1.Token`, where the `data` field
+// contains a serialized `TokenData` message.
+// The private key used to sign is the homeserver's private key.
 //
 // The target should be the foreignserver's server name.
 // The user ID should be the client's user ID on the homeserver.
 // The username and avatar should be the client's username and avatar,
 // so the foreignserver knows what username and avatar to give them.
-//
-// The return should be the stringified form of that JWT.
 //
 // The client will use this token in a LoginFederatedRequest request
 // and send it to the foreignserver as the auth_token field, with the
