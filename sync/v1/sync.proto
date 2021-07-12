@@ -1,13 +1,13 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
-import "token/v1/token.proto";
+import "harmonytypes/v1/types.proto";
 
 package protocol.sync.v1;
 
 option go_package = "github.com/harmony-development/legato/gen/sync/v1";
 
-// Authentication data that will be sent in a `token.v1.Token`.
+// Authentication data that will be sent in a `harmonytypes.v1.Token`.
 message AuthData {
   // The server name of the server initiating the transaction. For Pull,
   // this tells the server being connected to which homeservers' events it should send.
@@ -63,7 +63,7 @@ message Syn {
 //
 // ## Authorisation
 //
-// Requests are authorised using a serialized `token.v1.Token` in the Authorization HTTP header.
+// Requests are authorised using a serialized `harmonytypes.v1.Token` in the Authorization HTTP header.
 // The `data` field of the token will be a serialized `AuthData` message.
 // The private key used to sign is the homeserver's private key.
 //

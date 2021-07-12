@@ -151,3 +151,16 @@ message Error {
   string human_message = 2;
   bytes more_details = 3;
 }
+
+// Token that will be used for authentication.
+message Token {
+  // Ed25519 signature of the following serialized protobuf data, signed
+  // with a private key. Which private key used to sign will be described
+  // in the documentation.
+  //
+  // Has to be 64 bytes long, otherwise it will be rejected.
+  bytes sig = 1;
+  // Serialized protobuf data.
+  // The protobuf type of this serialized data is dependent on the API endpoint used.
+  bytes data = 2;
+}
