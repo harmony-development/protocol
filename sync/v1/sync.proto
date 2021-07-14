@@ -20,6 +20,10 @@ message AuthData {
   uint64 time = 2;
 }
 
+message EventQueue {
+  repeated Event events = 1;
+}
+
 message Event {
   message UserRemovedFromGuild {
     uint64 user_id = 1;
@@ -34,21 +38,6 @@ message Event {
     UserRemovedFromGuild user_removed_from_guild = 1;
     UserAddedToGuild user_added_to_guild = 2;
   }
-}
-
-message PostEventRequest {
-  Event event = 1;
-}
-
-// Acknowledgement of an event pulled using Pull.
-message Ack {
-  uint64 event_id = 1;
-}
-
-// A synchronisation message pulled using Pull.
-message Syn {
-  uint64 event_id = 1;
-  Event event = 2;
 }
 
 // # Postbox
@@ -72,35 +61,14 @@ message Syn {
 // In this section, we will use sender and recipient to refer to the servers
 // sending the events and the server receiving the events respectively.
 //
-// When an event that a recipient would be interested in receiving occurs, the
-// sender should check whether or not there is an active Pull by the receiver.
-// If there is one, the server should dispatch the event to its queue as described
-// later in this document.
-// If there is not an active Pull by the receiver, the sender will attempt to Push
-// to the receiver. If the Push RPC fails, the event will be dispatched to the
-// sender's queue for the receiver.
+// At PostboxService startup, a sender should first Pull all receivers it had
+// federated from before. If a receiver makes a Push to the sender while a Pull
+// is going on, the Push should be processed after the Pull is completed.
 //
-// ### The Event Queue
-//
-// The event queue is an abstract data structure. It is filled by a sender when
-// a Push fails.
-//
-// It is emptied by Pull requests. When the receiver initiates a Pull, the sender
-// sends up to 100 Syns in sequential order before waiting on Acks. Events sent
-// as a Syn but without an Ack are considered in-flight.
-//
-// An event will be taken out of flight if it is Acked by the receiver.
-//
-// If the Pull is cancelled or errors out before the sender receives an Ack for
-// an event in-flight, it will be returned to the queue to be sent when the receiver
-// performs another Pull.
-//
-// When an event is Acked and removed from flight, an older event from the queue should be
-// sent.
-//
-// In essence, the queue is a LIFO stack. Newer events should be sent and acked before older events.
+// The sender will attempt to Push to the receiver. If the Push RPC fails,
+// the event will be dispatched to the sender's queue for the receiver.
 //
 service PostboxService {
-  rpc Pull(stream Ack) returns (stream Syn) {}
+  rpc Pull(google.protobuf.Empty) returns (EventQueue) {}
   rpc Push(Event) returns (google.protobuf.Empty) {}
 }
