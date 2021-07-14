@@ -62,7 +62,8 @@ message Event {
 // sending the events and the server receiving the events respectively.
 //
 // At PostboxService startup, a sender should first Pull all receivers it had
-// federated from before.
+// federated from before. If a receiver makes a Push to the sender while a Pull
+// is going on, the Push should be processed after the Pull is completed.
 //
 // The sender will attempt to Push to the receiver. If the Push RPC fails,
 // the event will be dispatched to the sender's queue for the receiver.
