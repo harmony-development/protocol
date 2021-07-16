@@ -102,6 +102,23 @@ message Event {
   message RoleMoved {
     uint64 guild_id = 1;
     uint64 role_id = 2;
+    uint64 previous_id = 3;
+    uint64 next_id = 4;
+  }
+  message RoleDeleted {
+    uint64 guild_id = 1;
+    uint64 role_id = 2;
+  }
+  message RoleCreated {
+    uint64 guild_id = 1;
+    uint64 role_id = 2;
+    Role role = 3;
+  }
+  message RoleUpdated {
+    uint64 guild_id = 1;
+    uint64 channel_id = 2;
+    uint64 role_id = 3;
+    PermissionList perms = 4;
   }
   message ProfileUpdated {
     uint64 user_id = 1;
@@ -134,8 +151,11 @@ message Event {
     GuildDeleted deleted_guild = 11;
     MemberJoined joined_member = 12;
     MemberLeft left_member = 13;
-    RoleMoved role_moved = 14;
-    ProfileUpdated profile_updated = 15;
-    Typing typing = 16;
+    ProfileUpdated profile_updated = 14;
+    Typing typing = 15;
+    RoleCreated role_created = 16;
+    RoleDeleted role_deleted = 17;
+    RoleMoved role_moved = 18;
+    RoleUpdated role_updated = 19;
   }
 }
