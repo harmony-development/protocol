@@ -118,6 +118,12 @@ message Event {
     uint64 guild_id = 1;
     uint64 channel_id = 2;
     uint64 role_id = 3;
+    Role role = 4;
+  }
+  message RolePermissionsUpdated {
+    uint64 guild_id = 1;
+    uint64 channel_id = 2;
+    uint64 role_id = 3;
     PermissionList perms = 4;
   }
   message ProfileUpdated {
@@ -157,5 +163,6 @@ message Event {
     RoleDeleted role_deleted = 17;
     RoleMoved role_moved = 18;
     RoleUpdated role_updated = 19;
+    RolePermissionsUpdated role_perms_updated = 20;
   }
 }
