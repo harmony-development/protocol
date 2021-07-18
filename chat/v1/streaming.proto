@@ -4,6 +4,7 @@ package protocol.chat.v1;
 
 import "harmonytypes/v1/types.proto";
 import "google/protobuf/timestamp.proto";
+import "chat/v1/permissions.proto";
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
@@ -112,13 +113,19 @@ message Event {
   message RoleCreated {
     uint64 guild_id = 1;
     uint64 role_id = 2;
-    Role role = 3;
+    chat.v1.Role role = 3;
   }
   message RoleUpdated {
     uint64 guild_id = 1;
     uint64 channel_id = 2;
     uint64 role_id = 3;
-    PermissionList perms = 4;
+    chat.v1.Role role = 4;
+  }
+  message RolePermissionsUpdated {
+    uint64 guild_id = 1;
+    uint64 channel_id = 2;
+    uint64 role_id = 3;
+    chat.v1.PermissionList perms = 4;
   }
   message ProfileUpdated {
     uint64 user_id = 1;
@@ -157,5 +164,6 @@ message Event {
     RoleDeleted role_deleted = 17;
     RoleMoved role_moved = 18;
     RoleUpdated role_updated = 19;
+    RolePermissionsUpdated role_perms_updated = 20;
   }
 }
