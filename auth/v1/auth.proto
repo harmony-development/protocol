@@ -116,7 +116,8 @@ message FederateReply {
   string nonce = 2;
 }
 
-message KeyReply { string key = 1; }
+// `key` is the bytes of the public key.
+message KeyReply { bytes key = 1; }
 
 message LoginFederatedRequest {
   // A `harmonytypes.v1.Token` whose `data` field is a serialized `TokenData` message.
