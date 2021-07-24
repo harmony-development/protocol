@@ -65,9 +65,15 @@ message Event {
 // federated from before. If a receiver makes a Push to the sender while a Pull
 // is going on, the Push should be processed after the Pull is completed.
 //
-// The sender will attempt to Push to the receiver. If the Push RPC fails,
-// the event will be dispatched to the sender's queue for the receiver.
+// The sender will attempt to Push to the receiver. If the Push RPC fails more
+// than X times (a recommended retry count is 5), the event will be dispatched
+// to the sender's queue for the receiver. Unless the receiver pulls these events,
+// all new events should be dispatched to the queue. No new Push RPC should be made
+// before the queue is emptied. This ensures that events are always received in the
+// right order.
 //
+// It is recommended that receivers try pulling periodically, for example, every
+// 1 minute after the last Push RPC by the sender. This ensures that events are recieved.
 service PostboxService {
   rpc Pull(google.protobuf.Empty) returns (EventQueue) {}
   rpc Push(Event) returns (google.protobuf.Empty) {}
