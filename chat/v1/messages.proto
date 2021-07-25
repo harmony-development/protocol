@@ -9,7 +9,10 @@ option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 message GetChannelMessagesRequest {
   uint64 guild_id = 1 [jstype = JS_STRING];
   uint64 channel_id = 2 [jstype = JS_STRING];
+  // If `0`, this should default to the last message in the channel.
   uint64 before_message = 3 [jstype = JS_STRING];
+  // If `0`, this should default to 25.
+  uint64 count = 4 [jstype = JS_STRING];
 }
 message GetChannelMessagesResponse {
   bool reached_top = 1;
