@@ -37,7 +37,7 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
-  rpc GetGuildList(GetGuildListRequest) returns (GetGuildListResponse) {
+  rpc GetGuildList(google.protobuf.Empty) returns (GetGuildListResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
@@ -74,7 +74,7 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_permission_node =
         "messages.view";
   }
-  rpc GetEmotePacks(GetEmotePacksRequest) returns (GetEmotePacksResponse) {
+  rpc GetEmotePacks(google.protobuf.Empty) returns (GetEmotePacksResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
   rpc GetEmotePackEmotes(GetEmotePackEmotesRequest)
@@ -181,7 +181,7 @@ service ChatService {
         "permissions.manage.get";
   }
 
-  rpc MoveRole(MoveRoleRequest) returns (MoveRoleResponse) {
+  rpc MoveRole(MoveRoleRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "roles.manage";
   }

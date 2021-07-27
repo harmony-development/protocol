@@ -124,7 +124,7 @@ message Event {
     uint64 guild_id = 1;
     uint64 channel_id = 2;
     uint64 role_id = 3;
-    chat.v1.PermissionList perms = 4;
+    chat.v1.Permissions perms = 4;
   }
   message UserRolesUpdated {
     uint64 guild_id = 1;

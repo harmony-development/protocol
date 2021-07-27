@@ -12,19 +12,13 @@ message QueryPermissionsRequest {
 }
 message QueryPermissionsResponse { bool ok = 1; }
 
-message Permission {
-  enum Mode { Allow = 0; Deny = 1; }
-  string matches = 1;
-  Mode mode = 2;
-}
-
-message PermissionList { repeated Permission permissions = 1; }
+message Permissions { map<string, bool> permissions = 1; }
 
 message SetPermissionsRequest {
   uint64 guild_id = 1 [jstype = JS_STRING];
   uint64 channel_id = 2 [jstype = JS_STRING];
   uint64 role_id = 3 [jstype = JS_STRING];
-  PermissionList perms = 4;
+  Permissions perms = 4;
 }
 
 message GetPermissionsRequest {
@@ -32,7 +26,7 @@ message GetPermissionsRequest {
   uint64 channel_id = 2 [jstype = JS_STRING];
   uint64 role_id = 3 [jstype = JS_STRING];
 }
-message GetPermissionsResponse { PermissionList perms = 1; }
+message GetPermissionsResponse { Permissions perms = 1; }
 
 message Role {
   uint64 role_id = 1 [jstype = JS_STRING];
@@ -48,7 +42,6 @@ message MoveRoleRequest {
   uint64 before_id = 3 [jstype = JS_STRING];
   uint64 after_id = 4 [jstype = JS_STRING];
 }
-message MoveRoleResponse {}
 
 message GetGuildRolesRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
 message GetGuildRolesResponse { repeated Role roles = 1; }

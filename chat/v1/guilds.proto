@@ -21,8 +21,6 @@ message CreateInviteRequest {
 }
 message CreateInviteResponse { string name = 1; }
 
-message GetGuildListRequest {}
-
 message GetGuildListResponse {
   message GuildListEntry {
     uint64 guild_id = 1;
