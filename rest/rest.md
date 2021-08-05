@@ -74,6 +74,9 @@ The body will contain JSON object in the following format:
 }
 ```
 `serverName`: the Harmony server software being hosted
+
 `version`: the version of said Harmony server software
+
 `aboutServer`: A description of why / who this server is hosted for.
+
 `messageOfTheDay`: "message of the day", can be used to put maintenance information.
