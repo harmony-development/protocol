@@ -64,12 +64,15 @@ Expects authentication: no
 
 ##### Body
 
-The body will contain a UTF-8 string in the following format:
+The body will contain an UTF-8 string in the following format:
 ```
 serverName version
 
 aboutServer
+
+messageOfTheDay
 ```
 `serverName`: the Harmony server software being hosted
 `version`: the version of said Harmony server software
 `aboutServer`: A description of why / who this server is hosted for.
+`messageOfTheDay`: "message of the day", can be used to put maintance information.
