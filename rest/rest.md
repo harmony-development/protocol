@@ -64,13 +64,14 @@ Expects authentication: no
 
 ##### Body
 
-The body will contain an UTF-8 string in the following format:
+The body will contain JSON object in the following format:
 ```
-serverName version
-
-aboutServer
-
-messageOfTheDay
+{
+    "serverName": "Scherzo",
+    "version": "git-0c062f6",
+    "aboutServer": "The main Harmony server.",
+    "messageOfTheDay": "A maintance will be done between 18:00 - 20:00."
+}
 ```
 `serverName`: the Harmony server software being hosted
 `version`: the version of said Harmony server software
