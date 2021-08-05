@@ -53,3 +53,27 @@ The file ID should be one of the following:
 ##### Body
 
 The body will contain the content of the requested file.
+
+## GET `/_harmony/about`
+
+Expects authentication: no
+
+### Responses
+
+#### 200 OK
+
+##### Body
+
+The body will contain JSON object in the following format:
+```
+{
+    "serverName": "Scherzo",
+    "version": "git-0c062f6",
+    "aboutServer": "The main Harmony server.",
+    "messageOfTheDay": "A maintenance will be done between 18:00 - 20:00."
+}
+```
+`serverName`: the Harmony server software being hosted
+`version`: the version of said Harmony server software
+`aboutServer`: A description of why / who this server is hosted for.
+`messageOfTheDay`: "message of the day", can be used to put maintenance information.
