@@ -139,6 +139,9 @@ service ChatService {
   rpc DequipEmotePack(DequipEmotePackRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
+  rpc EquipEmotePack(EquipEmotePackRequest) returns (google.protobuf.Empty) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
 
   rpc JoinGuild(JoinGuildRequest) returns (JoinGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
