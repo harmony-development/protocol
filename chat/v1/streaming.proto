@@ -148,6 +148,8 @@ message Event {
     uint64 guild_id = 2;
     uint64 channel_id = 3;
   }
+  // Servers should calculate which users to send this event to when a permission is set.
+  // It should only be sent if a user is subscribed to the guild the permission pertains to.
   message PermissionUpdated {
     uint64 guild_id = 1;
     uint64 channel_id = 2;
