@@ -120,6 +120,7 @@ message Event {
     uint64 role_id = 3;
     chat.v1.Role role = 4;
   }
+  // This event will only be sent to users with the "guild.manage" permission.
   message RolePermissionsUpdated {
     uint64 guild_id = 1;
     uint64 channel_id = 2;
@@ -147,6 +148,12 @@ message Event {
     uint64 guild_id = 2;
     uint64 channel_id = 3;
   }
+  message PermissionUpdated {
+    uint64 guild_id = 1;
+    uint64 channel_id = 2;
+    string query = 3;
+    bool ok = 4;
+  }
 
   oneof event {
     GuildAddedToList guild_added_to_list = 1;
@@ -170,5 +177,6 @@ message Event {
     RoleUpdated role_updated = 19;
     RolePermissionsUpdated role_perms_updated = 20;
     UserRolesUpdated user_roles_updated = 21;
+    PermissionUpdated permission_updated = 22;
   }
 }
