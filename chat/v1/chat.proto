@@ -172,6 +172,16 @@ service ChatService {
     //     "permissions.query";
   }
 
+  rpc BatchQueryHasPermission(BatchQueryPermissionsRequest)
+      returns (BatchQueryPermissionsResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    // This permissions node is only required if you're trying
+    // to see if someone besides yourself has a permission.
+    //
+    // option (harmonytypes.v1.metadata).requires_permission_node =
+    //     "permissions.query";
+  }
+
   rpc SetPermissions(SetPermissionsRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
