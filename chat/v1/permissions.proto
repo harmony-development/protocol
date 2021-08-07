@@ -12,6 +12,13 @@ message QueryPermissionsRequest {
 }
 message QueryPermissionsResponse { bool ok = 1; }
 
+message BatchQueryPermissionsRequest {
+  repeated QueryPermissionsRequest requests = 1;
+}
+message BatchQueryPermissionsResponse {
+  repeated QueryPermissionsResponse responses = 1;
+}
+
 message Permission {
   enum Mode { Allow = 0; Deny = 1; }
   string matches = 1;
