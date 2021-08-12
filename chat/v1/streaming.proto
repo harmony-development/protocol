@@ -171,6 +171,11 @@ message Event {
     // ID of the pack that was deleted.
     uint64 pack_id = 1;
   }
+  // Should only be sent to the user who equipped the pack.
+  message EmotePackAdded {
+    // Emote pack that was equipped by the user.
+    chat.v1.EmotePack pack = 1;
+  }
   // Should only be sent to users who have the pack equipped.
   message EmotePackEmotesUpdated {
     // ID of the pack to update the emotes of.
@@ -204,8 +209,9 @@ message Event {
     RolePermissionsUpdated role_perms_updated = 20;
     UserRolesUpdated user_roles_updated = 21;
     PermissionUpdated permission_updated = 22;
-    EmotePackUpdated emote_pack_updated = 23;
-    EmotePackDeleted emote_pack_deleted = 24;
-    EmotePackEmotesUpdated emote_pack_emotes_updated = 25;
+    EmotePackAdded emote_pack_added = 23;
+    EmotePackUpdated emote_pack_updated = 24;
+    EmotePackDeleted emote_pack_deleted = 25;
+    EmotePackEmotesUpdated emote_pack_emotes_updated = 26;
   }
 }
