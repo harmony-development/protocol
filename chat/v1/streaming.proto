@@ -156,6 +156,29 @@ message Event {
     string query = 3;
     bool ok = 4;
   }
+  // Should only be sent to users who have the pack equipped.
+  message EmotePackUpdated {
+    // ID of the pack that was updated.
+    uint64 pack_id = 1;
+    // New pack name of the pack.
+    string pack_name = 2;
+    // Whether to update the pack name or not.
+    bool update_pack_name = 3;
+  }
+  // Should only be sent to users who have the pack equipped.
+  message EmotePackDeleted {
+    // ID of the pack that was deleted.
+    uint64 pack_id = 1;
+  }
+  // Should only be sent to users who have the pack equipped.
+  message EmotePackEmotesUpdated {
+    // ID of the pack to update the emotes of.
+    uint64 pack_id = 1;
+    // The added emotes.
+    repeated chat.v1.Emote added_emotes = 2;
+    // The image IDs of the deleted emotes.
+    repeated string deleted_emotes = 3;
+  }
 
   oneof event {
     GuildAddedToList guild_added_to_list = 1;
@@ -180,5 +203,8 @@ message Event {
     RolePermissionsUpdated role_perms_updated = 20;
     UserRolesUpdated user_roles_updated = 21;
     PermissionUpdated permission_updated = 22;
+    EmotePackUpdated emote_pack_updated = 23;
+    EmotePackDeleted emote_pack_deleted = 24;
+    EmotePackEmotesUpdated emote_pack_emotes_updated = 25;
   }
 }
