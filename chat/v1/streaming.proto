@@ -167,6 +167,7 @@ message Event {
     bool update_pack_name = 3;
   }
   // Should only be sent to users who have the pack equipped.
+  // Should also be sent if a user dequips an emote pack, only to the user that dequipped it.
   message EmotePackDeleted {
     // ID of the pack that was deleted.
     uint64 pack_id = 1;
