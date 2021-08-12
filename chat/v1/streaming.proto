@@ -5,6 +5,7 @@ package protocol.chat.v1;
 import "harmonytypes/v1/types.proto";
 import "google/protobuf/timestamp.proto";
 import "chat/v1/permissions.proto";
+import "chat/v1/emotes.proto";
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
