@@ -169,7 +169,7 @@ message Metadata {
 message ContentText { string content = 1; }
 message ContentEmbed { Embed embeds = 1; }
 message ContentFiles { repeated Attachment attachments = 1; }
-message ContentPhotos { repeated Attachment photos = 1; }
+message ContentPhotos { repeated Photo photos = 1; }
 
 message Content {
   oneof content {
