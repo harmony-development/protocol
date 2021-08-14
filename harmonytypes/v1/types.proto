@@ -115,6 +115,52 @@ message Attachment {
   string caption = 5;
 }
 
+/*
+  Minithumbnail is an extremely low-quality JPEG thumbnail.
+
+  The resolution is usually no larger than 64x64.
+*/
+message Minithumbnail {
+  // The width of the minithumbnail
+  uint32 width = 1;
+
+  // The height of the minithumbnail
+  uint32 height = 2;
+
+  // The JPEG data of the minithumbnail
+  bytes data = 3;
+}
+
+/*
+  Photo contains data about a photo.
+
+  Photo are always JPEG, and are
+  constrained to the following rules:
+
+  - width+height <= 10_000
+  - width <= height*20
+  - height <= width*20
+
+  Photos are preferably no more than 10MB
+  in size, and servers may compress as necessary.
+*/
+message Photo {
+  // The HMC URL of the photo.
+  string hmc = 1;
+  // The filename of the photo.
+  string name = 2;
+  // The size of the photo.
+  uint32 file_size = 3;
+  // The height of the photo, in pixels.
+  uint32 height = 4;
+  // The width of the photo, in pixels.
+  uint32 width = 5;
+  // The photo's caption.
+  string caption = 6;
+  // A thumbnail representing the photo.
+  Minithumbnail minithumbnail = 7;
+}
+
 message Metadata {
   string kind = 1;
   map<string, google.protobuf.Any> extension = 2;
@@ -123,12 +169,14 @@ message Metadata {
 message ContentText { string content = 1; }
 message ContentEmbed { Embed embeds = 1; }
 message ContentFiles { repeated Attachment attachments = 1; }
+message ContentPhotos { repeated Attachment photos = 1; }
 
 message Content {
   oneof content {
     ContentText text_message = 2;
     ContentEmbed embed_message = 4;
     ContentFiles files_message = 5;
+    ContentPhotos photos_message = 6;
   }
 }
 
