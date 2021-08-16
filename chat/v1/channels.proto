@@ -17,21 +17,21 @@ option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 // the usual text fare.
 //
 message CreateChannelRequest {
-  uint64 guild_id = 1 [jstype = JS_STRING];
+  uint64 guild_id = 1;
   string channel_name = 2; //  [(validate.rules).string.min_len = 1]
   bool is_category = 3;
-  uint64 previous_id = 5 [jstype = JS_STRING];
-  uint64 next_id = 4 [jstype = JS_STRING];
+  uint64 previous_id = 5;
+  uint64 next_id = 4;
   harmonytypes.v1.Metadata metadata = 6;
 }
-message CreateChannelResponse { uint64 channel_id = 1 [jstype = JS_STRING]; }
+message CreateChannelResponse { uint64 channel_id = 1; }
 
-message GetGuildChannelsRequest { uint64 guild_id = 1 [jstype = JS_STRING]; }
+message GetGuildChannelsRequest { uint64 guild_id = 1; }
 message GetGuildChannelsResponse {
   message Channel {
     harmonytypes.v1.Metadata metadata = 4;
   
-    uint64 channel_id = 1 [jstype = JS_STRING];
+    uint64 channel_id = 1;
     string channel_name = 2;
     bool is_category = 3;
   }
@@ -40,8 +40,8 @@ message GetGuildChannelsResponse {
 }
 
 message UpdateChannelInformationRequest {
-  uint64 guild_id = 1 [jstype = JS_STRING];
-  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 guild_id = 1;
+  uint64 channel_id = 2;
 
   string name = 3;
   bool update_name = 4;
@@ -51,18 +51,18 @@ message UpdateChannelInformationRequest {
 }
 
 message UpdateChannelOrderRequest {
-  uint64 guild_id = 1 [jstype = JS_STRING];
-  uint64 channel_id = 2 [jstype = JS_STRING];
-  uint64 previous_id = 3 [jstype = JS_STRING];
-  uint64 next_id = 4 [jstype = JS_STRING];
+  uint64 guild_id = 1;
+  uint64 channel_id = 2;
+  uint64 previous_id = 3;
+  uint64 next_id = 4;
 }
 
 message DeleteChannelRequest {
-  uint64 guild_id = 1 [jstype = JS_STRING];
-  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 guild_id = 1;
+  uint64 channel_id = 2;
 }
 
 message TypingRequest {
-  uint64 guild_id = 1 [jstype = JS_STRING];
-  uint64 channel_id = 2 [jstype = JS_STRING];
+  uint64 guild_id = 1;
+  uint64 channel_id = 2;
 }

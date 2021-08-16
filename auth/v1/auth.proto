@@ -10,7 +10,7 @@ option go_package = "github.com/harmony-development/legato/gen/auth/v1";
 message BeginAuthResponse { string auth_id = 1; }
 
 message Session {
-  uint64 user_id = 1 [jstype = JS_STRING];
+  uint64 user_id = 1;
   string session_token = 2;
 }
 
