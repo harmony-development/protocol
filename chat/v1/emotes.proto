@@ -5,8 +5,8 @@ package protocol.chat.v1;
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
 message EmotePack {
-  uint64 pack_id = 1 [jstype = JS_STRING];
-  uint64 pack_owner = 2 [jstype = JS_STRING];
+  uint64 pack_id = 1;
+  uint64 pack_owner = 2;
   string pack_name = 3;
 }
 
@@ -16,31 +16,31 @@ message Emote {
 }
 
 message CreateEmotePackRequest { string pack_name = 1; }
-message CreateEmotePackResponse { uint64 pack_id = 1 [jstype = JS_STRING]; }
+message CreateEmotePackResponse { uint64 pack_id = 1; }
 
 message GetEmotePacksRequest {}
 message GetEmotePacksResponse {
   repeated EmotePack packs = 1;
 }
 
-message GetEmotePackEmotesRequest { uint64 pack_id = 1 [jstype = JS_STRING]; }
+message GetEmotePackEmotesRequest { uint64 pack_id = 1; }
 message GetEmotePackEmotesResponse {
   repeated Emote emotes = 1;
 }
 
 message AddEmoteToPackRequest {
-  uint64 pack_id = 1 [jstype = JS_STRING];
+  uint64 pack_id = 1;
   string image_id = 2;
   string name = 3;
 }
 
 message DeleteEmoteFromPackRequest {
-  uint64 pack_id = 1 [jstype = JS_STRING];
+  uint64 pack_id = 1;
   string image_id = 2;
 }
 
-message DeleteEmotePackRequest { uint64 pack_id = 1 [jstype = JS_STRING]; }
+message DeleteEmotePackRequest { uint64 pack_id = 1; }
 
-message DequipEmotePackRequest { uint64 pack_id = 1 [jstype = JS_STRING]; }
+message DequipEmotePackRequest { uint64 pack_id = 1; }
 
-message EquipEmotePackRequest { uint64 pack_id = 1 [jstype = JS_STRING]; }
+message EquipEmotePackRequest { uint64 pack_id = 1; }

@@ -184,13 +184,13 @@ message Message {
   Metadata metadata = 1;
   Override overrides = 2;
 
-  uint64 guild_id = 3 [ jstype = JS_STRING ];
-  uint64 channel_id = 4 [ jstype = JS_STRING ];
-  uint64 message_id = 5 [ jstype = JS_STRING ];
-  uint64 author_id = 6 [ jstype = JS_STRING ];
+  uint64 guild_id = 3;
+  uint64 channel_id = 4;
+  uint64 message_id = 5;
+  uint64 author_id = 6;
   google.protobuf.Timestamp created_at = 7;
   google.protobuf.Timestamp edited_at = 8;
-  uint64 in_reply_to = 9 [ jstype = JS_STRING ];
+  uint64 in_reply_to = 9;
   Content content = 10;
 }
 
