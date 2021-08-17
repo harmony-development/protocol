@@ -7,9 +7,31 @@ import "harmonytypes/v1/types.proto";
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
 message GetChannelMessagesRequest {
+  enum Direction {
+    before = 0;
+    around = 1;
+    after = 2;
+  }
+
   uint64 guild_id = 1;
   uint64 channel_id = 2;
-  uint64 before_message = 3;
+  // The ID of the message that will be used as an "anchor" point to figure out
+  // where to get the messages.
+  uint64 message_id = 3;
+  // On which direction to get the messages.
+  //
+  // - By default, it is "before", which means you will get messages before the `message_id` message.
+  // - If it is "around", you will get the messages around the `message_id` message.
+  // This will include the `message_id` message itself, as the middle item of the list returned.
+  // - If it is "after", you will get the messages after the `message_id` message.
+  Direction direction = 4;
+  // How many messages to get.
+  //
+  // - If `0`, a recommended message count to return is 25. If the direction is "around", the recommended value is 12.
+  // - If the direction to get the messages is "around", this count will not be the *total* count
+  // of messages to return, but instead the count of messages to return *for each direction*, before and after.
+  // - Servers should enforce their own maximum limit, and clamp this value to the limit.
+  uint32 count = 5;
 }
 message GetChannelMessagesResponse {
   bool reached_top = 1;
