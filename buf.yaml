@@ -5,7 +5,7 @@ lint:
     - DEFAULT
     - COMMENTS
   except:
-    - MINIMAL
+    - DIRECTORY_SAME_PACKAGE
 breaking:
   use:
     - FILE
