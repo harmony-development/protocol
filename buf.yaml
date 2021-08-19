@@ -1,0 +1,8 @@
+version: v1
+name: harmonyapp.io/harmony-development/protocol
+lint:
+  use:
+    - DEFAULT
+breaking:
+  use:
+    - FILE
