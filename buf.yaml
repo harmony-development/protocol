@@ -4,6 +4,8 @@ lint:
   use:
     - DEFAULT
     - COMMENTS
+  except:
+    - MINIMAL
 breaking:
   use:
     - FILE
