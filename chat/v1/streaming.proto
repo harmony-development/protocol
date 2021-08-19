@@ -36,7 +36,7 @@ message Event {
     uint64 channel_id = 2;
     uint64 message_id = 3;
     google.protobuf.Timestamp edited_at = 4;
-    string content = 5;
+    string new_content = 5;
   }
   message MessageDeleted {
     uint64 guild_id = 1;
@@ -47,21 +47,16 @@ message Event {
     uint64 guild_id = 1;
     uint64 channel_id = 2;
     string name = 3;
-    uint64 previous_id = 4;
-    uint64 next_id = 5;
-    bool is_category = 6;
-    harmonytypes.v1.Metadata metadata = 7;
+    harmonytypes.v1.ItemPosition position = 4; 
+    bool is_category = 5;
+    harmonytypes.v1.Metadata metadata = 6;
   }
   message ChannelUpdated {
     uint64 guild_id = 1;
     uint64 channel_id = 2;
-    string name = 3;
-    bool update_name = 4;
-    uint64 previous_id = 5;
-    uint64 next_id = 6;
-    bool update_order = 7;
-    harmonytypes.v1.Metadata metadata = 8;
-    bool update_metadata = 9;
+    optional string new_name = 3;
+    optional harmonytypes.v1.ItemPosition new_position = 4;
+    optional harmonytypes.v1.Metadata new_metadata = 5;
   }
   message ChannelDeleted {
     uint64 guild_id = 1;
@@ -69,12 +64,9 @@ message Event {
   }
   message GuildUpdated {
     uint64 guild_id = 1;
-    string name = 2;
-    bool update_name = 3;
-    string picture = 4;
-    bool update_picture = 5;
-    harmonytypes.v1.Metadata metadata = 6;
-    bool update_metadata = 7;
+    optional string new_name = 2;
+    optional string new_picture = 3;
+    optional harmonytypes.v1.Metadata new_metadata = 4;
   }
   message GuildDeleted { uint64 guild_id = 1; }
   message MemberJoined {
@@ -104,8 +96,7 @@ message Event {
   message RoleMoved {
     uint64 guild_id = 1;
     uint64 role_id = 2;
-    uint64 previous_id = 3;
-    uint64 next_id = 4;
+    harmonytypes.v1.ItemPosition new_position = 3;
   }
   message RoleDeleted {
     uint64 guild_id = 1;
@@ -118,31 +109,27 @@ message Event {
   }
   message RoleUpdated {
     uint64 guild_id = 1;
-    uint64 role_id = 3;
-    chat.v1.Role role = 4;
+    uint64 role_id = 2;
+    chat.v1.Role new_role = 3;
   }
   // This event will only be sent to users with the "guild.manage" permission.
   message RolePermissionsUpdated {
     uint64 guild_id = 1;
     uint64 channel_id = 2;
     uint64 role_id = 3;
-    chat.v1.PermissionList perms = 4;
+    chat.v1.PermissionList new_perms = 4;
   }
   message UserRolesUpdated {
     uint64 guild_id = 1;
     uint64 user_id = 2;
-    repeated uint64 role_ids = 3;
+    repeated uint64 new_role_ids = 3;
   }
   message ProfileUpdated {
     uint64 user_id = 1;
-    string new_username = 2;
-    bool update_username = 3;
-    string new_avatar = 4;
-    bool update_avatar = 5;
-    harmonytypes.v1.UserStatus new_status = 6;
-    bool update_status = 7;
-    bool is_bot = 8;
-    bool update_is_bot = 9;
+    optional string new_username = 2;
+    optional string new_avatar = 3;
+    optional harmonytypes.v1.UserStatus new_status = 4;
+    optional bool new_is_bot = 5;
   }
   message Typing {
     uint64 user_id = 1;
@@ -162,9 +149,7 @@ message Event {
     // ID of the pack that was updated.
     uint64 pack_id = 1;
     // New pack name of the pack.
-    string pack_name = 2;
-    // Whether to update the pack name or not.
-    bool update_pack_name = 3;
+    optional string new_pack_name = 2;
   }
   // Should only be sent to users who have the pack equipped.
   // Should also be sent if a user dequips an emote pack, only to the user that dequipped it.

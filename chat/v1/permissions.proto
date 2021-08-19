@@ -52,8 +52,7 @@ message Role {
 message MoveRoleRequest {
   uint64 guild_id = 1;
   uint64 role_id = 2;
-  uint64 before_id = 3;
-  uint64 after_id = 4;
+  harmonytypes.v1.ItemPosition new_position = 3;
 }
 message MoveRoleResponse {}
 
@@ -70,13 +69,13 @@ message DeleteGuildRoleRequest {
   uint64 guild_id = 1;
   uint64 role_id = 2;
 }
+
 message ModifyGuildRoleRequest {
   uint64 guild_id = 1;
-  Role role = 2;
-  bool modify_name = 3;
-  bool modify_color = 4;
-  bool modify_hoist = 5;
-  bool modify_pingable = 6;
+  optional string new_name = 2;
+  optional int32 new_color = 3;
+  optional bool new_hoist = 4;
+  optional bool new_pingable = 5;
 }
 
 message ManageUserRolesRequest {
@@ -90,5 +89,4 @@ message GetUserRolesRequest {
   uint64 guild_id = 1;
   uint64 user_id = 2;
 }
-
 message GetUserRolesResponse { repeated uint64 roles = 1; }

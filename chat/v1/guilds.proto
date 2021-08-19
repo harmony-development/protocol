@@ -22,7 +22,6 @@ message CreateInviteRequest {
 message CreateInviteResponse { string name = 1; }
 
 message GetGuildListRequest {}
-
 message GetGuildListResponse {
   message GuildListEntry {
     uint64 guild_id = 1;
@@ -56,12 +55,9 @@ message GetGuildMembersResponse { repeated uint64 members = 1; }
 
 message UpdateGuildInformationRequest {
   uint64 guild_id = 1;
-  string new_guild_name = 2;
-  bool update_guild_name = 3;
-  string new_guild_picture = 4;
-  bool update_guild_picture = 5;
-  harmonytypes.v1.Metadata metadata = 6;
-  bool update_metadata = 7;
+  optional string new_guild_name = 2;
+  optional string new_guild_picture = 4;
+  optional harmonytypes.v1.Metadata new_metadata = 6;
 }
 
 message DeleteGuildRequest { uint64 guild_id = 1; }
@@ -82,8 +78,6 @@ message PreviewGuildResponse {
 }
 
 message LeaveGuildRequest { uint64 guild_id = 1; }
-
-// GUILD LIST
 
 message BanUserRequest {
   uint64 guild_id = 1;
