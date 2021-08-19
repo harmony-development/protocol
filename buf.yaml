@@ -1,0 +1,11 @@
+version: v1
+name: harmonyapp.io/harmony-development/protocol
+lint:
+  use:
+    - DEFAULT
+    - COMMENTS
+  except:
+    - PACKAGE_DIRECTORY_MATCH
+breaking:
+  use:
+    - FILE
