@@ -19,13 +19,19 @@ message BatchQueryPermissionsResponse {
   repeated QueryPermissionsResponse responses = 1;
 }
 
+// Object representing a permission.
 message Permission {
-  enum Mode { Allow = 0; Deny = 1; }
-  string matches = 1;
-  Mode mode = 2;
+  // Which permission node to match.
+  string match = 1;
+  // Whether to allow or deny permission for the specified node.
+  bool allow = 2;
 }
 
-message PermissionList { repeated Permission permissions = 1; }
+// Object representing a list of `Permission`s.
+message PermissionList {
+  // A list of permissions.
+  repeated Permission permissions = 1;
+}
 
 message SetPermissionsRequest {
   uint64 guild_id = 1;
