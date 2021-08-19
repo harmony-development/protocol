@@ -1,6 +1,20 @@
 name: Buf checks
 
-on: [push, pull_request]
+on: 
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'README.md'
+      - 'rest/*'
+      - 'name-resolution/*'
+      - 'meson.build'
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - 'README.md'
+      - 'rest/*'
+      - 'name-resolution/*'
+      - 'meson.build'
 
 jobs:
   lint-protos:
