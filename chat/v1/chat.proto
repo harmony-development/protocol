@@ -15,46 +15,59 @@ package protocol.chat.v1;
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
+// The core of Harmony's chat operations.
 service ChatService {
+  // Endpoint to create a guild.
   rpc CreateGuild(CreateGuildRequest) returns (CreateGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "";
   }
 
+  // Endpoint to create an invite.
   rpc CreateInvite(CreateInviteRequest) returns (CreateInviteResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "invites.manage.create";
   }
 
+  // Endpoint to create a channel.
   rpc CreateChannel(CreateChannelRequest) returns (CreateChannelResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "channels.manage.create";
   }
-  rpc CreateEmotePack(CreateEmotePackRequest)
-      returns (CreateEmotePackResponse) {
+
+  // Endpoint to create an emote pack.
+  rpc CreateEmotePack(CreateEmotePackRequest) returns (CreateEmotePackResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  // Endpoint to get your guild list.
   rpc GetGuildList(GetGuildListRequest) returns (GetGuildListResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  // Endpoint to get information about a guild.
   rpc GetGuild(GetGuildRequest) returns (GetGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
+
+  // Endpoint to get the invites of a guild.
+  //
   // This requires the "invites.view" permission.
-  rpc GetGuildInvites(GetGuildInvitesRequest)
-      returns (GetGuildInvitesResponse) {
+  rpc GetGuildInvites(GetGuildInvitesRequest) returns (GetGuildInvitesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "invites.view";
   }
+
+  // Endpoint to get the members of a guild.
   rpc GetGuildMembers(GetGuildMembersRequest)
       returns (GetGuildMembersResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  // Endpoint to get the channels of a guild.
+  //
   // You will only be informed of channels you have the "messages.view"
   // permission for.
   rpc GetGuildChannels(GetGuildChannelsRequest)
@@ -62,6 +75,7 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  // Endpoint to get the messages from a guild channel.
   rpc GetChannelMessages(GetChannelMessagesRequest)
       returns (GetChannelMessagesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
@@ -69,99 +83,135 @@ service ChatService {
         "messages.view";
   }
 
+  // Endpoint to get a single message from a guild channel.
   rpc GetMessage(GetMessageRequest) returns (GetMessageResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "messages.view";
   }
+
+  // Endpoint to get the emote packs you have equipped.
   rpc GetEmotePacks(GetEmotePacksRequest) returns (GetEmotePacksResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
+
+  // Endpoint to get the emotes in an emote pack.
   rpc GetEmotePackEmotes(GetEmotePackEmotesRequest)
       returns (GetEmotePackEmotesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  // Endpoint to update a guild's information.
   rpc UpdateGuildInformation(UpdateGuildInformationRequest)
       returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "guild.manage.change-information";
   }
+
+  // Endpoint to update a channel's information.
   rpc UpdateChannelInformation(UpdateChannelInformationRequest)
       returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "channels.manage.change-information";
   }
+
+  // Endpoint to change the position of a channel in the channel list.
   rpc UpdateChannelOrder(UpdateChannelOrderRequest)
       returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "channels.manage.move";
   }
+
+  // Endpoint to change the text of a message.
   rpc UpdateMessageText(UpdateMessageTextRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "messages.send";
   }
+
+  // Endpoint to add an emote to an emote pack that you own.
   rpc AddEmoteToPack(AddEmoteToPackRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  // Endpoint to delete a guild.
   rpc DeleteGuild(DeleteGuildRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "guild.manage.delete";
   }
+
+  // Endpoint to delete an invite.
   rpc DeleteInvite(DeleteInviteRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "invites.manage.delete";
   }
+
+  // Endpoint to delete a channel.
   rpc DeleteChannel(DeleteChannelRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "channels.manage.delete";
   }
+
+  // Endpoint to delete a message.
+  //
   // This requires the "messages.manage.delete" permission if you are not the
   // message author.
   rpc DeleteMessage(DeleteMessageRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
+
+  // Endpoint to delete an emote from an emote pack.
   rpc DeleteEmoteFromPack(DeleteEmoteFromPackRequest)
       returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
+
+  // Endpoint to delete an emote pack that you own.
   rpc DeleteEmotePack(DeleteEmotePackRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
+
+  // Endpoint to dequip an emote pack that you have equipped.
   rpc DequipEmotePack(DequipEmotePackRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
+
+  // Endpoint to equip an emote pack.
   rpc EquipEmotePack(EquipEmotePackRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  // Endpoint to join a guild.
   rpc JoinGuild(JoinGuildRequest) returns (JoinGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
+
+  // Endpoint to leave a guild.
   rpc LeaveGuild(LeaveGuildRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  // Endpont to trigger an action.
   rpc TriggerAction(TriggerActionRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "actions.trigger";
   }
 
+  // Endpoint to send a message.
   rpc SendMessage(SendMessageRequest) returns (SendMessageResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "messages.send";
   }
 
+  // Endpoint to query if a user has a permission.
   rpc QueryHasPermission(QueryPermissionsRequest)
       returns (QueryPermissionsResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
@@ -172,6 +222,7 @@ service ChatService {
     //     "permissions.query";
   }
 
+  // Endpoint to batch query if a user has a permission.
   rpc BatchQueryHasPermission(BatchQueryPermissionsRequest)
       returns (BatchQueryPermissionsResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
@@ -182,49 +233,58 @@ service ChatService {
     //     "permissions.query";
   }
 
+  // Endpoint to set permissions for a role in a guild.
   rpc SetPermissions(SetPermissionsRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "permissions.manage.set";
   }
 
+  // Endpoint to get permissions for a role in a guild.
   rpc GetPermissions(GetPermissionsRequest) returns (GetPermissionsResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "permissions.manage.get";
   }
 
+  // Endpoint to change the position of a role in the role list in a guild.
   rpc MoveRole(MoveRoleRequest) returns (MoveRoleResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "roles.manage";
   }
 
+  // Endpoint to get the roles from a guild.
   rpc GetGuildRoles(GetGuildRolesRequest) returns (GetGuildRolesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "roles.get";
   }
 
+  // Endpoint to add a role to a guild.
   rpc AddGuildRole(AddGuildRoleRequest) returns (AddGuildRoleResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "roles.manage";
   }
 
+  // Endpoint to a modify a role from a guild.
   rpc ModifyGuildRole(ModifyGuildRoleRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "roles.manage";
   }
 
+  // Endpoint to delete a role from a guild.
   rpc DeleteGuildRole(DeleteGuildRoleRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "roles.manage";
   }
 
+  // Endpoint to manage the roles of a guild member.
   rpc ManageUserRoles(ManageUserRolesRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "roles.user.manage";
   }
 
+  // Endpoint to get the roles a guild member has.
   rpc GetUserRoles(GetUserRolesRequest) returns (GetUserRolesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     // This permissions node is only required if you are trying to get the roles
@@ -234,49 +294,58 @@ service ChatService {
     // "roles.user.get";
   }
 
+  // Endpoint to stream events from the homeserver.
   rpc StreamEvents(stream StreamEventsRequest) returns (stream Event) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  // Endpoint to get the profile information of a user.
   rpc GetUser(GetUserRequest) returns (GetUserResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  // Endpoint to batch get the profile information of some users.
   rpc GetUserBulk(GetUserBulkRequest) returns (GetUserBulkResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
-  rpc GetUserMetadata(GetUserMetadataRequest)
-      returns (GetUserMetadataResponse) {
+  // Endpoint to get metadata you have.
+  rpc GetUserMetadata(GetUserMetadataRequest) returns (GetUserMetadataResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  // Endpoint to update your profile information.
   rpc ProfileUpdate(ProfileUpdateRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  // Endpoint to send a typing notification in a guild channel.
   rpc Typing(TypingRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "messages.send";
   }
 
+  // Endpoint to "preview" a guild, which returns some information about a guild.
   rpc PreviewGuild(PreviewGuildRequest) returns (PreviewGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = false;
   }
 
+  // Endpoint to ban a user from a guild.
   rpc BanUser(BanUserRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "user.manage.ban";
   }
 
+  // Endpoint to kick a user from a guild.
   rpc KickUser(KickUserRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "user.manage.kick";
   }
 
+  // Endpoint to unban a user from a guild.
   rpc UnbanUser(UnbanUserRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
