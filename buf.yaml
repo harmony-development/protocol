@@ -4,8 +4,6 @@ lint:
   use:
     - DEFAULT
     - COMMENTS
-  except:
-    - ENUM_VALUE_UPPER_SNAKE_CASE
 breaking:
   use:
     - FILE
