@@ -79,3 +79,37 @@ message UpdateMessageTextRequest {
   uint64 message_id = 3;
   string new_content = 4;
 }
+
+// Used in the `PinMessage` endpoint. 
+message PinMessageRequest {
+  // Guild ID of the guild where the channel is.
+  uint64 guild_id = 1;
+  // Channel ID of the channel where the message is.
+  uint64 channel_id = 2;
+  // Message ID of the message we want to pin.
+  uint64 message_id = 3;
+}
+
+// Used in the `UnpinMessage` endpoint. 
+message UnpinMessageRequest {
+  // Guild ID of the guild where the channel is.
+  uint64 guild_id = 1;
+  // Channel ID of the channel where the message is.
+  uint64 channel_id = 2;
+  // Message ID of the message we want to unpin.
+  uint64 message_id = 3;
+}
+
+// Used in the `GetPinnedMessages` endpoint.
+message GetPinnedMessagesRequest {
+  // Guild ID of the guild where the channel is.
+  uint64 guild_id = 1;
+  // Channel ID of the channel we want to get pins of.
+  uint64 channel_id = 2;
+}
+
+// Used in the `GetPinnedMessages` endpoint.
+message GetPinnedMessagesResponse {
+  // The IDs of the pinned messages.
+  repeated uint64 pinned_message_ids = 1;
+}

@@ -360,4 +360,22 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_permission_node =
         "user.manage.unban";
   }
+
+  // Endpoint to get all pinned messages in a guild channel.
+  rpc GetPinnedMessages(GetPinnedMessagesRequest) returns (GetPinnedMessagesResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node = "messages.view";
+  }
+
+  // Endpoint to pin a message in a guild channel.
+  rpc PinMessage(PinMessageRequest) returns (google.protobuf.Empty) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node = "messages.pin";
+  }
+
+  // Endpoint to unpin a message in a guild channel.
+  rpc UnpinMessage(UnpinMessageRequest) returns (google.protobuf.Empty) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node = "messages.unpin";
+  }
 }
