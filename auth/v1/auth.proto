@@ -7,10 +7,23 @@ package protocol.auth.v1;
 
 option go_package = "github.com/harmony-development/legato/gen/auth/v1";
 
-message BeginAuthResponse { string auth_id = 1; }
+// BeginAuthResponse
+// The return type of BeginAuth, containing the
+// auth_id that will be used for the authentication
+// section
+message BeginAuthResponse {
+  // auth_id: the ID of this auth session
+  string auth_id = 1;
+}
 
+// Session
+// Session contains the information for a new session;
+// the user_id you logged in as and the session_token
+// which should be passed to authorisation
 message Session {
+  // user_id: the ID of the user you logged in as
   uint64 user_id = 1;
+  // session_token: the session token to use in authorization
   string session_token = 2;
 }
 
@@ -24,7 +37,10 @@ message AuthStep {
   // A step which allows the user to choose from a range of options
   // Allows you to show a heading by specifying title
   message Choice {
+    // title: the title of the list of choices
     string title = 1;
+    // options: a list of choices, one of these
+    // should be sent in nextstep
     repeated string options = 2;
   }
 
@@ -42,11 +58,16 @@ message AuthStep {
     // text: a field type that has to contain text
     // number: a field type that has to contain a number
     message FormField {
+      // name: the identifier for the form field
       string name = 1;
+      // type: the type of the form field, as documented above
       string type = 2;
     }
 
+    // title: the title of this form
     string title = 1;
+
+    // fields: all the fields in this form
     repeated FormField fields = 2;
   }
 
