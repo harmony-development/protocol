@@ -106,6 +106,8 @@ message Event {
 
   // Event sent when all channels have been reordered
   message ChannelsReordered {
+    // guild_id: the guild whose channels are being reordered
+    uint64 guild_id = 2;
     // channel_ids: the new order of channel IDs
     repeated uint64 channel_ids = 1;
   }
