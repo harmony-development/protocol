@@ -370,12 +370,12 @@ service ChatService {
   // Endpoint to pin a message in a guild channel.
   rpc PinMessage(PinMessageRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "messages.pin";
+    option (harmonytypes.v1.metadata).requires_permission_node = "messages.pins.add";
   }
 
   // Endpoint to unpin a message in a guild channel.
   rpc UnpinMessage(UnpinMessageRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "messages.unpin";
+    option (harmonytypes.v1.metadata).requires_permission_node = "messages.pins.remove";
   }
 }
