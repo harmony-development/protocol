@@ -415,8 +415,8 @@ message Event {
     // Send the emote pack emotes updated event.
     EmotePackEmotesUpdated emote_pack_emotes_updated = 26;
     // Send the message pinned event.
-    MessagePinned message_pinned = 27;
+    MessagePinned message_pinned = 28;
     // Send the message unpinned event.
-    MessageUnpinned message_unpinned = 28;
+    MessageUnpinned message_unpinned = 29;
   }
 }
