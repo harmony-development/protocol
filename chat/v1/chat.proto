@@ -125,6 +125,15 @@ service ChatService {
         "channels.manage.move";
   }
 
+  // Endpoint to change the position of all channels in the guild;
+  // must specifcy all channels or fails
+  rpc UpdateAllChannelOrder(UpdateAllChannelOrderRequest)
+      returns (google.protobuf.Empty) {
+        option (harmonytypes.v1.metadata).requires_authentication = true;
+        option (harmonytypes.v1.metadata).requires_permission_node =
+            "channels.manage.move";
+      }
+
   // Endpoint to change the text of a message.
   rpc UpdateMessageText(UpdateMessageTextRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;

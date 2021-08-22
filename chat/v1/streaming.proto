@@ -104,6 +104,12 @@ message Event {
     bool update_metadata = 9;
   }
 
+  // Event sent when all channels have been reordered
+  message ChannelsReordered {
+    // channel_ids: the new order of channel IDs
+    repeated uint64 channel_ids = 1;
+  }
+
   // Event sent when a channel is deleted.
   message ChannelDeleted {
     // Guild ID of the guild where this event happened.
