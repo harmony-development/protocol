@@ -332,6 +332,32 @@ message Event {
     repeated string deleted_emotes = 3;
   }
 
+  // Sent when a message is pinned in a guild channel.
+  //
+  // Should only be sent to users who have the "message.view" permission for
+  // the guild channel where the message was pinned.
+  message MessagePinned {
+    // Guild ID of the guild where this event occured.
+    uint64 guild_id = 1;
+    // Channel ID of the channel where this event occured.
+    uint64 channel_id = 2;
+    // Message ID of the message that was pinned.
+    uint64 message_id = 3;
+  }
+
+  // Sent when a message is unpinned in a guild channel.
+  //
+  // Should only be sent to users who have the "message.view" permission for
+  // the guild channel where the message was unpinned.
+  message MessageUnpinned {
+    // Guild ID of the guild where this event occured.
+    uint64 guild_id = 1;
+    // Channel ID of the channel where this event occured.
+    uint64 channel_id = 2;
+    // Message ID of the message that was unpinned.
+    uint64 message_id = 3;
+  }
+
   // Which event to send.
   oneof event {
     // Send the guild added to list event.
@@ -388,5 +414,9 @@ message Event {
     EmotePackDeleted emote_pack_deleted = 25;
     // Send the emote pack emotes updated event.
     EmotePackEmotesUpdated emote_pack_emotes_updated = 26;
+    // Send the message pinned event.
+    MessagePinned message_pinned = 28;
+    // Send the message unpinned event.
+    MessageUnpinned message_unpinned = 29;
   }
 }
