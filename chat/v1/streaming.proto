@@ -350,6 +350,8 @@ message Event {
     ChannelUpdated edited_channel = 8;
     // Send the channel deleted event.
     ChannelDeleted deleted_channel = 9;
+    // The channels have been completely reordered.
+    ChannelsReordered channels_reordered = 27;
     // Send the guild updated event.
     GuildUpdated edited_guild = 10;
     // Send the guild deleted event.
