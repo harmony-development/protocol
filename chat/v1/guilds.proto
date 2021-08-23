@@ -90,12 +90,21 @@ message BanUserRequest {
   uint64 user_id = 2;
 }
 
+// BanUserResponse contains the response data for a BanUser request
+message BanUesrResponse {}
+
 message KickUserRequest {
   uint64 guild_id = 1;
   uint64 user_id = 2;
 }
 
+// KickUserResponse contains the response data for a KickUser request
+message KickUserResponse {}
+
 message UnbanUserRequest {
   uint64 guild_id = 1;
   uint64 user_id = 2;
 }
+
+// UnbanUserResponse contains the response data for a UnbanUser request
+message UnbanUserResponse {}

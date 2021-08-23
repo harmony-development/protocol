@@ -30,3 +30,6 @@ message ProfileUpdateRequest {
   bool is_bot = 7;
   bool update_is_bot = 8;
 }
+
+// ProfileUpdateResponse contains the response data for a profile update
+message ProfileUpdateResponse {}

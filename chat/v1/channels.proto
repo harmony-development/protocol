@@ -30,7 +30,7 @@ message GetGuildChannelsRequest { uint64 guild_id = 1; }
 message GetGuildChannelsResponse {
   message Channel {
     harmonytypes.v1.Metadata metadata = 4;
-  
+
     uint64 channel_id = 1;
     string channel_name = 2;
     bool is_category = 3;
@@ -65,12 +65,21 @@ message UpdateAllChannelOrderRequest {
   repeated uint64 channel_ids = 2;
 }
 
+// Request
 message DeleteChannelRequest {
+  // the channel
   uint64 guild_id = 1;
+  //
   uint64 channel_id = 2;
 }
 
+// Request which notifies a user is typing
 message TypingRequest {
+  // the guild the user is typing in
   uint64 guild_id = 1;
+  // the channel the user is typing in
   uint64 channel_id = 2;
 }
+
+// Response for a typing request
+message TypingResponse {}
