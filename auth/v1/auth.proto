@@ -7,10 +7,23 @@ package protocol.auth.v1;
 
 option go_package = "github.com/harmony-development/legato/gen/auth/v1";
 
-message BeginAuthResponse { string auth_id = 1; }
+// BeginAuthResponse
+// The return type of BeginAuth, containing the
+// auth_id that will be used for the authentication
+// section
+message BeginAuthResponse {
+  // auth_id: the ID of this auth session
+  string auth_id = 1;
+}
 
+// Session
+// Session contains the information for a new session;
+// the user_id you logged in as and the session_token
+// which should be passed to authorisation
 message Session {
+  // user_id: the ID of the user you logged in as
   uint64 user_id = 1;
+  // session_token: the session token to use in authorization
   string session_token = 2;
 }
 
@@ -24,7 +37,10 @@ message AuthStep {
   // A step which allows the user to choose from a range of options
   // Allows you to show a heading by specifying title
   message Choice {
+    // title: the title of the list of choices
     string title = 1;
+    // options: a list of choices, one of these
+    // should be sent in nextstep
     repeated string options = 2;
   }
 
@@ -42,11 +58,16 @@ message AuthStep {
     // text: a field type that has to contain text
     // number: a field type that has to contain a number
     message FormField {
+      // name: the identifier for the form field
       string name = 1;
+      // type: the type of the form field, as documented above
       string type = 2;
     }
 
+    // title: the title of this form
     string title = 1;
+
+    // fields: all the fields in this form
     repeated FormField fields = 2;
   }
 
@@ -55,17 +76,27 @@ message AuthStep {
   // The title and description should explain to the user
   // what they should do to complete this step
   message Waiting {
+    // title: the title of this waiting screen
     string title = 1;
+    // description: the explanation of what's being waited on
     string description = 2;
   }
 
+  // fallback_url: unused
   string fallback_url = 1;
+  // can_go_back: whether or not the client can request the
+  // server to send the previous step
   bool can_go_back = 2;
 
+  // step: the current step
   oneof step {
+    // choice: the user must pick a thing out of a list of options
     Choice choice = 3;
+    // form: the user must complete a form
     Form form = 4;
+    // session: you've completed auth, and have a session
     Session session = 5;
+    // waiting: you're waiting on something
     Waiting waiting = 6;
   }
 }
@@ -75,53 +106,90 @@ message AuthStep {
 // This needs to be called first with no arguments to
 // receive the first step
 message NextStepRequest {
+  // auth_id: the authentication session you want
+  // the next step of
   string auth_id = 1;
 
   // A simple choice string indicating which option the user chose
-  message Choice { string choice = 1; }
+  message Choice {
+    // choice: the choice the user picked
+    string choice = 1;
+  }
 
   // Form fields can either be bytes, string, or int64.
   message FormFields {
+    // field: the data for a form field
     oneof field {
+      // bytes: the form field's data is a byte array
       bytes bytes = 1;
+      // string: the form field's data is a string
       string string = 2;
+      // number: the form field's data is a number
       int64 number = 3;
     }
   }
 
   // An array of form fields, in the same order they came in from the server
-  message Form { repeated FormFields fields = 1; }
+  message Form {
+    // fields: the fields the user filled out
+    repeated FormFields fields = 1;
+  }
 
+  // step: the user's response to a step
   oneof step {
+    // choice: the choice the user picked
     Choice choice = 2;
+    // form: the form the user filled out
     Form form = 3;
   }
 }
 
 // StepBackRequest
 // A request to go back 1 step
-message StepBackRequest { string auth_id = 1; }
+message StepBackRequest {
+  // auth_id: the authentication session the user
+  // wants to go back in
+  string auth_id = 1;
+}
 
 // StreamStepsRequest
 // Required to be initiated by all authenticating clients
 // Allows the server to send steps
-message StreamStepsRequest { string auth_id = 1; }
+message StreamStepsRequest {
+  // auth_id: the authorization session
+  // who's steps you want to stream
+  string auth_id = 1;
+}
 
-// Connection
-message FederateRequest { string target = 1; }
+// The request to federate with a foreign server.
+message FederateRequest {
+  // target: the foreign server you want to
+  // federate with
+  string target = 1;
+}
+
+// The reply to a successful federation request,
+// containing the token you need to present to the
+// foreign server.
 message FederateReply {
   // A `harmonytypes.v1.Token` whose `data` field is a serialized `TokenData` message.
   // It is signed with the homeserver's private key.
   harmonytypes.v1.Token token = 1;
 }
 
-// `key` is the bytes of the public key.
-message KeyReply { bytes key = 1; }
+// Contains a key's bytes.
+message KeyReply {
+  // key: the bytes of the public key.
+  bytes key = 1;
+}
 
+// Log into a foreignserver using a token
+// from your homeserver, obtained through a FederateRequest
 message LoginFederatedRequest {
   // A `harmonytypes.v1.Token` whose `data` field is a serialized `TokenData` message.
   // It is signed with the homeserver's private key.
   harmonytypes.v1.Token auth_token = 1;
+  // domain: the homeserver that the auth token is from
   string domain = 2;
 }
 
@@ -163,14 +231,28 @@ message TokenData {
 //
 // TODO: finish
 
+// The service containing authorization/entication methods
 service AuthService {
+  // Federate with a foreignserver, obtaining a token
+  // you can use to call LoginFederated on it
   rpc Federate(FederateRequest) returns(FederateReply);
+  // Present a token to a foreignserver from a Federate call
+  // on your homeserver in order to login
   rpc LoginFederated(LoginFederatedRequest) returns(Session);
+  // Returns the public key of this server
   rpc Key(google.protobuf.Empty) returns(KeyReply);
+  // Begins an authentication session
   rpc BeginAuth(google.protobuf.Empty) returns(BeginAuthResponse);
+  // Goes to the next step of the authentication session,
+  // possibly presenting user input
   rpc NextStep(NextStepRequest) returns(AuthStep);
+  // Goes to the previous step of the authentication session
+  // if possible
   rpc StepBack(StepBackRequest) returns(AuthStep);
+  // Consume the steps of an authentication session
+  // as a stream
   rpc StreamSteps(StreamStepsRequest) returns(stream AuthStep);
+  // Check whether or not you're logged in and the session is valid
   rpc CheckLoggedIn(google.protobuf.Empty) returns(google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "";

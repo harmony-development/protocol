@@ -9,141 +9,278 @@ import "chat/v1/emotes.proto";
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
+// Request type for use in the `StreamEvents` endpoint.
 message StreamEventsRequest {
+  // Event source for guilds' events.
   message SubscribeToGuild { uint64 guild_id = 1; }
+  // Event source for actions' events.
   message SubscribeToActions {}
+  // Event source for homeserver events.
   message SubscribeToHomeserverEvents {}
 
+  // Describes which event source to subscribe to.
   oneof request {
+    // Subscribe to the guild event source.
     SubscribeToGuild subscribe_to_guild = 1;
+    // Subscribe to the action event source.
     SubscribeToActions subscribe_to_actions = 2;
+    // Subscribe to the homeserver event source.
     SubscribeToHomeserverEvents subscribe_to_homeserver_events = 3;
   }
 }
 
+// Describes an event.
 message Event {
+  // A reason for why a user has left a guild.
   enum LeaveReason {
+    // The user left the guild willingly.
     willingly = 0;
+    // The user was banned from the guild.
     banned = 1;
+    // The user was kicked from the guild.
     kicked = 2;
   }
+
+  // Event sent when a new message is sent.
   message MessageSent {
+    // ID that is sent by your client it can use to confirm that the message is sent.
     uint64 echo_id = 1;
+    // The actual message.
     harmonytypes.v1.Message message = 2;
   }
+
+  // Event sent when a message's text content is updated.
   message MessageUpdated {
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
+    // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
+    // Message ID of the message that was updated.
     uint64 message_id = 3;
+    // When this message was edited.
     google.protobuf.Timestamp edited_at = 4;
+    // New message content.
     string new_content = 5;
   }
+
+  // Event sent when a message is deleted.
   message MessageDeleted {
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
+    // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
+    // Message ID of the message that was deleted.
     uint64 message_id = 3;
   }
+
+  // Event sent when a new channel is created.
   message ChannelCreated {
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
+    // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
+    // Name of this channel.
     string name = 3;
-    harmonytypes.v1.ItemPosition position = 4; 
+    // the position in the channel list.
+    harmonytypes.v1.ItemPosition position = 4;
+    // Is this channel a category or not.
     bool is_category = 5;
+    // Metadata for this channel.
     harmonytypes.v1.Metadata metadata = 6;
   }
+
+  // Event sent when a channel's information or position in the channel is changed.
   message ChannelUpdated {
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
+    // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
     optional string new_name = 3;
     optional harmonytypes.v1.ItemPosition new_position = 4;
     optional harmonytypes.v1.Metadata new_metadata = 5;
   }
+
+  // Event sent when all channels have been reordered
+  message ChannelsReordered {
+    // guild_id: the guild whose channels are being reordered
+    uint64 guild_id = 2;
+    // channel_ids: the new order of channel IDs
+    repeated uint64 channel_ids = 1;
+  }
+
+  // Event sent when a channel is deleted.
   message ChannelDeleted {
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
+    // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
   }
+
+  // Event sent when a guild's information is updated.
   message GuildUpdated {
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
     optional string new_name = 2;
     optional string new_picture = 3;
     optional harmonytypes.v1.Metadata new_metadata = 4;
   }
+
+  // Event sent when a guild is deleted.
   message GuildDeleted { uint64 guild_id = 1; }
+
+  // Event sent a user joins to a guild.
   message MemberJoined {
+    // Member ID of the member that joined the guild.
     uint64 member_id = 1;
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 2;
   }
+
+  // Event sent when a member of a guild leaves said guild for whatever reason.
   message MemberLeft {
+    // User ID of the member that left the guild.
     uint64 member_id = 1;
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 2;
+    // Why this member left the guild.
     LeaveReason leave_reason = 3;
   }
+
+  // Event sent when you join a new guild.
   message GuildAddedToList {
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
+    // The homeserver this guild is on.
     string homeserver = 2;
   }
+
+  // Event sent when you leave a guild.
   message GuildRemovedFromList {
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
+    // The homeserver this guild is on.
     string homeserver = 2;
   }
+
+  // Event sent when an action is performed.
   message ActionPerformed {
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
+    // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
+    // Message ID where this event happened.
     uint64 message_id = 3;
+    // Action ID of the action that was performed.
     string action_id = 4;
+    // Action data.
     string action_data = 5;
   }
+
+  // Event sent when a role's position in the role list is changed.
   message RoleMoved {
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
+    // Role ID of the role that was moved.
     uint64 role_id = 2;
     harmonytypes.v1.ItemPosition new_position = 3;
   }
+
+  // Event sent when a role is deleted.
   message RoleDeleted {
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
+    // Role ID of the role that was deleted.
     uint64 role_id = 2;
   }
+
+  // Event sent when a role is created.
   message RoleCreated {
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
+    // Role ID of the role that was created.
     uint64 role_id = 2;
+    // The actual role.
     chat.v1.Role role = 3;
   }
+
+  // Event sent when a role's information is changed.
   message RoleUpdated {
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
+    // Role ID of the role that was changed.
     uint64 role_id = 2;
+    // The actual new role.
     chat.v1.Role new_role = 3;
   }
+
+  // Event sent when a role's permissions are changed.
+  //
   // This event will only be sent to users with the "guild.manage" permission.
   message RolePermissionsUpdated {
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
+    // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
+    // Role ID of the role that had it's permissions changed. 
     uint64 role_id = 3;
+    // The new permissions.
     chat.v1.PermissionList new_perms = 4;
   }
+
+  // Event sent when a user's roles are changed.
   message UserRolesUpdated {
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
+    // User ID of the user that had it's roles changed.
     uint64 user_id = 2;
+    // The new role IDs.
     repeated uint64 new_role_ids = 3;
   }
+
+  // Event sent when a user's profile is updated.
+  //
+  // Servers should sent this event only to users that can "see" (eg. they are
+  // in the same guild) the user this event was triggered by.
   message ProfileUpdated {
+    // User ID of the user that had it's profile updated.
     uint64 user_id = 1;
+    // New username for this user.
     optional string new_username = 2;
+    // New avatar for this user.
     optional string new_avatar = 3;
+    // New status for this user.
     optional harmonytypes.v1.UserStatus new_status = 4;
+    // New is bot or not for this user.
     optional bool new_is_bot = 5;
   }
+  
+  // Event sent when a user sends a typing notification in a guild channel. 
   message Typing {
+    // User ID of the user that sent the typing notification.
     uint64 user_id = 1;
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 2;
+    // Channel ID of the channel where this event happened.
     uint64 channel_id = 3;
   }
+
+  // Event sent when a permission is changed that matters to you.
+  //
   // Servers should calculate which users to send this event to when a permission is set.
   // It should only be sent if a user is subscribed to the guild the permission pertains to.
   message PermissionUpdated {
+    // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
+    // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
+    // The permission node that was changed.
     string query = 3;
+    // Whether you have the permission or not.
     bool ok = 4;
   }
+
+  // Event sent when an emote pack's information is changed.
+  //
   // Should only be sent to users who have the pack equipped.
   message EmotePackUpdated {
     // ID of the pack that was updated.
@@ -151,17 +288,26 @@ message Event {
     // New pack name of the pack.
     optional string new_pack_name = 2;
   }
+
+  // Event sent when an emote pack is deleted.
+  //
   // Should only be sent to users who have the pack equipped.
   // Should also be sent if a user dequips an emote pack, only to the user that dequipped it.
   message EmotePackDeleted {
     // ID of the pack that was deleted.
     uint64 pack_id = 1;
   }
+
+  // Event sent when an emote pack is added.
+  //
   // Should only be sent to the user who equipped the pack.
   message EmotePackAdded {
     // Emote pack that was equipped by the user.
     chat.v1.EmotePack pack = 1;
   }
+
+  // Event sent when an emote pack's emotes were changed.
+  //
   // Should only be sent to users who have the pack equipped.
   message EmotePackEmotesUpdated {
     // ID of the pack to update the emotes of.
@@ -172,32 +318,91 @@ message Event {
     repeated string deleted_emotes = 3;
   }
 
+  // Sent when a message is pinned in a guild channel.
+  //
+  // Should only be sent to users who have the "message.view" permission for
+  // the guild channel where the message was pinned.
+  message MessagePinned {
+    // Guild ID of the guild where this event occured.
+    uint64 guild_id = 1;
+    // Channel ID of the channel where this event occured.
+    uint64 channel_id = 2;
+    // Message ID of the message that was pinned.
+    uint64 message_id = 3;
+  }
+
+  // Sent when a message is unpinned in a guild channel.
+  //
+  // Should only be sent to users who have the "message.view" permission for
+  // the guild channel where the message was unpinned.
+  message MessageUnpinned {
+    // Guild ID of the guild where this event occured.
+    uint64 guild_id = 1;
+    // Channel ID of the channel where this event occured.
+    uint64 channel_id = 2;
+    // Message ID of the message that was unpinned.
+    uint64 message_id = 3;
+  }
+
+  // Which event to send.
   oneof event {
+    // Send the guild added to list event.
     GuildAddedToList guild_added_to_list = 1;
+    // Send the guild removed from list event.
     GuildRemovedFromList guild_removed_from_list = 2;
+    // Send the action performed event.
     ActionPerformed action_performed = 3;
+    // Send the message sent event.
     MessageSent sent_message = 4;
+    // Send the message updated event.
     MessageUpdated edited_message = 5;
+    // Send the message deleted event.
     MessageDeleted deleted_message = 6;
+    // Send the channel created event.
     ChannelCreated created_channel = 7;
+    // Send the channel updated event.
     ChannelUpdated edited_channel = 8;
+    // Send the channel deleted event.
     ChannelDeleted deleted_channel = 9;
+    // The channels have been completely reordered.
+    ChannelsReordered channels_reordered = 27;
+    // Send the guild updated event.
     GuildUpdated edited_guild = 10;
+    // Send the guild deleted event.
     GuildDeleted deleted_guild = 11;
+    // Send the member joined event.
     MemberJoined joined_member = 12;
+    // Send the member left event.
     MemberLeft left_member = 13;
+    // Send the profile updated event.
     ProfileUpdated profile_updated = 14;
+    // Send the typing event.
     Typing typing = 15;
+    // Send the role created event.
     RoleCreated role_created = 16;
+    // Send the role deleted event.
     RoleDeleted role_deleted = 17;
+    // Send the role moved event.
     RoleMoved role_moved = 18;
+    // Send the role updated event.
     RoleUpdated role_updated = 19;
+    // Send the role perms updated event.
     RolePermissionsUpdated role_perms_updated = 20;
+    // Send the user roles updated event.
     UserRolesUpdated user_roles_updated = 21;
+    // Send the permission updated event.
     PermissionUpdated permission_updated = 22;
+    // Send the emote pack added event.
     EmotePackAdded emote_pack_added = 23;
+    // Send the emote pack updated event.
     EmotePackUpdated emote_pack_updated = 24;
+    // Send the emote pack deleted event.
     EmotePackDeleted emote_pack_deleted = 25;
+    // Send the emote pack emotes updated event.
     EmotePackEmotesUpdated emote_pack_emotes_updated = 26;
+    // Send the message pinned event.
+    MessagePinned message_pinned = 28;
+    // Send the message unpinned event.
+    MessageUnpinned message_unpinned = 29;
   }
 }

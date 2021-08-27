@@ -51,6 +51,14 @@ message UpdateChannelOrderRequest {
   optional harmonytypes.v1.ItemPosition new_position = 3;
 }
 
+// Request specifiying the order of all channels in a guild at once
+message UpdateAllChannelOrderRequest {
+  // guild_id: the guild to specify the new channel order for
+  uint64 guild_id = 1;
+  // channel_ids: the new order of channel ids
+  repeated uint64 channel_ids = 2;
+}
+
 message DeleteChannelRequest {
   uint64 guild_id = 1;
   uint64 channel_id = 2;
