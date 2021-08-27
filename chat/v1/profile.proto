@@ -21,12 +21,8 @@ message GetUserMetadataRequest { string app_id = 1; }
 message GetUserMetadataResponse { string metadata = 1; }
 
 message ProfileUpdateRequest {
-  string new_username = 1;
-  bool update_username = 2;
-  string new_avatar = 3;
-  bool update_avatar = 4;
-  harmonytypes.v1.UserStatus new_status = 5;
-  bool update_status = 6;
-  bool is_bot = 7;
-  bool update_is_bot = 8;
+  optional string new_username = 1;
+  optional string new_avatar = 2;
+  optional harmonytypes.v1.UserStatus new_status = 3;
+  optional bool new_is_bot = 4;
 }

@@ -20,9 +20,8 @@ message CreateChannelRequest {
   uint64 guild_id = 1;
   string channel_name = 2; //  [(validate.rules).string.min_len = 1]
   bool is_category = 3;
-  uint64 previous_id = 5;
-  uint64 next_id = 4;
-  harmonytypes.v1.Metadata metadata = 6;
+  harmonytypes.v1.ItemPosition position = 4;
+  harmonytypes.v1.Metadata metadata = 5;
 }
 message CreateChannelResponse { uint64 channel_id = 1; }
 
@@ -42,19 +41,14 @@ message GetGuildChannelsResponse {
 message UpdateChannelInformationRequest {
   uint64 guild_id = 1;
   uint64 channel_id = 2;
-
-  string name = 3;
-  bool update_name = 4;
-
-  harmonytypes.v1.Metadata metadata = 5;
-  bool update_metadata = 6;
+  optional string new_name = 3;
+  optional harmonytypes.v1.Metadata new_metadata = 4;
 }
 
 message UpdateChannelOrderRequest {
   uint64 guild_id = 1;
   uint64 channel_id = 2;
-  uint64 previous_id = 3;
-  uint64 next_id = 4;
+  optional harmonytypes.v1.ItemPosition new_position = 3;
 }
 
 // Request specifiying the order of all channels in a guild at once

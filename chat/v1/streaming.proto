@@ -60,7 +60,7 @@ message Event {
     // When this message was edited.
     google.protobuf.Timestamp edited_at = 4;
     // New message content.
-    string content = 5;
+    string new_content = 5;
   }
 
   // Event sent when a message is deleted.
@@ -81,12 +81,12 @@ message Event {
     uint64 channel_id = 2;
     // Name of this channel.
     string name = 3;
-    uint64 previous_id = 4;
-    uint64 next_id = 5;
+    // the position in the channel list.
+    harmonytypes.v1.ItemPosition position = 4;
     // Is this channel a category or not.
-    bool is_category = 6;
+    bool is_category = 5;
     // Metadata for this channel.
-    harmonytypes.v1.Metadata metadata = 7;
+    harmonytypes.v1.Metadata metadata = 6;
   }
 
   // Event sent when a channel's information or position in the channel is changed.
@@ -95,13 +95,9 @@ message Event {
     uint64 guild_id = 1;
     // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
-    string name = 3;
-    bool update_name = 4;
-    uint64 previous_id = 5;
-    uint64 next_id = 6;
-    bool update_order = 7;
-    harmonytypes.v1.Metadata metadata = 8;
-    bool update_metadata = 9;
+    optional string new_name = 3;
+    optional harmonytypes.v1.ItemPosition new_position = 4;
+    optional harmonytypes.v1.Metadata new_metadata = 5;
   }
 
   // Event sent when all channels have been reordered
@@ -124,12 +120,9 @@ message Event {
   message GuildUpdated {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
-    string name = 2;
-    bool update_name = 3;
-    string picture = 4;
-    bool update_picture = 5;
-    harmonytypes.v1.Metadata metadata = 6;
-    bool update_metadata = 7;
+    optional string new_name = 2;
+    optional string new_picture = 3;
+    optional harmonytypes.v1.Metadata new_metadata = 4;
   }
 
   // Event sent when a guild is deleted.
@@ -189,8 +182,7 @@ message Event {
     uint64 guild_id = 1;
     // Role ID of the role that was moved.
     uint64 role_id = 2;
-    uint64 previous_id = 3;
-    uint64 next_id = 4;
+    harmonytypes.v1.ItemPosition new_position = 3;
   }
 
   // Event sent when a role is deleted.
@@ -216,9 +208,9 @@ message Event {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
     // Role ID of the role that was changed.
-    uint64 role_id = 3;
+    uint64 role_id = 2;
     // The actual new role.
-    chat.v1.Role role = 4;
+    chat.v1.Role new_role = 3;
   }
 
   // Event sent when a role's permissions are changed.
@@ -232,7 +224,7 @@ message Event {
     // Role ID of the role that had it's permissions changed. 
     uint64 role_id = 3;
     // The new permissions.
-    chat.v1.PermissionList perms = 4;
+    chat.v1.PermissionList new_perms = 4;
   }
 
   // Event sent when a user's roles are changed.
@@ -242,7 +234,7 @@ message Event {
     // User ID of the user that had it's roles changed.
     uint64 user_id = 2;
     // The new role IDs.
-    repeated uint64 role_ids = 3;
+    repeated uint64 new_role_ids = 3;
   }
 
   // Event sent when a user's profile is updated.
@@ -253,17 +245,13 @@ message Event {
     // User ID of the user that had it's profile updated.
     uint64 user_id = 1;
     // New username for this user.
-    string new_username = 2;
-    bool update_username = 3;
+    optional string new_username = 2;
     // New avatar for this user.
-    string new_avatar = 4;
-    bool update_avatar = 5;
+    optional string new_avatar = 3;
     // New status for this user.
-    harmonytypes.v1.UserStatus new_status = 6;
-    bool update_status = 7;
+    optional harmonytypes.v1.UserStatus new_status = 4;
     // New is bot or not for this user.
-    bool is_bot = 8;
-    bool update_is_bot = 9;
+    optional bool new_is_bot = 5;
   }
   
   // Event sent when a user sends a typing notification in a guild channel. 
@@ -298,9 +286,7 @@ message Event {
     // ID of the pack that was updated.
     uint64 pack_id = 1;
     // New pack name of the pack.
-    string pack_name = 2;
-    // Whether to update the pack name or not.
-    bool update_pack_name = 3;
+    optional string new_pack_name = 2;
   }
 
   // Event sent when an emote pack is deleted.
