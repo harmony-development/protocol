@@ -4,43 +4,91 @@ package protocol.chat.v1;
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
+// EmotePack is a pack of emojis
 message EmotePack {
+  // the ID of the emote pack
   uint64 pack_id = 1;
+  // the owner of the emote pack
   uint64 pack_owner = 2;
+  // the name of the emote pack
   string pack_name = 3;
 }
 
+// Emote represents a single emote item
 message Emote {
+  // The image ID where the emote is located at
   string image_id = 1;
+  // the name of the emote.
   string name = 2;
 }
 
-message CreateEmotePackRequest { string pack_name = 1; }
-message CreateEmotePackResponse { uint64 pack_id = 1; }
+// Request data for the CreateEmotePack endpoint
+message CreateEmotePackRequest {
+  // the name of the emote pack being created
+  string pack_name = 1;
+}
 
+// Response data for the CreateEmotePack endpoint
+message CreateEmotePackResponse {
+  // the ID of the emote pack created
+  uint64 pack_id = 1;
+}
+
+// Request data for the GetEmotePacks endpoint
 message GetEmotePacksRequest {}
+
+// Response data for the GetEmotePacks endpoint
 message GetEmotePacksResponse {
+  // A list of emote packs that you have equipped.
   repeated EmotePack packs = 1;
 }
 
-message GetEmotePackEmotesRequest { uint64 pack_id = 1; }
+// Request data for the GetEmotePackEmotes endpoint
+message GetEmotePackEmotesRequest {
+  // The pack ID to get emotes for
+  uint64 pack_id = 1;
+}
+
+// Response data for the GetEmotePackEmotes endpoint
 message GetEmotePackEmotesResponse {
+  // A list of emotes inside of the emote pack
   repeated Emote emotes = 1;
 }
 
+// Request data for the AddEmoteToPack endpoint
 message AddEmoteToPackRequest {
+  // the ID of the emote pack to add the emote to
   uint64 pack_id = 1;
+  // the image ID of the emote. To obtain this, upload the emote image to the
+  // `_harmony/media/upload` endpoint, and the response data will contain the
+  // ID.
   string image_id = 2;
+  // the name of the emote.
   string name = 3;
 }
 
+// Request data for the DeleteEmoteFromPack endpoint
 message DeleteEmoteFromPackRequest {
+  // the ID of the pack to delete the emote from
   uint64 pack_id = 1;
+  // the image ID of the emote to delete
   string image_id = 2;
 }
 
-message DeleteEmotePackRequest { uint64 pack_id = 1; }
+// Request data for the DeleteEmotePack endpoint
+message DeleteEmotePackRequest {
+  // the ID of the pack to delete
+  uint64 pack_id = 1;
+}
 
-message DequipEmotePackRequest { uint64 pack_id = 1; }
+// Request data for the DequipEmotePack endpoint
+message DequipEmotePackRequest {
+  // the ID of the emote pack to dequip (remove from your user)
+  uint64 pack_id = 1;
+}
 
-message EquipEmotePackRequest { uint64 pack_id = 1; }
+// Request data for the EquipEmotePack endpoint
+message EquipEmotePackRequest {
+  // the ID of the emote pack to equip (add to your user)
+  uint64 pack_id = 1;
+}

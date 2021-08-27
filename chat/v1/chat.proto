@@ -235,8 +235,8 @@ service ChatService {
   }
 
   // Endpoint to batch query if a user has a permission.
-  rpc BatchQueryHasPermission(BatchQueryPermissionsRequest)
-      returns (BatchQueryPermissionsResponse) {
+  rpc BatchQueryHasPermission(BatchQueryHasPermissionRequest)
+      returns (BatchQueryHasPermissionResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     // This permissions node is only required if you're trying
     // to see if someone besides yourself has a permission.
@@ -246,7 +246,7 @@ service ChatService {
   }
 
   // Endpoint to set permissions for a role in a guild.
-  rpc SetPermissions(SetPermissionsRequest) returns (google.protobuf.Empty) {
+  rpc SetPermissions(SetPermissionsRequest) returns (SetPermissionsResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "permissions.manage.set";
@@ -278,19 +278,22 @@ service ChatService {
   }
 
   // Endpoint to a modify a role from a guild.
-  rpc ModifyGuildRole(ModifyGuildRoleRequest) returns (google.protobuf.Empty) {
+  rpc ModifyGuildRole(ModifyGuildRoleRequest)
+      returns (ModifyGuildRoleResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "roles.manage";
   }
 
   // Endpoint to delete a role from a guild.
-  rpc DeleteGuildRole(DeleteGuildRoleRequest) returns (google.protobuf.Empty) {
+  rpc DeleteGuildRole(DeleteGuildRoleRequest)
+      returns (DeleteGuildRoleResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "roles.manage";
   }
 
   // Endpoint to manage the roles of a guild member.
-  rpc ManageUserRoles(ManageUserRolesRequest) returns (google.protobuf.Empty) {
+  rpc ManageUserRoles(ManageUserRolesRequest)
+      returns (ManageUserRolesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "roles.user.manage";
@@ -348,7 +351,7 @@ service ChatService {
   }
 
   // Endpoint to ban a user from a guild.
-  rpc BanUser(BanUserRequest) returns (BanUesrResponse) {
+  rpc BanUser(BanUserRequest) returns (BanUserResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "user.manage.ban";
@@ -384,7 +387,7 @@ service ChatService {
   }
 
   // Endpoint to unpin a message in a guild channel.
-  rpc UnpinMessage(UnpinMessageRequest) returns (google.protobuf.Empty) {
+  rpc UnpinMessage(UnpinMessageRequest) returns (UnpinMessageResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "messages.pins.remove";

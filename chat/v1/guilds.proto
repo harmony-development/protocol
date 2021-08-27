@@ -91,7 +91,7 @@ message BanUserRequest {
 }
 
 // BanUserResponse contains the response data for a BanUser request
-message BanUesrResponse {}
+message BanUserResponse {}
 
 message KickUserRequest {
   uint64 guild_id = 1;

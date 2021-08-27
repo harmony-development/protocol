@@ -12,27 +12,41 @@ message QueryPermissionsRequest {
 }
 message QueryPermissionsResponse { bool ok = 1; }
 
-message BatchQueryPermissionsRequest {
+// Request data for the BatchQueryHasPermission endpoint
+message BatchQueryHasPermissionRequest {
+  // the permission checks to run
   repeated QueryPermissionsRequest requests = 1;
 }
-message BatchQueryPermissionsResponse {
+// Response data for the BatchQueryHasPermission endpoint
+message BatchQueryHasPermissionResponse {
+  // the permission responses
   repeated QueryPermissionsResponse responses = 1;
 }
 
 message Permission {
-  enum Mode { Allow = 0; Deny = 1; }
+  enum Mode {
+    Allow = 0;
+    Deny = 1;
+  }
   string matches = 1;
   Mode mode = 2;
 }
 
 message PermissionList { repeated Permission permissions = 1; }
 
+// Request data for the SetPermissions endpoint
 message SetPermissionsRequest {
+  // the guild ID for the role to update
   uint64 guild_id = 1;
-  uint64 channel_id = 2;
+  // the channel ID for the role to update
+  optional uint64 channel_id = 2;
+  // the role ID for the role to update
   uint64 role_id = 3;
+  // the new list of permissions
   PermissionList perms = 4;
 }
+// Response data for the SetPermissions endpoint
+message SetPermissionsResponse {}
 
 message GetPermissionsRequest {
   uint64 guild_id = 1;
@@ -70,14 +84,27 @@ message DeleteGuildRoleRequest {
   uint64 guild_id = 1;
   uint64 role_id = 2;
 }
+// Response data for the DeleteGuildRole endpoint
+message DeleteGuildRoleResponse {}
+
+// Request data for the ModifyGuildRole endpoint
 message ModifyGuildRoleRequest {
+  // the ID of the guild where the role is being modified
   uint64 guild_id = 1;
+  // the updated role data
   Role role = 2;
+  // whether name should be updated
   bool modify_name = 3;
+  // whether color should be updated
   bool modify_color = 4;
+  // whether hoist should be updated
   bool modify_hoist = 5;
+  // whether pingable should be updated
   bool modify_pingable = 6;
 }
+
+// Response data for the ModifyGuildRole endpoint
+message ModifyGuildRoleResponse {}
 
 message ManageUserRolesRequest {
   uint64 guild_id = 1;
@@ -85,6 +112,9 @@ message ManageUserRolesRequest {
   repeated uint64 give_role_ids = 3;
   repeated uint64 take_role_ids = 4;
 }
+
+// Response data for the ManageUserRoles endpoint
+message ManageUserRolesResponse {}
 
 message GetUserRolesRequest {
   uint64 guild_id = 1;
