@@ -22,7 +22,10 @@ message BatchQueryPermissionsResponse {
 }
 
 message Permission {
-  enum Mode { Allow = 0; Deny = 1; }
+  enum Mode {
+    Allow = 0;
+    Deny = 1;
+  }
   string matches = 1;
   Mode mode = 2;
 }
@@ -73,10 +76,17 @@ message DeleteGuildRoleRequest {
 }
 
 message ModifyGuildRoleRequest {
+  // the ID of the guild where the role is located
   uint64 guild_id = 1;
+  // the ID of the role to modify
+  uint64 role_id = 2;
+  // the new name of the role
   optional string new_name = 2;
+  // the new color of the role
   optional int32 new_color = 3;
+  // the new hoist status of the role
   optional bool new_hoist = 4;
+  // the new pingable status of the role
   optional bool new_pingable = 5;
 }
 
