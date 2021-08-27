@@ -81,13 +81,13 @@ message ModifyGuildRoleRequest {
   // the ID of the role to modify
   uint64 role_id = 2;
   // the new name of the role
-  optional string new_name = 2;
+  optional string new_name = 3;
   // the new color of the role
-  optional int32 new_color = 3;
+  optional int32 new_color = 4;
   // the new hoist status of the role
-  optional bool new_hoist = 4;
+  optional bool new_hoist = 5;
   // the new pingable status of the role
-  optional bool new_pingable = 5;
+  optional bool new_pingable = 6;
 }
 
 message ManageUserRolesRequest {
