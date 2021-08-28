@@ -79,17 +79,32 @@ message PreviewGuildResponse {
 
 message LeaveGuildRequest { uint64 guild_id = 1; }
 
+// Used in `BanUser` endpoint.
 message BanUserRequest {
+  // The guild ID of the guild to ban the user from.
   uint64 guild_id = 1;
+  // The ID of the user to ban.
   uint64 user_id = 2;
 }
+// Used in `BanUser` endpoint.
+message BanUserResponse {}
 
+// Used in `KickUser` endpoint.
 message KickUserRequest {
+  // The guild ID of the guild to kick the user from.
   uint64 guild_id = 1;
+  // The user ID of the user to kick.
   uint64 user_id = 2;
 }
+// Used in `KickUser` endpoint.
+message KickUserResponse {}
 
+// Used in `UnbanUser` endpoint.
 message UnbanUserRequest {
+  // The guild ID of the guild to unban the user from.
   uint64 guild_id = 1;
+  // The user ID of the user to unban.
   uint64 user_id = 2;
 }
+// Used in `UnbanUser` endpoint.
+message UnbanUserResponse {}

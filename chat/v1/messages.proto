@@ -6,6 +6,7 @@ import "harmonytypes/v1/types.proto";
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
+// Used in the `GetChannelMessages` endpoint.
 message GetChannelMessagesRequest {
   // The direction relative to the `message_id` message to get messages from.
   enum Direction {
@@ -18,21 +19,28 @@ message GetChannelMessagesRequest {
   uint64 channel_id = 2;
   // The ID of the message that will be used as an "anchor" point to figure out
   // where to get the messages.
-  // If not specified, the `direction` will be ignored and the newest messages will be returned. 
+  // If not specified, the `direction` will be ignored and the newest messages
+  // will be returned.
   uint64 message_id = 3;
   // On which direction to get the messages.
   //
-  // - By default, it is "before", which means you will get messages before the `message_id` message.
-  // - If it is "around", you will get the messages around the `message_id` message.
-  // This will include the `message_id` message itself, as the middle item of the list returned.
-  // - If it is "after", you will get the messages after the `message_id` message.
+  // - By default, it is "before", which means you will get messages before the
+  // `message_id` message.
+  // - If it is "around", you will get the messages around the `message_id`
+  // message. This will include the `message_id` message itself, as the middle
+  // item of the list returned.
+  // - If it is "after", you will get the messages after the `message_id`
+  // message.
   Direction direction = 4;
   // How many messages to get.
   //
-  // - If `0`, a recommended message count to return is 25. If the direction is "around", the recommended value is 12.
-  // - If the direction to get the messages is "around", this count will not be the *total* count
-  // of messages to return, but instead the count of messages to return *for each direction*, before and after.
-  // - Servers should enforce their own maximum limit, and clamp this value to the limit.
+  // - If `0`, a recommended message count to return is 25. If the direction is
+  // "around", the recommended value is 12.
+  // - If the direction to get the messages is "around", this count will not be
+  // the *total* count of messages to return, but instead the count of messages
+  // to return *for each direction*, before and after.
+  // - Servers should enforce their own maximum limit, and clamp this value to
+  // the limit.
   uint32 count = 5;
 }
 message GetChannelMessagesResponse {
@@ -82,7 +90,7 @@ message UpdateMessageTextRequest {
   string new_content = 4;
 }
 
-// Used in the `PinMessage` endpoint. 
+// Used in the `PinMessage` endpoint.
 message PinMessageRequest {
   // Guild ID of the guild where the channel is.
   uint64 guild_id = 1;
@@ -91,8 +99,10 @@ message PinMessageRequest {
   // Message ID of the message we want to pin.
   uint64 message_id = 3;
 }
+// Used in the `UnpinMessage` endpoint.
+message PinMessageResponse {}
 
-// Used in the `UnpinMessage` endpoint. 
+// Used in the `UnpinMessage` endpoint.
 message UnpinMessageRequest {
   // Guild ID of the guild where the channel is.
   uint64 guild_id = 1;
@@ -101,6 +111,8 @@ message UnpinMessageRequest {
   // Message ID of the message we want to unpin.
   uint64 message_id = 3;
 }
+// Used in the `UnpinMessage` endpoint.
+message UnpinMessageResponse {}
 
 // Used in the `GetPinnedMessages` endpoint.
 message GetPinnedMessagesRequest {

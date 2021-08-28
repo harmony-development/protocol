@@ -38,7 +38,8 @@ service ChatService {
   }
 
   // Endpoint to create an emote pack.
-  rpc CreateEmotePack(CreateEmotePackRequest) returns (CreateEmotePackResponse) {
+  rpc CreateEmotePack(CreateEmotePackRequest)
+      returns (CreateEmotePackResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
@@ -55,7 +56,8 @@ service ChatService {
   // Endpoint to get the invites of a guild.
   //
   // This requires the "invites.view" permission.
-  rpc GetGuildInvites(GetGuildInvitesRequest) returns (GetGuildInvitesResponse) {
+  rpc GetGuildInvites(GetGuildInvitesRequest)
+      returns (GetGuildInvitesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "invites.view";
   }
@@ -129,13 +131,14 @@ service ChatService {
   // must specifcy all channels or fails
   rpc UpdateAllChannelOrder(UpdateAllChannelOrderRequest)
       returns (google.protobuf.Empty) {
-        option (harmonytypes.v1.metadata).requires_authentication = true;
-        option (harmonytypes.v1.metadata).requires_permission_node =
-            "channels.manage.move";
-      }
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "channels.manage.move";
+  }
 
   // Endpoint to change the text of a message.
-  rpc UpdateMessageText(UpdateMessageTextRequest) returns (google.protobuf.Empty) {
+  rpc UpdateMessageText(UpdateMessageTextRequest)
+      returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "messages.send";
@@ -319,63 +322,69 @@ service ChatService {
   }
 
   // Endpoint to get metadata you have.
-  rpc GetUserMetadata(GetUserMetadataRequest) returns (GetUserMetadataResponse) {
+  rpc GetUserMetadata(GetUserMetadataRequest)
+      returns (GetUserMetadataResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
   // Endpoint to update your profile information.
-  rpc ProfileUpdate(ProfileUpdateRequest) returns (google.protobuf.Empty) {
+  rpc ProfileUpdate(ProfileUpdateRequest) returns (ProfileUpdateResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
   // Endpoint to send a typing notification in a guild channel.
-  rpc Typing(TypingRequest) returns (google.protobuf.Empty) {
+  rpc Typing(TypingRequest) returns (TypingResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "messages.send";
   }
 
-  // Endpoint to "preview" a guild, which returns some information about a guild.
+  // Endpoint to "preview" a guild, which returns some information about a
+  // guild.
   rpc PreviewGuild(PreviewGuildRequest) returns (PreviewGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = false;
   }
 
   // Endpoint to ban a user from a guild.
-  rpc BanUser(BanUserRequest) returns (google.protobuf.Empty) {
+  rpc BanUser(BanUserRequest) returns (BanUserResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "user.manage.ban";
   }
 
   // Endpoint to kick a user from a guild.
-  rpc KickUser(KickUserRequest) returns (google.protobuf.Empty) {
+  rpc KickUser(KickUserRequest) returns (KickUserResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "user.manage.kick";
   }
 
   // Endpoint to unban a user from a guild.
-  rpc UnbanUser(UnbanUserRequest) returns (google.protobuf.Empty) {
+  rpc UnbanUser(UnbanUserRequest) returns (UnbanUserResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "user.manage.unban";
   }
 
   // Endpoint to get all pinned messages in a guild channel.
-  rpc GetPinnedMessages(GetPinnedMessagesRequest) returns (GetPinnedMessagesResponse) {
+  rpc GetPinnedMessages(GetPinnedMessagesRequest)
+      returns (GetPinnedMessagesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "messages.view";
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "messages.view";
   }
 
   // Endpoint to pin a message in a guild channel.
-  rpc PinMessage(PinMessageRequest) returns (google.protobuf.Empty) {
+  rpc PinMessage(PinMessageRequest) returns (PinMessageResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "messages.pins.add";
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "messages.pins.add";
   }
 
   // Endpoint to unpin a message in a guild channel.
-  rpc UnpinMessage(UnpinMessageRequest) returns (google.protobuf.Empty) {
+  rpc UnpinMessage(UnpinMessageRequest) returns (UnpinMessageResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "messages.pins.remove";
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "messages.pins.remove";
   }
 }

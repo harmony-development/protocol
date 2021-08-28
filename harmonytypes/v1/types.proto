@@ -10,50 +10,83 @@ option go_package = "github.com/harmony-development/legato/gen/harmonytypes/v1";
 
 import "google/protobuf/descriptor.proto";
 
+// Metadata for methods. These are set in individual RPC endpoints and are
+// typically used by servers.
 message HarmonyMethodMetadata {
+  // whether the method requires authentication.
   bool requires_authentication = 1;
+  // whether the method allows federation or not.
   bool requires_local = 2;
+  // the permission nodes required to invoke the method.
   string requires_permission_node = 3;
 }
 
 extend google.protobuf.MethodOptions { HarmonyMethodMetadata metadata = 1091; }
 
+// The possible statuses a user can have.
 enum UserStatus {
-  USER_STATUS_ONLINE_UNSPECIFIED = 0;
-  USER_STATUS_STREAMING = 1;
-  USER_STATUS_DO_NOT_DISTURB = 2;
-  USER_STATUS_IDLE = 3;
-  USER_STATUS_OFFLINE = 4;
+  // User is offline (not connected to the server).
+  USER_STATUS_OFFLINE_UNSPECIFIED = 0;
+  // User is online (this is the default value if ommitted).
+  USER_STATUS_ONLINE = 1;
+  // User is away.
+  USER_STATUS_IDLE = 2;
+  // User does not want to be disturbed.
+  USER_STATUS_DO_NOT_DISTURB = 3;
+  // User is on mobile.
+  USER_STATUS_MOBILE = 4;
+  // User is streaming
+  USER_STATUS_STREAMING = 5;
 }
 
-// OVERRIDES
+// Overrides provide a way to override the name and avatar of a message.
 message Override {
-  string name = 1;
+  // the overridden username.
+  string username = 1;
+  // the overridden avatar.
   string avatar = 2;
+  // the reason for overriding username and avatar.
   oneof reason {
+    // a custom reason in case the builtin ones don't fit
     string user_defined = 3;
+    // the override occured because of a webhook
     google.protobuf.Empty webhook = 4;
     // plurality, not system as in computer
     google.protobuf.Empty system_plurality = 5;
+    // the override occured because it was made by the server
     google.protobuf.Empty system_message = 6;
+    // the override occured because of bridging
     google.protobuf.Empty bridge = 7;
   }
 }
 
 // EMBEDS AND ACTIONS
 
+// Actions are interactive elements that can exist within an embed.
 message Action {
+  // The action type. This is primarily used to change the look of the action to
+  // the user (example: Destructive actions will have a red background).
   enum Type {
-    Normal = 0;
-    Primary = 1;
-    Destructive = 2;
+    // a normal action.
+    TYPE_NORMAL_UNSPECIFIED = 0;
+    // a primary action.
+    TYPE_PRIMARY = 1;
+    // A destructive / dangerous action.
+    TYPE_DESTRUCTIVE = 2;
   }
+
+  // A button that users can click on to trigger an action.
   message Button {
+    // The text to show on the button.
     string text = 1;
-    string url = 2;
+    // The url the button should link to.
+    optional string url = 2;
   }
+  // A dropdown menu that users can click on to trigger an action.
   message Dropdown {
+    // The text describing the dropdown.
     string text = 1;
+    // The options in the dropdown.
     repeated string options = 2;
   }
   message Input {
@@ -209,7 +242,8 @@ message Token {
   // Has to be 64 bytes long, otherwise it will be rejected.
   bytes sig = 1;
   // Serialized protobuf data.
-  // The protobuf type of this serialized data is dependent on the API endpoint used.
+  // The protobuf type of this serialized data is dependent on the API endpoint
+  // used.
   bytes data = 2;
 }
 
