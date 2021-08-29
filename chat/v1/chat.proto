@@ -1,12 +1,10 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
-// import "validate/validate.proto";
 import "chat/v1/profile.proto";
 import "chat/v1/guilds.proto";
 import "chat/v1/channels.proto";
 import "chat/v1/messages.proto";
-import "chat/v1/emotes.proto";
 import "chat/v1/permissions.proto";
 import "chat/v1/streaming.proto";
 
