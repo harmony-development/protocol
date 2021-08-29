@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+import "harmonytypes/v1/types.proto";
+import "emote/v1/types.proto";
+
+package protocol.emote.v1;
+
+// Harmony's Emote service manages the emotes and emote packs.
+service EmoteService {
+  // Endpoint to create an emote pack.
+  rpc CreateEmotePack(CreateEmotePackRequest)
+      returns (CreateEmotePackResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+  // Endpoint to get the emote packs you have equipped.
+  rpc GetEmotePacks(GetEmotePacksRequest) returns (GetEmotePacksResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+  // Endpoint to get the emotes in an emote pack.
+  rpc GetEmotePackEmotes(GetEmotePackEmotesRequest) returns (GetEmotePackEmotesResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+  // Endpoint to add an emote to an emote pack that you own.
+  rpc AddEmoteToPack(AddEmoteToPackRequest) returns (AddEmoteToPackResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+  // Endpoint to delete an emote pack that you own.
+  rpc DeleteEmotePack(DeleteEmotePackRequest) returns (DeleteEmotePackResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+
+  // Endpoint to delete an emote from an emote pack.
+  rpc DeleteEmoteFromPack(DeleteEmoteFromPackRequest) returns (DeleteEmoteFromPackResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+
+  // Endpoint to dequip an emote pack that you have equipped.
+  rpc DequipEmotePack(DequipEmotePackRequest) returns (DequipEmotePackResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+
+  // Endpoint to equip an emote pack.
+  rpc EquipEmotePack(EquipEmotePackRequest) returns (EquipEmotePackResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+}

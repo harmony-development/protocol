@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package protocol.emote.v1;
+
+// Data for a single pack of emotes.
+message EmotePack {
+  // The ID of the pack.
+  uint64 pack_id = 1;
+  // The ID of the user who created the pack.
+  uint64 pack_owner = 2;
+  // The name of the pack.
+  string pack_name = 3;
+}
+
+// Data for a single emote.
+message Emote {
+  // The image ID of the emote. This is the ID of the image in the image store
+  // (same place attachments are stored).
+  string image_id = 1;
+  // The name of the emote.
+  string name = 2;
+}
+
+// Used in the `CreateEmotePack` endpoint.
+message CreateEmotePackRequest {
+  // the name of the pack.
+  string pack_name = 1;
+}
+// Used in the `CreateEmotePack` endpoint.
+message CreateEmotePackResponse {
+  // The ID of the pack.
+  uint64 pack_id = 1;
+}
+
+// Used in the `GetEmotePacks` endpoint.
+message GetEmotePacksRequest {}
+// Used in the `GetEmotePacks` endpoint.
+message GetEmotePacksResponse {
+  // The list of emote packs.
+  repeated EmotePack packs = 1;
+}
+
+// Used in the `GetEmotes` endpoint.
+message GetEmotePackEmotesRequest {
+  // The ID of the pack.
+  uint64 pack_id = 1;
+}
+// Used in the `GetEmotes` endpoint.
+message GetEmotePackEmotesResponse {
+  // The list of emotes in the pack.
+  repeated Emote emotes = 1;
+}
+
+// Used in the `AddEmoteToPack` endpoint.
+message AddEmoteToPackRequest {
+  // The ID of the pack.
+  uint64 pack_id = 1;
+  // The emote to add.
+  Emote emote = 2;
+}
+// Used in the `AddEmoteToPack` endpoint.
+message AddEmoteToPackResponse {}
+
+// Used in the `DeleteEmoteFromPack` endpoint.
+message DeleteEmoteFromPackRequest {
+  // The ID of the pack.
+  uint64 pack_id = 1;
+  // The name of the emote to delete.
+  string name = 2;
+}
+// Used in the `DeleteEmoteFromPack` endpoint.
+message DeleteEmoteFromPackResponse {}
+
+// Used in the `DeleteEmotePack` endpoint.
+message DeleteEmotePackRequest {
+  // The ID of the pack.
+  uint64 pack_id = 1;
+}
+// Used in the `DeleteEmotePack` endpoint.
+message DeleteEmotePackResponse {}
+
+// Used in the `DequipEmotePack` endpoint.
+message DequipEmotePackRequest {
+  // The ID of the pack.
+  uint64 pack_id = 1;
+}
+// Used in the `DequipEmotePack` endpoint.
+message DequipEmotePackResponse {}
+
+// Used in the `EquipEmotePack` endpoint.
+message EquipEmotePackRequest {
+  // The ID of the pack.
+  uint64 pack_id = 1;
+}
+// Used in the `EquipEmotePack` endpoint.
+message EquipEmotePackResponse {}

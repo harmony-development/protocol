@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+import "harmonytypes/v1/types.proto";
+
+package protocol.profile.v1;
+
+// Data for a single profile, without the user's ID.
+message Profile {
+  // the name of the user.
+  string user_name = 1;
+  // the user's avatar.
+  string user_avatar = 2;
+  // the status of the user.
+  harmonytypes.v1.UserStatus user_status = 3;
+  // whether the user is a bot or not.
+  bool is_bot = 4;
+}
+
+// Used in `GetProfile` endpoint.
+message GetProfileRequest {
+  // The id of the user to get.
+  uint64 user_id = 1;
+}
+
+// Used in `GetProfile` endpoint.
+message GetProfileResponse {
+  // The user's profile
+  Profile profile = 1;
+}
+
+// Used in `UpdateProfile` endpoint.
+message UpdateProfileRequest {
+  // the new profile data.
+  Profile profile = 1;
+}
+
+// Used in `UpdateProfile` endpoint.
+message UpdateProfileResponse {}
+
+// Used in `GetAppData` endpoint.
+message GetAppDataRequest {
+  // the app id.
+  string app_id = 1;
+}
+
+// Used in `GetAppData` endpoint.
+message GetAppDataResponse {
+  // the app data.
+  bytes app_data = 1;
+}
+
+// Used in `SetAppData` endpoint.
+message SetAppDataRequest {
+  // the app id.
+  string app_id = 1;
+  // the app data.
+  bytes app_data = 2;
+}
+// Used in `SetAppData` endpoint.
+message SetAppDataResponse {}

@@ -54,8 +54,8 @@ message PermissionList {
 message SetPermissionsRequest {
   // the guild ID to set permissions for.
   uint64 guild_id = 1;
-  // the channel ID to set permissions for. If not set, it will set it for the
-  // guild.
+  // the channel ID to set permissions for. Only set if the role is for a
+  // channel.
   optional uint64 channel_id = 2;
   // the role ID to set permissions for.
   uint64 role_id = 3;

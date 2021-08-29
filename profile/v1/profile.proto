@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+import "harmonytypes/v1/types.proto";
+import "profile/v1/types.proto";
+
+package protocol.profile.v1;
+
+// Harmony's Profile service manages the profiles of the users.
+service ProfileService {
+  // Gets a user's profile.
+  rpc GetProfile(GetProfileRequest) returns (GetProfileResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+
+  // Updates the user's profile.
+  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse) {}
+
+  // Gets app data for a user (this can be used to store user preferences which
+  // is synchronized across devices).
+  rpc GetAppData(GetAppDataRequest) returns (GetAppDataResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+
+  // Sets the app data for a user.
+  rpc SetAppData(SetAppDataRequest) returns (SetAppDataResponse) {}
+}

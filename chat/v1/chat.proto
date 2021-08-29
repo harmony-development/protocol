@@ -2,7 +2,6 @@ syntax = "proto3";
 
 import "google/protobuf/empty.proto";
 // import "validate/validate.proto";
-import "harmonytypes/v1/types.proto";
 import "chat/v1/profile.proto";
 import "chat/v1/guilds.proto";
 import "chat/v1/channels.proto";
@@ -35,12 +34,6 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "channels.manage.create";
-  }
-
-  // Endpoint to create an emote pack.
-  rpc CreateEmotePack(CreateEmotePackRequest)
-      returns (CreateEmotePackResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
   // Endpoint to get your guild list.
@@ -92,17 +85,6 @@ service ChatService {
         "messages.view";
   }
 
-  // Endpoint to get the emote packs you have equipped.
-  rpc GetEmotePacks(GetEmotePacksRequest) returns (GetEmotePacksResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
-  // Endpoint to get the emotes in an emote pack.
-  rpc GetEmotePackEmotes(GetEmotePackEmotesRequest)
-      returns (GetEmotePackEmotesResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
   // Endpoint to update a guild's information.
   rpc UpdateGuildInformation(UpdateGuildInformationRequest)
       returns (google.protobuf.Empty) {
@@ -144,11 +126,6 @@ service ChatService {
         "messages.send";
   }
 
-  // Endpoint to add an emote to an emote pack that you own.
-  rpc AddEmoteToPack(AddEmoteToPackRequest) returns (google.protobuf.Empty) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
   // Endpoint to delete a guild.
   rpc DeleteGuild(DeleteGuildRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
@@ -175,27 +152,6 @@ service ChatService {
   // This requires the "messages.manage.delete" permission if you are not the
   // message author.
   rpc DeleteMessage(DeleteMessageRequest) returns (google.protobuf.Empty) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
-  // Endpoint to delete an emote from an emote pack.
-  rpc DeleteEmoteFromPack(DeleteEmoteFromPackRequest)
-      returns (google.protobuf.Empty) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
-  // Endpoint to delete an emote pack that you own.
-  rpc DeleteEmotePack(DeleteEmotePackRequest) returns (google.protobuf.Empty) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
-  // Endpoint to dequip an emote pack that you have equipped.
-  rpc DequipEmotePack(DequipEmotePackRequest) returns (google.protobuf.Empty) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
-  // Endpoint to equip an emote pack.
-  rpc EquipEmotePack(EquipEmotePackRequest) returns (google.protobuf.Empty) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
@@ -308,27 +264,6 @@ service ChatService {
 
   // Endpoint to stream events from the homeserver.
   rpc StreamEvents(stream StreamEventsRequest) returns (stream Event) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
-  // Endpoint to get the profile information of a user.
-  rpc GetUser(GetUserRequest) returns (GetUserResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
-  // Endpoint to batch get the profile information of some users.
-  rpc GetUserBulk(GetUserBulkRequest) returns (GetUserBulkResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
-  // Endpoint to get metadata you have.
-  rpc GetUserMetadata(GetUserMetadataRequest)
-      returns (GetUserMetadataResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
-  // Endpoint to update your profile information.
-  rpc ProfileUpdate(ProfileUpdateRequest) returns (ProfileUpdateResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
