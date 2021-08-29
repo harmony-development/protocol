@@ -5,14 +5,15 @@ package protocol.chat.v1;
 import "harmonytypes/v1/types.proto";
 import "google/protobuf/timestamp.proto";
 import "chat/v1/permissions.proto";
-import "chat/v1/emotes.proto";
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
 // Request type for use in the `StreamEvents` endpoint.
 message StreamEventsRequest {
   // Event source for guilds' events.
-  message SubscribeToGuild { uint64 guild_id = 1; }
+  message SubscribeToGuild {
+    uint64 guild_id = 1;
+  }
   // Event source for actions' events.
   message SubscribeToActions {}
   // Event source for homeserver events.
@@ -126,7 +127,9 @@ message Event {
   }
 
   // Event sent when a guild is deleted.
-  message GuildDeleted { uint64 guild_id = 1; }
+  message GuildDeleted {
+    uint64 guild_id = 1;
+  }
 
   // Event sent a user joins to a guild.
   message MemberJoined {
@@ -221,7 +224,7 @@ message Event {
     uint64 guild_id = 1;
     // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
-    // Role ID of the role that had it's permissions changed. 
+    // Role ID of the role that had it's permissions changed.
     uint64 role_id = 3;
     // The new permissions.
     chat.v1.PermissionList new_perms = 4;
@@ -253,8 +256,8 @@ message Event {
     // New is bot or not for this user.
     optional bool new_is_bot = 5;
   }
-  
-  // Event sent when a user sends a typing notification in a guild channel. 
+
+  // Event sent when a user sends a typing notification in a guild channel.
   message Typing {
     // User ID of the user that sent the typing notification.
     uint64 user_id = 1;
