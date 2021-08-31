@@ -261,11 +261,6 @@ service ChatService {
     // "roles.user.get";
   }
 
-  // Endpoint to stream events from the homeserver.
-  rpc StreamEvents(stream StreamEventsRequest) returns (stream Event) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
   // Endpoint to send a typing notification in a guild channel.
   rpc Typing(TypingRequest) returns (TypingResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
