@@ -9,7 +9,7 @@ import "chat/v1/permissions.proto";
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
 // Request type for use in the `StreamEvents` endpoint.
-message StreamEventsRequest {
+message StreamRequest {
   // Event source for guilds' events.
   message SubscribeToGuild {
     uint64 guild_id = 1;
@@ -31,15 +31,15 @@ message StreamEventsRequest {
 }
 
 // Describes an event.
-message Event {
+message StreamEvent {
   // A reason for why a user has left a guild.
   enum LeaveReason {
     // The user left the guild willingly.
-    willingly = 0;
+    LEAVE_REASON_WILLINGLY_UNSPECIFIED = 0;
     // The user was banned from the guild.
-    banned = 1;
+    LEAVE_REASON_BANNED = 1;
     // The user was kicked from the guild.
-    kicked = 2;
+    LEAVE_REASON_KICKED = 2;
   }
 
   // Event sent when a new message is sent.
@@ -282,45 +282,6 @@ message Event {
     bool ok = 4;
   }
 
-  // Event sent when an emote pack's information is changed.
-  //
-  // Should only be sent to users who have the pack equipped.
-  message EmotePackUpdated {
-    // ID of the pack that was updated.
-    uint64 pack_id = 1;
-    // New pack name of the pack.
-    optional string new_pack_name = 2;
-  }
-
-  // Event sent when an emote pack is deleted.
-  //
-  // Should only be sent to users who have the pack equipped.
-  // Should also be sent if a user dequips an emote pack, only to the user that dequipped it.
-  message EmotePackDeleted {
-    // ID of the pack that was deleted.
-    uint64 pack_id = 1;
-  }
-
-  // Event sent when an emote pack is added.
-  //
-  // Should only be sent to the user who equipped the pack.
-  message EmotePackAdded {
-    // Emote pack that was equipped by the user.
-    chat.v1.EmotePack pack = 1;
-  }
-
-  // Event sent when an emote pack's emotes were changed.
-  //
-  // Should only be sent to users who have the pack equipped.
-  message EmotePackEmotesUpdated {
-    // ID of the pack to update the emotes of.
-    uint64 pack_id = 1;
-    // The added emotes.
-    repeated chat.v1.Emote added_emotes = 2;
-    // The image IDs of the deleted emotes.
-    repeated string deleted_emotes = 3;
-  }
-
   // Sent when a message is pinned in a guild channel.
   //
   // Should only be sent to users who have the "message.view" permission for
@@ -395,14 +356,6 @@ message Event {
     UserRolesUpdated user_roles_updated = 21;
     // Send the permission updated event.
     PermissionUpdated permission_updated = 22;
-    // Send the emote pack added event.
-    EmotePackAdded emote_pack_added = 23;
-    // Send the emote pack updated event.
-    EmotePackUpdated emote_pack_updated = 24;
-    // Send the emote pack deleted event.
-    EmotePackDeleted emote_pack_deleted = 25;
-    // Send the emote pack emotes updated event.
-    EmotePackEmotesUpdated emote_pack_emotes_updated = 26;
     // Send the message pinned event.
     MessagePinned message_pinned = 28;
     // Send the message unpinned event.
