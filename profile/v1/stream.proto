@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+import "profile/v1/types.proto";
+
+package protocol.profile.v1;
+
+// Event sent when a user's profile is updated.
+//
+// Servers should sent this event only to users that can "see" (eg. they are
+// in the same guild) the user this event was triggered by.
+message ProfileUpdated {
+  // User ID of the user that had it's profile updated.
+  uint64 user_id = 1;
+  // New username for this user.
+  optional string new_username = 2;
+  // New avatar for this user.
+  optional string new_avatar = 3;
+  // New status for this user.
+  optional UserStatus new_status = 4;
+  // New is bot or not for this user.
+  optional bool new_is_bot = 5;
+}
+
+// Describes an emote service event.
+message StreamEvent {
+  // The event type.
+  oneof event {
+    // Send the profile updated event.
+    ProfileUpdated profile_updated = 14;
+  }
+}

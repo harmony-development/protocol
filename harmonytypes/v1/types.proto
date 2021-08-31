@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-import "google/protobuf/timestamp.proto";
-import "google/protobuf/empty.proto";
 import "google/protobuf/any.proto";
 
 package protocol.harmonytypes.v1;
@@ -10,188 +8,24 @@ option go_package = "github.com/harmony-development/legato/gen/harmonytypes/v1";
 
 import "google/protobuf/descriptor.proto";
 
+// Metadata for methods. These are set in individual RPC endpoints and are
+// typically used by servers.
 message HarmonyMethodMetadata {
+  // whether the method requires authentication.
   bool requires_authentication = 1;
+  // whether the method allows federation or not.
   bool requires_local = 2;
+  // the permission nodes required to invoke the method.
   string requires_permission_node = 3;
 }
 
-extend google.protobuf.MethodOptions { HarmonyMethodMetadata metadata = 1091; }
-
-enum UserStatus {
-  USER_STATUS_ONLINE_UNSPECIFIED = 0;
-  USER_STATUS_STREAMING = 1;
-  USER_STATUS_DO_NOT_DISTURB = 2;
-  USER_STATUS_IDLE = 3;
-  USER_STATUS_OFFLINE = 4;
-}
-
-// OVERRIDES
-message Override {
-  string name = 1;
-  string avatar = 2;
-  oneof reason {
-    string user_defined = 3;
-    google.protobuf.Empty webhook = 4;
-    // plurality, not system as in computer
-    google.protobuf.Empty system_plurality = 5;
-    google.protobuf.Empty system_message = 6;
-    google.protobuf.Empty bridge = 7;
-  }
-}
-
-// EMBEDS AND ACTIONS
-
-message Action {
-  enum Type {
-    Normal = 0;
-    Primary = 1;
-    Destructive = 2;
-  }
-  message Button {
-    string text = 1;
-    string url = 2;
-  }
-  message Dropdown {
-    string text = 1;
-    repeated string options = 2;
-  }
-  message Input {
-    string label = 1;
-    bool wide = 2;
-  }
-
-  Type action_type = 1;
-  string id = 2;
-  oneof kind {
-    Button button = 3;
-    Dropdown dropdown = 4;
-    Input input = 5;
-  }
-}
-
-message EmbedHeading {
-  string text = 1;
-  string subtext = 2;
-  string url = 3;
-  string icon = 4;
-}
-
-message EmbedField {
-  enum Presentation {
-    Data = 0;
-    CaptionedImage = 1;
-    Row = 2;
-  }
-  string title = 1;
-  string subtitle = 2;
-  string body = 3;
-
-  string image_url = 4;
-
-  Presentation presentation = 5;
-
-  repeated Action actions = 6;
-}
-
-message Embed {
-  string title = 1;
-  string body = 2;
-
-  int64 color = 3;
-
-  EmbedHeading header = 4;
-  EmbedHeading footer = 5;
-
-  repeated EmbedField fields = 6;
-}
-
-// TYPES
-message Attachment {
-  string id = 1;
-  string name = 2;
-  string type = 3;
-  int32 size = 4;
-  string caption = 5;
-}
-
-/*
-  Minithumbnail is an extremely low-quality JPEG thumbnail.
-
-  The resolution is usually no larger than 64x64.
-*/
-message Minithumbnail {
-  // The width of the minithumbnail
-  uint32 width = 1;
-
-  // The height of the minithumbnail
-  uint32 height = 2;
-
-  // The JPEG data of the minithumbnail
-  bytes data = 3;
-}
-
-/*
-  Photo contains data about a photo.
-
-  Photo are always JPEG, and are
-  constrained to the following rules:
-
-  - width+height <= 10_000
-  - width <= height*20
-  - height <= width*20
-
-  Photos are preferably no more than 10MB
-  in size, and servers may compress as necessary.
-*/
-message Photo {
-  // The HMC URL of the photo.
-  string hmc = 1;
-  // The filename of the photo.
-  string name = 2;
-  // The size of the photo.
-  uint32 file_size = 3;
-  // The height of the photo, in pixels.
-  uint32 height = 4;
-  // The width of the photo, in pixels.
-  uint32 width = 5;
-  // The photo's caption.
-  string caption = 6;
-  // A thumbnail representing the photo.
-  Minithumbnail minithumbnail = 7;
+extend google.protobuf.MethodOptions {
+  HarmonyMethodMetadata metadata = 1091;
 }
 
 message Metadata {
   string kind = 1;
   map<string, google.protobuf.Any> extension = 2;
-}
-
-message ContentText { string content = 1; }
-message ContentEmbed { Embed embeds = 1; }
-message ContentFiles { repeated Attachment attachments = 1; }
-message ContentPhotos { repeated Photo photos = 1; }
-
-message Content {
-  oneof content {
-    ContentText text_message = 1;
-    ContentEmbed embed_message = 2;
-    ContentFiles files_message = 3;
-    ContentPhotos photos_message = 4;
-  }
-}
-
-message Message {
-  Metadata metadata = 1;
-  Override overrides = 2;
-
-  uint64 guild_id = 3;
-  uint64 channel_id = 4;
-  uint64 message_id = 5;
-  uint64 author_id = 6;
-  google.protobuf.Timestamp created_at = 7;
-  google.protobuf.Timestamp edited_at = 8;
-  uint64 in_reply_to = 9;
-  Content content = 10;
 }
 
 message Error {
@@ -217,14 +51,18 @@ message Token {
 // An object representing an item position between two other items.
 message ItemPosition {
   // An object that represents the top of an ordered list.
-  message Top { uint64 next_id = 1; }
+  message Top {
+    uint64 next_id = 1;
+  }
   // An object that represents a place between two items in an ordered list.
   message Between {
     uint64 previous_id = 1;
     uint64 next_id = 2;
   }
   // An object that represents the bottom of an ordered list.
-  message Bottom { uint64 previous_id = 1; }
+  message Bottom {
+    uint64 previous_id = 1;
+  }
 
   oneof position {
     Top top = 1;

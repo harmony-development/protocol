@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+import "harmonytypes/v1/types.proto";
+import "chat/v1/stream.proto";
+import "emote/v1/stream.proto";
+import "profile/v1/stream.proto";
+
+package protocol.stream.v1;
+
+// Used in the `StreamEvents` endpoint.
+message StreamEventsRequest {
+  // The request to send.
+  oneof request {
+    // A chat request.
+    chat.v1.StreamRequest chat = 1;
+  }
+}
+
+// Used in the `StreamEvents` endpoint.
+message StreamEventsResponse {
+  // Possible events.
+  oneof event {
+    // A chat event.
+    chat.v1.StreamEvent chat = 1;
+    // A emote event.
+    emote.v1.StreamEvent emote = 2;
+    // A profile event.
+    profile.v1.StreamEvent profile = 3;
+  }
+}
+
+// Harmony's Stream service manages event delivery to clients.
+service StreamService {
+  // Endpoint to stream events from the homeserver.
+  rpc StreamEvents(stream StreamEventsRequest) returns (stream StreamEventsResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+}

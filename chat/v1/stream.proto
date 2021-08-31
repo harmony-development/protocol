@@ -5,14 +5,17 @@ package protocol.chat.v1;
 import "harmonytypes/v1/types.proto";
 import "google/protobuf/timestamp.proto";
 import "chat/v1/permissions.proto";
-import "chat/v1/emotes.proto";
+import "chat/v1/messages.proto";
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
 // Request type for use in the `StreamEvents` endpoint.
-message StreamEventsRequest {
+message StreamRequest {
   // Event source for guilds' events.
-  message SubscribeToGuild { uint64 guild_id = 1; }
+  message SubscribeToGuild {
+    // the guild id to subscribe to
+    uint64 guild_id = 1;
+  }
   // Event source for actions' events.
   message SubscribeToActions {}
   // Event source for homeserver events.
@@ -30,15 +33,15 @@ message StreamEventsRequest {
 }
 
 // Describes an event.
-message Event {
+message StreamEvent {
   // A reason for why a user has left a guild.
   enum LeaveReason {
     // The user left the guild willingly.
-    willingly = 0;
+    LEAVE_REASON_WILLINGLY_UNSPECIFIED = 0;
     // The user was banned from the guild.
-    banned = 1;
+    LEAVE_REASON_BANNED = 1;
     // The user was kicked from the guild.
-    kicked = 2;
+    LEAVE_REASON_KICKED = 2;
   }
 
   // Event sent when a new message is sent.
@@ -46,7 +49,7 @@ message Event {
     // ID that is sent by your client it can use to confirm that the message is sent.
     uint64 echo_id = 1;
     // The actual message.
-    harmonytypes.v1.Message message = 2;
+    Message message = 2;
   }
 
   // Event sent when a message's text content is updated.
@@ -126,7 +129,9 @@ message Event {
   }
 
   // Event sent when a guild is deleted.
-  message GuildDeleted { uint64 guild_id = 1; }
+  message GuildDeleted {
+    uint64 guild_id = 1;
+  }
 
   // Event sent a user joins to a guild.
   message MemberJoined {
@@ -221,7 +226,7 @@ message Event {
     uint64 guild_id = 1;
     // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
-    // Role ID of the role that had it's permissions changed. 
+    // Role ID of the role that had it's permissions changed.
     uint64 role_id = 3;
     // The new permissions.
     chat.v1.PermissionList new_perms = 4;
@@ -237,24 +242,7 @@ message Event {
     repeated uint64 new_role_ids = 3;
   }
 
-  // Event sent when a user's profile is updated.
-  //
-  // Servers should sent this event only to users that can "see" (eg. they are
-  // in the same guild) the user this event was triggered by.
-  message ProfileUpdated {
-    // User ID of the user that had it's profile updated.
-    uint64 user_id = 1;
-    // New username for this user.
-    optional string new_username = 2;
-    // New avatar for this user.
-    optional string new_avatar = 3;
-    // New status for this user.
-    optional harmonytypes.v1.UserStatus new_status = 4;
-    // New is bot or not for this user.
-    optional bool new_is_bot = 5;
-  }
-  
-  // Event sent when a user sends a typing notification in a guild channel. 
+  // Event sent when a user sends a typing notification in a guild channel.
   message Typing {
     // User ID of the user that sent the typing notification.
     uint64 user_id = 1;
@@ -277,45 +265,6 @@ message Event {
     string query = 3;
     // Whether you have the permission or not.
     bool ok = 4;
-  }
-
-  // Event sent when an emote pack's information is changed.
-  //
-  // Should only be sent to users who have the pack equipped.
-  message EmotePackUpdated {
-    // ID of the pack that was updated.
-    uint64 pack_id = 1;
-    // New pack name of the pack.
-    optional string new_pack_name = 2;
-  }
-
-  // Event sent when an emote pack is deleted.
-  //
-  // Should only be sent to users who have the pack equipped.
-  // Should also be sent if a user dequips an emote pack, only to the user that dequipped it.
-  message EmotePackDeleted {
-    // ID of the pack that was deleted.
-    uint64 pack_id = 1;
-  }
-
-  // Event sent when an emote pack is added.
-  //
-  // Should only be sent to the user who equipped the pack.
-  message EmotePackAdded {
-    // Emote pack that was equipped by the user.
-    chat.v1.EmotePack pack = 1;
-  }
-
-  // Event sent when an emote pack's emotes were changed.
-  //
-  // Should only be sent to users who have the pack equipped.
-  message EmotePackEmotesUpdated {
-    // ID of the pack to update the emotes of.
-    uint64 pack_id = 1;
-    // The added emotes.
-    repeated chat.v1.Emote added_emotes = 2;
-    // The image IDs of the deleted emotes.
-    repeated string deleted_emotes = 3;
   }
 
   // Sent when a message is pinned in a guild channel.
@@ -374,8 +323,6 @@ message Event {
     MemberJoined joined_member = 12;
     // Send the member left event.
     MemberLeft left_member = 13;
-    // Send the profile updated event.
-    ProfileUpdated profile_updated = 14;
     // Send the typing event.
     Typing typing = 15;
     // Send the role created event.
@@ -392,14 +339,6 @@ message Event {
     UserRolesUpdated user_roles_updated = 21;
     // Send the permission updated event.
     PermissionUpdated permission_updated = 22;
-    // Send the emote pack added event.
-    EmotePackAdded emote_pack_added = 23;
-    // Send the emote pack updated event.
-    EmotePackUpdated emote_pack_updated = 24;
-    // Send the emote pack deleted event.
-    EmotePackDeleted emote_pack_deleted = 25;
-    // Send the emote pack emotes updated event.
-    EmotePackEmotesUpdated emote_pack_emotes_updated = 26;
     // Send the message pinned event.
     MessagePinned message_pinned = 28;
     // Send the message unpinned event.
