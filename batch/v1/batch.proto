@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package protocol.batch.v1;
+
+// AnyRequest is a generic message supporting any unary request.
+message AnyRequest {
+  // The endpoint to which the request is being sent.
+  string endpoint = 1;
+  // The request data.
+  bytes request = 2;
+}
+
+// Used in `Batch` endpoint.
+message BatchRequest {
+  // The list of requests to be executed in the batch.
+  repeated AnyRequest requests = 1;
+}
+
+// Used in `Batch` endpoint.
+message BatchResponse {
+  // The list of responses to the requests.
+  repeated bytes responses = 1;
+}
+
+// Used in `BatchSame` endpoint.
+message BatchSameRequest {
+  // The endpoint to call for all requests.
+  string endpoint = 1;
+  // The list of requests to be executed in the batch.
+  repeated bytes requests = 2;
+}
+// Used in `BatchSame` endpoint.
+message BatchSameResponse {
+  // The list of responses to the requests.
+  repeated bytes responses = 1;
+}
+
+// Service to batch requests.
+service BatchService {
+  // Batch requests.
+  // Does not support batching stream requests.
+  // Batched requests should be verified and an error should be thrown if they
+  // are invalid.
+  rpc Batch(BatchRequest) returns (BatchResponse) {}
+  // BatchSame allows batching for requests using the same endpoint.
+  // This allows for additional network optimizations since the endpoint doesn't
+  // have to be sent for every request.
+  rpc BatchSame(BatchSameRequest) returns (BatchSameResponse) {}
+}
