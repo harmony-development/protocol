@@ -7,7 +7,7 @@ import "chat/v1/guilds.proto";
 import "chat/v1/channels.proto";
 import "chat/v1/messages.proto";
 import "chat/v1/permissions.proto";
-import "chat/v1/streaming.proto";
+import "chat/v1/stream.proto";
 
 package protocol.chat.v1;
 
