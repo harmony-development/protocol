@@ -3,6 +3,7 @@ syntax = "proto3";
 import "harmonytypes/v1/types.proto";
 import "chat/v1/stream.proto";
 import "emote/v1/stream.proto";
+import "profile/v1/stream.proto";
 
 package protocol.stream.v1;
 
@@ -23,6 +24,8 @@ message StreamEventsResponse {
     chat.v1.StreamEvent chat = 1;
     // A emote event.
     emote.v1.StreamEvent emote = 2;
+    // A profile event.
+    profile.v1.StreamEvent profile = 3;
   }
 }
 

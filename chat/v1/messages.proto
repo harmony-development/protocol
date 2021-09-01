@@ -2,9 +2,202 @@ syntax = "proto3";
 
 package protocol.chat.v1;
 
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 import "harmonytypes/v1/types.proto";
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
+
+// Overrides provide a way to override the name and avatar of a message.
+message Override {
+  // the overridden username.
+  string username = 1;
+  // the overridden avatar.
+  string avatar = 2;
+  // the reason for overriding username and avatar.
+  oneof reason {
+    // a custom reason in case the builtin ones don't fit
+    string user_defined = 3;
+    // the override occured because of a webhook
+    google.protobuf.Empty webhook = 4;
+    // plurality, not system as in computer
+    google.protobuf.Empty system_plurality = 5;
+    // the override occured because it was made by the server
+    google.protobuf.Empty system_message = 6;
+    // the override occured because of bridging
+    google.protobuf.Empty bridge = 7;
+  }
+}
+
+// EMBEDS AND ACTIONS
+
+// Actions are interactive elements that can exist within an embed.
+message Action {
+  // The action type. This is primarily used to change the look of the action to
+  // the user (example: Destructive actions will have a red background).
+  enum Type {
+    // a normal action.
+    TYPE_NORMAL_UNSPECIFIED = 0;
+    // a primary action.
+    TYPE_PRIMARY = 1;
+    // A destructive / dangerous action.
+    TYPE_DESTRUCTIVE = 2;
+  }
+
+  // A button that users can click on to trigger an action.
+  message Button {
+    // The text to show on the button.
+    string text = 1;
+    // The url the button should link to.
+    optional string url = 2;
+  }
+  // A dropdown menu that users can click on to trigger an action.
+  message Dropdown {
+    // The text describing the dropdown.
+    string text = 1;
+    // The options in the dropdown.
+    repeated string options = 2;
+  }
+  message Input {
+    string label = 1;
+    bool wide = 2;
+  }
+
+  Type action_type = 1;
+  string id = 2;
+  oneof kind {
+    Button button = 3;
+    Dropdown dropdown = 4;
+    Input input = 5;
+  }
+}
+
+message EmbedHeading {
+  string text = 1;
+  string subtext = 2;
+  string url = 3;
+  string icon = 4;
+}
+
+message EmbedField {
+  enum Presentation {
+    Data = 0;
+    CaptionedImage = 1;
+    Row = 2;
+  }
+  string title = 1;
+  string subtitle = 2;
+  string body = 3;
+
+  string image_url = 4;
+
+  Presentation presentation = 5;
+
+  repeated Action actions = 6;
+}
+
+message Embed {
+  string title = 1;
+  string body = 2;
+
+  int64 color = 3;
+
+  EmbedHeading header = 4;
+  EmbedHeading footer = 5;
+
+  repeated EmbedField fields = 6;
+}
+
+// TYPES
+message Attachment {
+  string id = 1;
+  string name = 2;
+  string type = 3;
+  int32 size = 4;
+  string caption = 5;
+}
+
+/*
+  Minithumbnail is an extremely low-quality JPEG thumbnail.
+
+  The resolution is usually no larger than 64x64.
+*/
+message Minithumbnail {
+  // The width of the minithumbnail
+  uint32 width = 1;
+
+  // The height of the minithumbnail
+  uint32 height = 2;
+
+  // The JPEG data of the minithumbnail
+  bytes data = 3;
+}
+
+/*
+  Photo contains data about a photo.
+
+  Photo are always JPEG, and are
+  constrained to the following rules:
+
+  - width+height <= 10_000
+  - width <= height*20
+  - height <= width*20
+
+  Photos are preferably no more than 10MB
+  in size, and servers may compress as necessary.
+*/
+message Photo {
+  // The HMC URL of the photo.
+  string hmc = 1;
+  // The filename of the photo.
+  string name = 2;
+  // The size of the photo.
+  uint32 file_size = 3;
+  // The height of the photo, in pixels.
+  uint32 height = 4;
+  // The width of the photo, in pixels.
+  uint32 width = 5;
+  // The photo's caption.
+  string caption = 6;
+  // A thumbnail representing the photo.
+  Minithumbnail minithumbnail = 7;
+}
+
+message ContentText {
+  string content = 1;
+}
+message ContentEmbed {
+  Embed embeds = 1;
+}
+message ContentFiles {
+  repeated Attachment attachments = 1;
+}
+message ContentPhotos {
+  repeated Photo photos = 1;
+}
+
+message Content {
+  oneof content {
+    ContentText text_message = 1;
+    ContentEmbed embed_message = 2;
+    ContentFiles files_message = 3;
+    ContentPhotos photos_message = 4;
+  }
+}
+
+message Message {
+  harmonytypes.v1.Metadata metadata = 1;
+  Override overrides = 2;
+
+  uint64 guild_id = 3;
+  uint64 channel_id = 4;
+  uint64 message_id = 5;
+  uint64 author_id = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp edited_at = 8;
+  uint64 in_reply_to = 9;
+  Content content = 10;
+}
 
 // Used in the `GetChannelMessages` endpoint.
 message GetChannelMessagesRequest {
@@ -45,7 +238,7 @@ message GetChannelMessagesRequest {
 }
 message GetChannelMessagesResponse {
   bool reached_top = 1;
-  repeated harmonytypes.v1.Message messages = 2;
+  repeated Message messages = 2;
 }
 
 message GetMessageRequest {
@@ -53,7 +246,9 @@ message GetMessageRequest {
   uint64 channel_id = 2;
   uint64 message_id = 3;
 }
-message GetMessageResponse { harmonytypes.v1.Message message = 1; }
+message GetMessageResponse {
+  Message message = 1;
+}
 
 message DeleteMessageRequest {
   uint64 guild_id = 1;
@@ -75,13 +270,16 @@ message TriggerActionRequest {
 message SendMessageRequest {
   uint64 guild_id = 1;
   uint64 channel_id = 2;
-  harmonytypes.v1.Content content = 3;
+  Content content = 3;
   uint64 echo_id = 4;
-  harmonytypes.v1.Metadata metadata = 5;
-  harmonytypes.v1.Override overrides = 6;
+  Override overrides = 6;
   uint64 in_reply_to = 7;
+
+  harmonytypes.v1.Metadata metadata = 5;
 }
-message SendMessageResponse { uint64 message_id = 1; }
+message SendMessageResponse {
+  uint64 message_id = 1;
+}
 
 message UpdateMessageTextRequest {
   uint64 guild_id = 1;

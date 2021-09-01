@@ -1,8 +1,22 @@
 syntax = "proto3";
 
-import "harmonytypes/v1/types.proto";
-
 package protocol.profile.v1;
+
+// The possible statuses a user can have.
+enum UserStatus {
+  // User is offline (not connected to the server).
+  USER_STATUS_OFFLINE_UNSPECIFIED = 0;
+  // User is online (this is the default value if ommitted).
+  USER_STATUS_ONLINE = 1;
+  // User is away.
+  USER_STATUS_IDLE = 2;
+  // User does not want to be disturbed.
+  USER_STATUS_DO_NOT_DISTURB = 3;
+  // User is on mobile.
+  USER_STATUS_MOBILE = 4;
+  // User is streaming
+  USER_STATUS_STREAMING = 5;
+}
 
 // Data for a single profile, without the user's ID.
 message Profile {
@@ -11,7 +25,7 @@ message Profile {
   // the user's avatar.
   string user_avatar = 2;
   // the status of the user.
-  harmonytypes.v1.UserStatus user_status = 3;
+  UserStatus user_status = 3;
   // whether the user is a bot or not.
   bool is_bot = 4;
 }

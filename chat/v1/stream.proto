@@ -5,6 +5,7 @@ package protocol.chat.v1;
 import "harmonytypes/v1/types.proto";
 import "google/protobuf/timestamp.proto";
 import "chat/v1/permissions.proto";
+import "chat/v1/messages.proto";
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
@@ -12,6 +13,7 @@ option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 message StreamRequest {
   // Event source for guilds' events.
   message SubscribeToGuild {
+    // the guild id to subscribe to
     uint64 guild_id = 1;
   }
   // Event source for actions' events.
@@ -47,7 +49,7 @@ message StreamEvent {
     // ID that is sent by your client it can use to confirm that the message is sent.
     uint64 echo_id = 1;
     // The actual message.
-    harmonytypes.v1.Message message = 2;
+    Message message = 2;
   }
 
   // Event sent when a message's text content is updated.
@@ -240,23 +242,6 @@ message StreamEvent {
     repeated uint64 new_role_ids = 3;
   }
 
-  // Event sent when a user's profile is updated.
-  //
-  // Servers should sent this event only to users that can "see" (eg. they are
-  // in the same guild) the user this event was triggered by.
-  message ProfileUpdated {
-    // User ID of the user that had it's profile updated.
-    uint64 user_id = 1;
-    // New username for this user.
-    optional string new_username = 2;
-    // New avatar for this user.
-    optional string new_avatar = 3;
-    // New status for this user.
-    optional harmonytypes.v1.UserStatus new_status = 4;
-    // New is bot or not for this user.
-    optional bool new_is_bot = 5;
-  }
-
   // Event sent when a user sends a typing notification in a guild channel.
   message Typing {
     // User ID of the user that sent the typing notification.
@@ -338,8 +323,6 @@ message StreamEvent {
     MemberJoined joined_member = 12;
     // Send the member left event.
     MemberLeft left_member = 13;
-    // Send the profile updated event.
-    ProfileUpdated profile_updated = 14;
     // Send the typing event.
     Typing typing = 15;
     // Send the role created event.
