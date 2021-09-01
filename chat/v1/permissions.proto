@@ -25,17 +25,6 @@ message QueryPermissionsResponse {
   bool ok = 1;
 }
 
-// Used in the `QueryGuildPermissions` endpoint.
-message BatchQueryPermissionsRequest {
-  // a list of QueryPermissions requests to batch.
-  repeated QueryPermissionsRequest requests = 1;
-}
-// Used in the `QueryGuildPermissions` endpoint.
-message BatchQueryPermissionsResponse {
-  // a list of QueryPermissions responses.
-  repeated QueryPermissionsResponse responses = 1;
-}
-
 // A single permission node.
 message Permission {
   // the permission matcher. (example: roles.manage)
