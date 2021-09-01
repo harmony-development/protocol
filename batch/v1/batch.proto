@@ -26,5 +26,7 @@ message BatchResponse {
 service BatchService {
   // Batch requests.
   // Does not support batching stream requests.
+  // Batched requests should be verified and an error should be thrown if they
+  // are invalid.
   rpc Batch(BatchRequest) returns (BatchResponse) {}
 }
