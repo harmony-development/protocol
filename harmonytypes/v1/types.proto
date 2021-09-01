@@ -209,7 +209,8 @@ message Token {
   // Has to be 64 bytes long, otherwise it will be rejected.
   bytes sig = 1;
   // Serialized protobuf data.
-  // The protobuf type of this serialized data is dependent on the API endpoint used.
+  // The protobuf type of this serialized data is dependent on the API endpoint
+  // used.
   bytes data = 2;
 }
 
