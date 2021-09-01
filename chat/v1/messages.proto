@@ -85,9 +85,10 @@ message EmbedField {
     CaptionedImage = 1;
     Row = 2;
   }
+
   string title = 1;
   string subtitle = 2;
-  string body = 3;
+  harmonytypes.v1.FormattedText body = 3;
 
   string image_url = 4;
 
@@ -98,7 +99,7 @@ message EmbedField {
 
 message Embed {
   string title = 1;
-  string body = 2;
+  harmonytypes.v1.FormattedText body = 2;
 
   int64 color = 3;
 
@@ -114,7 +115,7 @@ message Attachment {
   string name = 2;
   string type = 3;
   int32 size = 4;
-  string caption = 5;
+  harmonytypes.v1.FormattedText caption = 5;
 }
 
 /*
@@ -158,13 +159,13 @@ message Photo {
   // The width of the photo, in pixels.
   uint32 width = 5;
   // The photo's caption.
-  string caption = 6;
+  harmonytypes.v1.FormattedText caption = 6;
   // A thumbnail representing the photo.
   Minithumbnail minithumbnail = 7;
 }
 
 message ContentText {
-  string content = 1;
+  harmonytypes.v1.FormattedText content = 1;
 }
 message ContentEmbed {
   Embed embeds = 1;
@@ -285,7 +286,7 @@ message UpdateMessageTextRequest {
   uint64 guild_id = 1;
   uint64 channel_id = 2;
   uint64 message_id = 3;
-  string new_content = 4;
+  harmonytypes.v1.FormattedText new_content = 4;
 }
 
 // Used in the `PinMessage` endpoint.
