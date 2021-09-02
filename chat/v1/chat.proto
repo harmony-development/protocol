@@ -304,4 +304,9 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_permission_node =
         "messages.pins.remove";
   }
+
+  // Endpoint to stream events from the homeserver.
+  rpc StreamEvents(stream StreamEventsRequest) returns (stream StreamEventsResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
 }
