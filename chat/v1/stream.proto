@@ -6,11 +6,13 @@ import "harmonytypes/v1/types.proto";
 import "google/protobuf/timestamp.proto";
 import "chat/v1/permissions.proto";
 import "chat/v1/messages.proto";
+import "emote/v1/stream.proto";
+import "profile/v1/stream.proto";
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
 // Request type for use in the `StreamEvents` endpoint.
-message StreamRequest {
+message StreamEventsRequest {
   // Event source for guilds' events.
   message SubscribeToGuild {
     // the guild id to subscribe to
@@ -29,6 +31,19 @@ message StreamRequest {
     SubscribeToActions subscribe_to_actions = 2;
     // Subscribe to the homeserver event source.
     SubscribeToHomeserverEvents subscribe_to_homeserver_events = 3;
+  }
+}
+
+// Used in the `StreamEvents` endpoint.
+message StreamEventsResponse {
+  // Possible events.
+  oneof event {
+    // A chat event.
+    StreamEvent chat = 1;
+    // A emote event.
+    emote.v1.StreamEvent emote = 2;
+    // A profile event.
+    profile.v1.StreamEvent profile = 3;
   }
 }
 
