@@ -11,9 +11,9 @@ option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 // Overrides provide a way to override the name and avatar of a message.
 message Override {
   // the overridden username.
-  string username = 1;
+  optional string username = 1;
   // the overridden avatar.
-  string avatar = 2;
+  optional string avatar = 2;
   // the reason for overriding username and avatar.
   oneof reason {
     // a custom reason in case the builtin ones don't fit
@@ -56,53 +56,80 @@ message Action {
     // The options in the dropdown.
     repeated string options = 2;
   }
+  // A text input that users can type in to trigger an action.
   message Input {
+    // The label describing the input.
     string label = 1;
+    // Whether to display this input wide.
     bool wide = 2;
   }
 
+  // Type of the action.
   Type action_type = 1;
+  // ID of the action.
   string id = 2;
+  // The kind of the action.
   oneof kind {
+    // Button action.
     Button button = 3;
+    // Dropdown action.
     Dropdown dropdown = 4;
+    // Input action.
     Input input = 5;
   }
 }
 
+// Object representing a message embed.
 message Embed {
+  // Object representing an embed heading.
   message EmbedHeading {
+    // Text of the heading.
     string text = 1;
-    string subtext = 2;
-    string url = 3;
-    string icon = 4;
+    // Subtext of the heading.
+    optional string subtext = 2;
+    // URL of the heading.
+    optional string url = 3;
+    // Icon of the heading.
+    optional string icon = 4;
   }
 
+  // Object representing an embed field.
   message EmbedField {
+    // Type representing how to present an embed field.
     enum Presentation {
-      Data = 0;
-      CaptionedImage = 1;
-      Row = 2;
+      // Show the field as data.
+      PRESENTATION_DATA_UNSPECIFIED = 0;
+      // Show the field as a captioned image.
+      PRESENTATION_CAPTIONED_IMAGE = 1;
+      // Show the field as a row.
+      PRESENTATION_ROW = 2;
     }
+
+    // Title of this field.
     string title = 1;
-    string subtitle = 2;
-    string body = 3;
-  
-    string image_url = 4;
-  
+    // Subtitle of this field.
+    optional string subtitle = 2;
+    // Body text of this field (eg. a description).
+    optional string body = 3;
+    // Image URL of this field.
+    optional string image_url = 4;
+    // How to present this field.
     Presentation presentation = 5;
-  
+    // Actions of this field.
     repeated Action actions = 6;
   }
 
+  // Title of this embed.
   string title = 1;
-  string body = 2;
-
-  int64 color = 3;
-
-  EmbedHeading header = 4;
-  EmbedHeading footer = 5;
-
+  // Body text of this embed.
+  optional string body = 2;
+  // Color of this embed.
+  optional int32 color = 3;
+  // Embed heading for the header.
+  optional EmbedHeading header = 4;
+  // Embed heading for the footer.
+  optional EmbedHeading footer = 5;
+  // Fields of this embed.
   repeated EmbedField fields = 6;
 }
 
@@ -114,10 +141,8 @@ message Embed {
 message Minithumbnail {
   // The width of the minithumbnail
   uint32 width = 1;
-
   // The height of the minithumbnail
   uint32 height = 2;
-
   // The JPEG data of the minithumbnail
   bytes data = 3;
 }
@@ -147,18 +172,23 @@ message Photo {
   // The width of the photo, in pixels.
   uint32 width = 5;
   // The photo's caption.
-  string caption = 6;
+  optional string caption = 6;
   // A thumbnail representing the photo.
   Minithumbnail minithumbnail = 7;
 }
 
 // Object representing a generic message attachment.
 message Attachment {
+  // File ID of this attachment.
   string id = 1;
+  // Filename of this attachment.
   string name = 2;
-  string type = 3;
-  int32 size = 4;
-  string caption = 5;
+  // Mimetype of this attachment.
+  string mimetype = 3;
+  // Size of this attachment.
+  uint32 size = 4;
+  // Caption of this attachment.
+  optional string caption = 5;
 }
 
 // Object representing a message's content.
@@ -199,16 +229,20 @@ message Content {
 
 // Object representing a message without the ID part.
 message Message {
+  // Metadata of this message.
   harmonytypes.v1.Metadata metadata = 1;
+  // Overrides of this message.
   Override overrides = 2;
-
-  uint64 guild_id = 3;
-  uint64 channel_id = 4;
-  uint64 author_id = 5;
-  google.protobuf.Timestamp created_at = 6;
-  google.protobuf.Timestamp edited_at = 7;
-  uint64 in_reply_to = 8;
-  Content content = 9;
+  // User ID of the user who sent this message.
+  uint64 author_id = 3;
+  // When this message was created.
+  google.protobuf.Timestamp created_at = 4;
+  // The most recent time this message was edited.
+  optional google.protobuf.Timestamp edited_at = 5;
+  // The message this message is a reply to.
+  optional uint64 in_reply_to = 6;
+  // The content of the message.
+  Content content = 7;
 }
 
 // Used in the `GetChannelMessages` endpoint.
