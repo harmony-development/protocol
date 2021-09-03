@@ -266,7 +266,7 @@ message StreamEvent {
     // Role ID of the role that had it's permissions changed.
     uint64 role_id = 3;
     // The new permissions.
-    chat.v1.PermissionList new_perms = 4;
+    repeated chat.v1.Permission new_perms = 4;
   }
 
   // Event sent when a user's roles are changed.
