@@ -15,7 +15,7 @@ message Guild {
   // User ID of the owner of the guild.
   uint64 owner_id = 3;
   // Metadata of the guild.
-  harmonytypes.v1.Metadata metadata = 4;
+  optional harmonytypes.v1.Metadata metadata = 4;
 }
 
 // Object representing an invite without the ID part.

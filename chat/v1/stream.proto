@@ -104,7 +104,7 @@ message StreamEvent {
     // Is this channel a category or not.
     bool is_category = 5;
     // Metadata for this channel.
-    harmonytypes.v1.Metadata metadata = 6;
+    optional harmonytypes.v1.Metadata metadata = 6;
   }
 
   // Event sent when a channel's information is changed.

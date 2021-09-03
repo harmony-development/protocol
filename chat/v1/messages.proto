@@ -230,7 +230,7 @@ message Content {
 // Object representing a message without the ID part.
 message Message {
   // Metadata of this message.
-  harmonytypes.v1.Metadata metadata = 1;
+  optional harmonytypes.v1.Metadata metadata = 1;
   // Overrides of this message.
   Override overrides = 2;
   // User ID of the user who sent this message.
