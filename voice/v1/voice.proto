@@ -24,6 +24,7 @@ message ConnectRequest {
   uint64 guild_id = 1;
   // Channel ID of the voice channel to connect.
   uint64 channel_id = 2;
+  // Connection offer.
   string offer = 3;
 }
 // Used in `Connect` endpoint.
