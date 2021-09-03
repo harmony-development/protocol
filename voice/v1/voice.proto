@@ -11,9 +11,9 @@ option go_package = "github.com/harmony-development/legato/gen/voice/v1";
 message Signal {
   // The event kind of this signal.
   oneof event {
-    // ICE candidate event.
+    // WebRTC ICE candidate event.
     string ice_candidate = 1;
-    // Event sent when a renegotiation is needed in the connection.
+    // Event sent when a renegotiation is needed in the WebRTC connection.
     google.protobuf.Empty renegotiation_needed = 2;
   }
 }
@@ -24,12 +24,12 @@ message ConnectRequest {
   uint64 guild_id = 1;
   // Channel ID of the voice channel to connect.
   uint64 channel_id = 2;
-  // Connection offer.
+  // WebRTC Connection offer.
   string offer = 3;
 }
 // Used in `Connect` endpoint.
 message ConnectResponse {
-  // Connection answer.
+  // WebRTC Connection answer.
   string answer = 1;
 }
 
@@ -46,7 +46,7 @@ message StreamStateResponse {
   Signal signal = 1;
 }
 
-// Harmony service for facilitating voice operations.
+// Harmony service for facilitating voice operations using WebRTC.
 service VoiceService {
   // Endpoint to connect to a voice channel.
   rpc Connect(ConnectRequest) returns (ConnectResponse) {
