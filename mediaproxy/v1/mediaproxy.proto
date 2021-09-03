@@ -66,6 +66,7 @@ message CanInstantViewResponse {
   bool can_instant_view = 1;
 }
 
+// Harmony service for fetching metadata and generating instant view for URLs.
 service MediaProxyService {
     // Endpoint to fetch metadata for a URL.
     rpc FetchLinkMetadata(FetchLinkMetadataRequest) returns (FetchLinkMetadataResponse) {

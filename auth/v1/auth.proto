@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-import "google/protobuf/empty.proto";
 import "harmonytypes/v1/types.proto";
 
 package protocol.auth.v1;

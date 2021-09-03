@@ -1,27 +1,55 @@
 syntax = "proto3";
 
-import "google/protobuf/empty.proto";
-
 package protocol.voice.v1;
 
 option go_package = "github.com/harmony-development/legato/gen/voice/v1";
 
+// A signal object.
 message Signal {
+  // The event kind of this signal.
   oneof event {
+    // ICE candidate event.
     string ice_candidate = 1;
+    // Event sent when a renegotiation is needed in the connection.
     google.protobuf.Empty renegotiation_needed = 2;
   }
 }
 
+// Used in `Connect` endpoint.
 message ConnectRequest {
-  uint64 channel_id = 1;
-  string offer = 2;
+  // Guild ID of the guild where the channel is.
+  uint64 guild_id = 1;
+  // Channel ID of the voice channel to connect.
+  uint64 channel_id = 2;
+  string offer = 3;
 }
-message ConnectResponse { string answer = 1; }
+// Used in `Connect` endpoint.
+message ConnectResponse {
+  // Connection answer.
+  string answer = 1;
+}
 
-message StreamStateRequest { uint64 channel_id = 1; }
+// Used in `StreamState` endpoint.
+message StreamStateRequest {
+  // Guild ID of the guild where the channel is.
+  uint64 guild_id = 1;
+  // Channel ID of the voice channel to stream states for.
+  uint64 channel_id = 2;
+}
+// Used in `StreamState` endpoint.
+message StreamStateResponse {
+  // The signal event.
+  Signal signal = 1;
+}
 
+// Harmony service for facilitating voice operations.
 service VoiceService {
-  rpc Connect(ConnectRequest) returns (ConnectResponse) {};
-  rpc StreamState(StreamStateRequest) returns (stream Signal) {};
+  // Endpoint to connect to a voice channel.
+  rpc Connect(ConnectRequest) returns (ConnectResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+  // Endpoint to stream states of a voice connection.
+  rpc StreamState(StreamStateRequest) returns (stream StreamStateResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
 }
