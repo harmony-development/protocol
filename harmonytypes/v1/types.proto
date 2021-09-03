@@ -20,6 +20,7 @@ message HarmonyMethodMetadata {
 }
 
 extend google.protobuf.MethodOptions {
+  // Harmony method metadata.
   HarmonyMethodMetadata metadata = 1091;
 }
 

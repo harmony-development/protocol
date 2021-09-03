@@ -51,8 +51,11 @@ message InstantViewRequest {
 }
 // Used in the `InstantView` endpoint.
 message InstantViewResponse {
+  // Site metadata for the URL.
   SiteMetadata metadata = 1;
+  // Instant view content.
   string content = 2;
+  // Whether the instant view is valid.
   bool is_valid = 3;
 }
 // Used in the `CanInstantView` endpoint.

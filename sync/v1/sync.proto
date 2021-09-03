@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-import "harmonytypes/v1/types.proto";
-
 package protocol.sync.v1;
 
 option go_package = "github.com/harmony-development/legato/gen/sync/v1";
