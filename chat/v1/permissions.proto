@@ -6,8 +6,8 @@ import "harmonytypes/v1/types.proto";
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
-// Used in the `QueryPermissions` endpoint.
-message QueryPermissionsRequest {
+// Used in the `QueryHasPermission` endpoint.
+message QueryHasPermissionRequest {
   // the guild ID to query permissions for
   uint64 guild_id = 1;
   // the channel ID to query permissions for. If not set, it will query
@@ -19,8 +19,8 @@ message QueryPermissionsRequest {
   // the permission node to check for.
   string check_for = 3;
 }
-// Used in the `QueryPermissions` endpoint.
-message QueryPermissionsResponse {
+// Used in the `QueryHasPermission` endpoint.
+message QueryHasPermissionResponse {
   // the permissions for the given node.
   bool ok = 1;
 }
