@@ -216,7 +216,7 @@ message GetChannelMessagesRequest {
   // The direction relative to the `message_id` message to get messages from.
   enum Direction {
     // Get messages before the anchor.
-    DIRECTION_BEFORE = 0;
+    DIRECTION_BEFORE_UNSPECIFIED = 0;
     // Get messages around the anchor, including the anchor.
     DIRECTION_AROUND = 1;
     // Get messages after the anchor.
