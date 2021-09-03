@@ -163,11 +163,37 @@ message Attachment {
 
 // Object representing a message's content.
 message Content {
+  // Object representing text content.
+  message TextContent {
+    // Text content.
+    string content = 1;
+  }
+  // Object representing embed content.
+  message EmbedContent {
+    // Embed content.
+    Embed embed = 1;
+  }
+  // Object representing attachment content.
+  message AttachmentContent {
+    // A list of attachments.
+    repeated Attachment files = 1;
+  }
+  // Object representing photo content.
+  message PhotoContent {
+    // A list of photos.
+    repeated Photo photos = 1;
+  }
+
+  // Content data.
   oneof content {
-    string text_message = 1;
-    Embed embed_message = 2;
-    repeated Attachment files_message = 3;
-    repeated Photo photos_message = 4;
+    // Text content.
+    TextContent text_message = 1;
+    // Embed content.
+    EmbedContent embed_message = 2;
+    // Attachment content.
+    AttachmentContent attachment_message = 3;
+    // Photo content.
+    PhotoContent photo_message = 4;
   }
 }
 
