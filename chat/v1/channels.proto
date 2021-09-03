@@ -6,6 +6,12 @@ package protocol.chat.v1;
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
+message Channel {
+  string channel_name = 1;
+  bool is_category = 2;
+  harmonytypes.v1.Metadata metadata = 3;
+}
+
 // Channel Kinds:
 //
 // Channel kinds specified in an official Harmony protocol will start with a
@@ -18,24 +24,18 @@ option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 //
 message CreateChannelRequest {
   uint64 guild_id = 1;
-  string channel_name = 2; //  [(validate.rules).string.min_len = 1]
-  bool is_category = 3;
-  harmonytypes.v1.ItemPosition position = 4;
-  harmonytypes.v1.Metadata metadata = 5;
+  Channel channel = 2;
+  harmonytypes.v1.ItemPosition position = 3;
 }
 message CreateChannelResponse { uint64 channel_id = 1; }
 
 message GetGuildChannelsRequest { uint64 guild_id = 1; }
 message GetGuildChannelsResponse {
-  message Channel {
-    harmonytypes.v1.Metadata metadata = 4;
-
+  message ChannelWithId {
     uint64 channel_id = 1;
-    string channel_name = 2;
-    bool is_category = 3;
+    Channel channel = 2;
   }
-
-  repeated Channel channels = 1;
+  repeated ChannelWithId channels = 1;
 }
 
 message UpdateChannelInformationRequest {

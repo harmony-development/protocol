@@ -48,8 +48,11 @@ message SetPermissionsRequest {
   optional uint64 channel_id = 2;
   // the role ID to set permissions for.
   uint64 role_id = 3;
-  // the permissions list to set.
-  PermissionList perms = 4;
+  // the permission list to give.
+  //
+  // There is no "perms_to_take" because not given permissions are by
+  // default not allowed.
+  PermissionList perms_to_give = 4;
 }
 // Used in the `SetPermissions` endpoint.
 message SetPermissionsResponse {}

@@ -107,15 +107,26 @@ message StreamEvent {
     harmonytypes.v1.Metadata metadata = 6;
   }
 
-  // Event sent when a channel's information or position in the channel is changed.
+  // Event sent when a channel's information is changed.
   message ChannelUpdated {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
-    // Channel ID of the channel where this event happened.
+    // Channel ID of the channel that was changed.
     uint64 channel_id = 2;
+    // The new name of the channel. 
     optional string new_name = 3;
-    optional harmonytypes.v1.ItemPosition new_position = 4;
-    optional harmonytypes.v1.Metadata new_metadata = 5;
+    // The new metadata of the channel.
+    optional harmonytypes.v1.Metadata new_metadata = 4;
+  }
+
+  // Event sent when a channel's position in the channel list is changed.
+  message ChannelPositionUpdated {
+    // Guild ID of the guild where this event happened.
+    uint64 guild_id = 1;
+    // Channel ID of the channel that was changed.
+    uint64 channel_id = 2;
+    // The new position of the channel.
+    optional harmonytypes.v1.ItemPosition new_position = 3;
   }
 
   // Event sent when all channels have been reordered
@@ -130,21 +141,25 @@ message StreamEvent {
   message ChannelDeleted {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
-    // Channel ID of the channel where this event happened.
+    // Channel ID of the channel that was deleted.
     uint64 channel_id = 2;
   }
 
-  // Event sent when a guild's information is updated.
+  // Event sent when a guild's information is changed.
   message GuildUpdated {
-    // Guild ID of the guild where this event happened.
+    // Guild ID of the guild that was changed.
     uint64 guild_id = 1;
+    // The new name of the guild.
     optional string new_name = 2;
+    // The new picture of the guild.
     optional string new_picture = 3;
+    // The new metadata of the guild.
     optional harmonytypes.v1.Metadata new_metadata = 4;
   }
 
   // Event sent when a guild is deleted.
   message GuildDeleted {
+    // Guild ID of the guild that was deleted.
     uint64 guild_id = 1;
   }
 
@@ -202,6 +217,7 @@ message StreamEvent {
     uint64 guild_id = 1;
     // Role ID of the role that was moved.
     uint64 role_id = 2;
+    // New position of the role.
     harmonytypes.v1.ItemPosition new_position = 3;
   }
 
@@ -229,8 +245,14 @@ message StreamEvent {
     uint64 guild_id = 1;
     // Role ID of the role that was changed.
     uint64 role_id = 2;
-    // The actual new role.
-    chat.v1.Role new_role = 3;
+    // The new name of the role.
+    optional string new_name = 3;
+    // The new color of the role.
+    optional int32 new_color = 4;
+    // The new hoist status of the role.
+    optional bool new_hoist = 5;
+    // The new pingable status of the role.
+    optional bool new_pingable = 6;
   }
 
   // Event sent when a role's permissions are changed.
@@ -328,8 +350,6 @@ message StreamEvent {
     ChannelUpdated edited_channel = 8;
     // Send the channel deleted event.
     ChannelDeleted deleted_channel = 9;
-    // The channels have been completely reordered.
-    ChannelsReordered channels_reordered = 27;
     // Send the guild updated event.
     GuildUpdated edited_guild = 10;
     // Send the guild deleted event.
@@ -339,24 +359,28 @@ message StreamEvent {
     // Send the member left event.
     MemberLeft left_member = 13;
     // Send the typing event.
-    Typing typing = 15;
+    Typing typing = 14;
     // Send the role created event.
-    RoleCreated role_created = 16;
+    RoleCreated role_created = 15;
     // Send the role deleted event.
-    RoleDeleted role_deleted = 17;
+    RoleDeleted role_deleted = 16;
     // Send the role moved event.
-    RoleMoved role_moved = 18;
+    RoleMoved role_moved = 17;
     // Send the role updated event.
-    RoleUpdated role_updated = 19;
+    RoleUpdated role_updated = 18;
     // Send the role perms updated event.
-    RolePermissionsUpdated role_perms_updated = 20;
+    RolePermissionsUpdated role_perms_updated = 19;
     // Send the user roles updated event.
-    UserRolesUpdated user_roles_updated = 21;
+    UserRolesUpdated user_roles_updated = 20;
     // Send the permission updated event.
-    PermissionUpdated permission_updated = 22;
+    PermissionUpdated permission_updated = 21;
+    // The channels have been completely reordered.
+    ChannelsReordered channels_reordered = 22;
+    // Send the channel position updated event.
+    ChannelPositionUpdated edited_channel_position = 23;
     // Send the message pinned event.
-    MessagePinned message_pinned = 28;
+    MessagePinned message_pinned = 24;
     // Send the message unpinned event.
-    MessageUnpinned message_unpinned = 29;
+    MessageUnpinned message_unpinned = 25;
   }
 }
