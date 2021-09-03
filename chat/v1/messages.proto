@@ -29,8 +29,6 @@ message Override {
   }
 }
 
-// EMBEDS AND ACTIONS
-
 // Actions are interactive elements that can exist within an embed.
 message Action {
   // The action type. This is primarily used to change the look of the action to
@@ -72,31 +70,31 @@ message Action {
   }
 }
 
-message EmbedHeading {
-  string text = 1;
-  string subtext = 2;
-  string url = 3;
-  string icon = 4;
-}
-
-message EmbedField {
-  enum Presentation {
-    Data = 0;
-    CaptionedImage = 1;
-    Row = 2;
-  }
-  string title = 1;
-  string subtitle = 2;
-  string body = 3;
-
-  string image_url = 4;
-
-  Presentation presentation = 5;
-
-  repeated Action actions = 6;
-}
-
 message Embed {
+  message EmbedHeading {
+    string text = 1;
+    string subtext = 2;
+    string url = 3;
+    string icon = 4;
+  }
+
+  message EmbedField {
+    enum Presentation {
+      Data = 0;
+      CaptionedImage = 1;
+      Row = 2;
+    }
+    string title = 1;
+    string subtitle = 2;
+    string body = 3;
+  
+    string image_url = 4;
+  
+    Presentation presentation = 5;
+  
+    repeated Action actions = 6;
+  }
+
   string title = 1;
   string body = 2;
 
@@ -106,15 +104,6 @@ message Embed {
   EmbedHeading footer = 5;
 
   repeated EmbedField fields = 6;
-}
-
-// TYPES
-message Attachment {
-  string id = 1;
-  string name = 2;
-  string type = 3;
-  int32 size = 4;
-  string caption = 5;
 }
 
 /*
@@ -163,52 +152,54 @@ message Photo {
   Minithumbnail minithumbnail = 7;
 }
 
-message ContentText {
-  string content = 1;
-}
-message ContentEmbed {
-  Embed embeds = 1;
-}
-message ContentFiles {
-  repeated Attachment attachments = 1;
-}
-message ContentPhotos {
-  repeated Photo photos = 1;
+// Object representing a generic message attachment.
+message Attachment {
+  string id = 1;
+  string name = 2;
+  string type = 3;
+  int32 size = 4;
+  string caption = 5;
 }
 
+// Object representing a message's content.
 message Content {
   oneof content {
-    ContentText text_message = 1;
-    ContentEmbed embed_message = 2;
-    ContentFiles files_message = 3;
-    ContentPhotos photos_message = 4;
+    string text_message = 1;
+    Embed embed_message = 2;
+    repeated Attachment files_message = 3;
+    repeated Photo photos_message = 4;
   }
 }
 
+// Object representing a message without the ID part.
 message Message {
   harmonytypes.v1.Metadata metadata = 1;
   Override overrides = 2;
 
   uint64 guild_id = 3;
   uint64 channel_id = 4;
-  uint64 message_id = 5;
-  uint64 author_id = 6;
-  google.protobuf.Timestamp created_at = 7;
-  google.protobuf.Timestamp edited_at = 8;
-  uint64 in_reply_to = 9;
-  Content content = 10;
+  uint64 author_id = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp edited_at = 7;
+  uint64 in_reply_to = 8;
+  Content content = 9;
 }
 
 // Used in the `GetChannelMessages` endpoint.
 message GetChannelMessagesRequest {
   // The direction relative to the `message_id` message to get messages from.
   enum Direction {
-    before = 0;
-    around = 1;
-    after = 2;
+    // Get messages before the anchor.
+    DIRECTION_BEFORE = 0;
+    // Get messages around the anchor, including the anchor.
+    DIRECTION_AROUND = 1;
+    // Get messages after the anchor.
+    DIRECTION_AFTER = 2;
   }
 
+  // Guild ID of the guild that has the channel.
   uint64 guild_id = 1;
+  // Channel ID of the channel to get messages from.
   uint64 channel_id = 2;
   // The ID of the message that will be used as an "anchor" point to figure out
   // where to get the messages.
@@ -224,7 +215,7 @@ message GetChannelMessagesRequest {
   // item of the list returned.
   // - If it is "after", you will get the messages after the `message_id`
   // message.
-  Direction direction = 4;
+  optional Direction direction = 4;
   // How many messages to get.
   //
   // - If `0`, a recommended message count to return is 25. If the direction is
@@ -234,59 +225,107 @@ message GetChannelMessagesRequest {
   // to return *for each direction*, before and after.
   // - Servers should enforce their own maximum limit, and clamp this value to
   // the limit.
-  uint32 count = 5;
+  optional uint32 count = 5;
 }
+// Used in the `GetChannelMessages` endpoint.
 message GetChannelMessagesResponse {
+  // Object representing a message with it's ID.
+  message MessageWithId {
+    // ID of the message.
+    uint64 message_id = 1;
+    // The message data.
+    Message message = 2;
+  }
+
+  // Has reached the top (first message) of the message history.
   bool reached_top = 1;
-  repeated Message messages = 2;
+  // Has reached the bottom (last message) of the message history.
+  bool reached_bottom = 2;
+  // The messages requested.
+  repeated MessageWithId messages = 3;
 }
 
+// Used in the `GetMessage` endpoint.
 message GetMessageRequest {
+  // Guild ID of the guild where the channel is.
   uint64 guild_id = 1;
+  // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
+  // Message ID of the message you want to get.
   uint64 message_id = 3;
 }
+// Used in the `GetMessage` endpoint.
 message GetMessageResponse {
+  // The message requested.
   Message message = 1;
 }
 
+// Used in the `DeleteMessage` endpoint.
 message DeleteMessageRequest {
+  // Guild ID of the guild where the channel is.
   uint64 guild_id = 1;
+  // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
+  // Message ID of the message you want to delete.
   uint64 message_id = 3;
 }
+// Used in the `DeleteMessage` endpoint.
+message DeleteMessageResponse {}
 
-// TRIGGERS
-
+// Used in the `TriggerAction` endpoint.
 message TriggerActionRequest {
+  // Guild ID of the guild where the channel is.
   uint64 guild_id = 1;
+  // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
+  // Message ID of the message you want to trigger an action in.
   uint64 message_id = 3;
+  // Action ID of the action you want to trigger.
   string action_id = 4;
+  // Action data to be passed to the action.
   string action_data = 5;
 }
+// Used in the `TriggerAction` endpoint.
+message TriggerActionResponse {}
 
-// SendMessage
+// Used in the `SendMessage` endpoint.
 message SendMessageRequest {
+  // Guild ID of the guild where the channel is.
   uint64 guild_id = 1;
+  // Channel ID of the channel you want to send a message in.
   uint64 channel_id = 2;
+  // Content of the new message.
   Content content = 3;
-  uint64 echo_id = 4;
-  Override overrides = 6;
-  uint64 in_reply_to = 7;
+  // Echo ID of the new message. This can be used by clients to
+  // determine whether a message is sent.
+  optional uint64 echo_id = 4;
+  // The overrides of this new message.
+  optional Override overrides = 6;
+  // The message this new message is a reply to.
+  optional uint64 in_reply_to = 7;
 
-  harmonytypes.v1.Metadata metadata = 5;
+  // The metadata of this new message.
+  optional harmonytypes.v1.Metadata metadata = 5;
 }
+// Used in the `SendMessage` endpoint.
 message SendMessageResponse {
+  // Message ID of the message sent.
   uint64 message_id = 1;
 }
 
+// Used in the `UpdateMessageText` endpoint.
 message UpdateMessageTextRequest {
+  // Guild ID of the guild where the channel is.
   uint64 guild_id = 1;
+  // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
+  // Message ID of the message you want to edit the text of.
   uint64 message_id = 3;
+  // New content for this message.
   string new_content = 4;
 }
+// Used in the `UpdateMessageText` endpoint.
+message UpdateMessageTextResponse {}
 
 // Used in the `PinMessage` endpoint.
 message PinMessageRequest {

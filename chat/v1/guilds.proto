@@ -18,75 +18,165 @@ message Guild {
   harmonytypes.v1.Metadata metadata = 4;
 }
 
+// Object representing an invite without the ID part.
+message Invite {
+  // Possible uses of this invite. A use of `0` means infinite uses.
+  uint32 possible_uses = 1;
+  // Total use count of this invite.
+  uint32 use_count = 2;
+}
+
 // Request type used in `CreateGuild` RPC. 
 message CreateGuildRequest {
   // The guild data to create a request with.
   // The `owner_id` field of `Guild` will be set by server, so setting it is not needed.
   Guild guild = 1;
-  harmonytypes.v1.Metadata metadata = 2;
 }
-message CreateGuildResponse { uint64 guild_id = 1; }
-
-message CreateInviteRequest {
+// Used in the `CreateGuild` endpoint.
+message CreateGuildResponse {
+  // Guild ID of the guild that was created.
   uint64 guild_id = 1;
-  string name = 2;
-  int32 possible_uses = 3;
 }
-message CreateInviteResponse { string name = 1; }
 
+// Used in the `CreateInvite` endpoint.
+message CreateInviteRequest {
+  // Guild ID of the guild to create an invite in.
+  uint64 guild_id = 1;
+  // The name of the invite.
+  string name = 2;
+  // The possible uses of the invite.
+  //
+  // A possible use of `0` means that the invite can be used infinitely many times.
+  uint32 possible_uses = 3;
+}
+// Used in the `CreateInvite` endpoint.
+message CreateInviteResponse {
+  // The invite ID of the invite that was created.
+  string invite_id = 1;
+}
+
+// Used in the `GetGuildList` endpoint.
 message GetGuildListRequest {}
+// Used in the `GetGuildList` endpoint.
 message GetGuildListResponse {
+  // Object representing a guild list entry.
   message GuildListEntry {
+    // Guild ID of this guild entry.
     uint64 guild_id = 1;
+    // Homeserver of this guild.
     string host = 2;
   }
 
+  // Guild list returned by the server.
   repeated GuildListEntry guilds = 1;
 }
 
-message GetGuildRequest { uint64 guild_id = 1; }
+// Used in the `GetGuild` endpoint.
+message GetGuildRequest {
+  // Guild ID of the guild to get information about.
+  uint64 guild_id = 1;
+}
+// Used in the `GetGuild` endpoint.
 message GetGuildResponse {
+  // The information of the guild requested.
   Guild guild = 1;
 }
 
-message GetGuildInvitesRequest { uint64 guild_id = 1; }
+// Used in the `GetGuildInvites` endpoint.
+message GetGuildInvitesRequest {
+  // Guild ID of the guild you want to get invites of.
+  uint64 guild_id = 1;
+}
+// Used in the `GetGuildInvites` endpoint.
 message GetGuildInvitesResponse {
-  message Invite {
+  // Object representing invite data with that invite's ID.
+  message InviteWithId {
+    // ID of the invite.
     string invite_id = 1;
-    int32 possible_uses = 2;
-    int32 use_count = 3;
+    // The invite data.
+    Invite invite = 2;
   }
-  repeated Invite invites = 1;
+
+  // The invites of the guild, with IDs.
+  repeated InviteWithId invites = 1;
 }
 
-message GetGuildMembersRequest { uint64 guild_id = 1; }
-message GetGuildMembersResponse { repeated uint64 members = 1; }
-
-message UpdateGuildInformationRequest {
+// Used in the `GetGuildMembers` endpoint.
+message GetGuildMembersRequest {
+  // Guild ID of the guild you want to get members of.
   uint64 guild_id = 1;
+}
+// Used in the `GetGuildMembers` endpoint.
+message GetGuildMembersResponse {
+  // User IDs of all the guild members.
+  repeated uint64 members = 1;
+}
+
+// Used in the `UpdateGuildInformation` endpoint.
+message UpdateGuildInformationRequest {
+  // Guild ID of the guild you want to update the information of.
+  uint64 guild_id = 1;
+  // New name for the guild.
   optional string new_guild_name = 2;
+  // New picture for the guild.
   optional string new_guild_picture = 3;
+  // New metadata for the guild.
   optional harmonytypes.v1.Metadata new_metadata = 4;
 }
+// Used in the `UpdateGuildInformation` endpoint.
+message UpdateGuildInformationResponse {}
 
-message DeleteGuildRequest { uint64 guild_id = 1; }
-
-message DeleteInviteRequest {
+// Used in the `DeleteGuild` endpoint.
+message DeleteGuildRequest {
+  // Guild ID of the guild you want to delete.
   uint64 guild_id = 1;
+}
+// Used in the `DeleteGuild` endpoint.
+message DeleteGuildResponse {}
+
+// Used in the `DeleteInvite` endpoint.
+message DeleteInviteRequest {
+  // Guild ID of the guild where the invite is located.
+  uint64 guild_id = 1;
+  // Invite ID of the invite you want to delete.
   string invite_id = 2;
 }
+// Used in the `DeleteInvite` endpoint.
+message DeleteInviteResponse {}
 
-message JoinGuildRequest { string invite_id = 1; }
-message JoinGuildResponse { uint64 guild_id = 1; }
+// Used in the `JoinGuild` endpoint.
+message JoinGuildRequest {
+  // Invite ID of the guild you want to join.
+  string invite_id = 1;
+}
+// Used in the `JoinGuild` endpoint.
+message JoinGuildResponse {
+  // Guild ID of the guild you joined.
+  uint64 guild_id = 1;
+}
 
-message PreviewGuildRequest { string invite_id = 1; }
+// Used in the `PreviewGuild` endpoint.
+message PreviewGuildRequest {
+  // Invite ID of the guild you want to get information from.
+  string invite_id = 1;
+}
+// Used in the `PreviewGuild` endpoint.
 message PreviewGuildResponse {
+  // Name of the guild requested.
   string name = 1;
-  string avatar = 2;
+  // Picture of the guild requested.
+  string picture = 2;
+  // Member count of the guild requested.
   uint64 member_count = 3;
 }
 
-message LeaveGuildRequest { uint64 guild_id = 1; }
+// Used in the `LeaveGuild` endpoint.
+message LeaveGuildRequest {
+  // Guild ID of the guild you want to leave.
+  uint64 guild_id = 1;
+}
+// Used in the `LeaveGuild` endpoint.
+message LeaveGuildResponse {}
 
 // Used in `BanUser` endpoint.
 message BanUserRequest {
