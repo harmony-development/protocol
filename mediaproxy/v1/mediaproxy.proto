@@ -76,7 +76,7 @@ service MediaProxyService {
         option (harmonytypes.v1.metadata).requires_authentication = true;
     }
     // Endpoint to query if the server can generate an instant view for a website URL.
-    rpc CanInstantView(InstantViewRequest) returns (CanInstantViewResponse) {
+    rpc CanInstantView(CanInstantViewRequest) returns (CanInstantViewResponse) {
         option (harmonytypes.v1.metadata).requires_authentication = true;
     }
 }
