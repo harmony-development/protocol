@@ -39,7 +39,7 @@ message EmotePackEmotesUpdated {
   uint64 pack_id = 1;
   // The added emotes.
   repeated Emote added_emotes = 2;
-  // The image IDs of the deleted emotes.
+  // The names of the deleted emotes.
   repeated string deleted_emotes = 3;
 }
 
