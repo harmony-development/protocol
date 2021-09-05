@@ -38,12 +38,16 @@ message ChannelWithId {
 message CreateChannelRequest {
   // Guild ID of the guild to create a channel in.
   uint64 guild_id = 1;
-  // The channel data for your new channel.
-  Channel channel = 2;
+  // The name of this channel.
+  string channel_name = 2;
+  // Whether this channel is a category or not.
+  bool is_category = 3;
+  // The metadata of this channel.
+  optional harmonytypes.v1.Metadata metadata = 4;
   // The position of your new channel in the channel list.
   //
   // If not specified, it will be put at the bottom of the channel list.
-  optional harmonytypes.v1.ItemPosition position = 3;
+  optional harmonytypes.v1.ItemPosition position = 5;
 }
 // Used in the `CreateChannel` endpoint. 
 message CreateChannelResponse {

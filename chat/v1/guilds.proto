@@ -44,9 +44,12 @@ message GuildListEntry {
 
 // Request type used in `CreateGuild` RPC. 
 message CreateGuildRequest {
-  // The guild data to create a request with.
-  // The `owner_id` field of `Guild` will be set by server, so setting it is not needed.
-  Guild guild = 1;
+  // The name of the guild.
+  string name = 1;
+  // The picture HMC of the guild.
+  string picture = 2;
+  // Metadata of the guild.
+  optional harmonytypes.v1.Metadata metadata = 3;
 }
 // Used in the `CreateGuild` endpoint.
 message CreateGuildResponse {

@@ -6,6 +6,14 @@ import "harmonytypes/v1/types.proto";
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
+// Object representing a single permission node.
+message Permission {
+  // the permission matcher. (example: roles.manage)
+  string matches = 1;
+  // whether the permission is allowed or not.
+  bool ok = 2;
+}
+
 // Object representing a role without the ID.
 message Role {
   // the role name.
@@ -16,6 +24,14 @@ message Role {
   bool hoist = 3;
   // whether the role is mentionable or not.
   bool pingable = 4;
+}
+
+// Object representing a role with it's ID.
+message RoleWithId {
+  // ID of the role.
+  uint64 role_id = 1;
+  // The role data.
+  Role role = 2;
 }
 
 // Used in the `QueryHasPermission` endpoint.
@@ -35,14 +51,6 @@ message QueryHasPermissionRequest {
 message QueryHasPermissionResponse {
   // the permissions for the given node.
   bool ok = 1;
-}
-
-// Object representing a single permission node.
-message Permission {
-  // the permission matcher. (example: roles.manage)
-  string matches = 1;
-  // whether the permission is allowed or not.
-  bool ok = 2;
 }
 
 // Used in the `SetPermissions` endpoint.
@@ -98,14 +106,6 @@ message GetGuildRolesRequest {
 }
 // Used in the `GetGuildRoles` endpoint.
 message GetGuildRolesResponse {
-  // Object representing a role with it's ID.
-  message RoleWithId {
-    // ID of the role.
-    uint64 role_id = 1;
-    // The role data.
-    Role role = 2;
-  }
-
   // the list of roles in the guild.
   repeated RoleWithId roles = 1;
 }
@@ -114,8 +114,14 @@ message GetGuildRolesResponse {
 message AddGuildRoleRequest {
   // the guild ID to add the role to.
   uint64 guild_id = 1;
-  // the role to add.
-  Role role = 2;
+  // the role name.
+  string name = 2;
+  // the role color.
+  int32 color = 3;
+  // whether the role is hoisted or not.
+  bool hoist = 4;
+  // whether the role is mentionable or not.
+  bool pingable = 5;
 }
 // Used in the `AddGuildRole` endpoint.
 message AddGuildRoleResponse {
