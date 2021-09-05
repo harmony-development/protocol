@@ -1,8 +1,5 @@
 syntax = "proto3";
 
-import "google/protobuf/empty.proto";
-import "harmonytypes/v1/types.proto";
-
 package protocol.sync.v1;
 
 option go_package = "github.com/harmony-development/legato/gen/sync/v1";
@@ -20,25 +17,47 @@ message AuthData {
   uint64 time = 2;
 }
 
-message EventQueue {
-  repeated Event events = 1;
-}
-
+// Object representing a postbox event.
 message Event {
+  // Event sent when a user is removed from a guild.
   message UserRemovedFromGuild {
+    // User ID of the user that was removed.
     uint64 user_id = 1;
+    // Guild ID of the guild where the user was.
     uint64 guild_id = 2;
   }
+  // Event sent when a user is added to a guild.
   message UserAddedToGuild {
-  	uint64 user_id = 1;
-  	uint64 guild_id = 2;
+    // User ID of the user that was added.
+    uint64 user_id = 1;
+    // Guild ID of the guild where the user will be.
+    uint64 guild_id = 2;
   }
 
+  // The kind and data of this event.
   oneof kind {
+    // User removed from a guild.
     UserRemovedFromGuild user_removed_from_guild = 1;
+    // User added to a guild.
     UserAddedToGuild user_added_to_guild = 2;
   }
 }
+
+// Used in `Pull` endpoint.
+message PullRequest {}
+// Used in `Pull` endpoint.
+message PullResponse {
+  // The events that were not processed yet.
+  repeated Event event_queue = 1;
+}
+
+// Used in `Push` endpoint.
+message PushRequest {
+  // The event to push to the server.
+  Event event = 1;
+}
+// Used in `Push` endpoint.
+message PushResponse {}
 
 // # Postbox
 //
@@ -75,6 +94,8 @@ message Event {
 // It is recommended that receivers try pulling periodically, for example, every
 // 1 minute after the last Push RPC by the sender. This ensures that events are recieved.
 service PostboxService {
-  rpc Pull(google.protobuf.Empty) returns (EventQueue) {}
-  rpc Push(Event) returns (google.protobuf.Empty) {}
+  // Endpoint to pull events.
+  rpc Pull(PullRequest) returns (PullResponse) {}
+  // Endpoint to push events.
+  rpc Push(PushRequest) returns (PushResponse) {}
 }

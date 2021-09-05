@@ -5,49 +5,82 @@ import "harmonytypes/v1/types.proto";
 
 option go_package = "github.com/harmony-development/legato/gen/mediaproxy/v1";
 
+// Object representing the metadata of a website.
 message SiteMetadata {
-    string site_title = 1;
-    string page_title = 2;
-    string kind = 3;
-    string description = 4;
-    string url = 5;
-    string image = 6;
+  // Title of the website.
+  string site_title = 1;
+  // Page title of the website page.
+  string page_title = 2;
+  // Kind of the website.
+  string kind = 3;
+  // Description of the website page.
+  string description = 4;
+  // URL of the website.
+  string url = 5;
+  // A thumbnail image of the website.
+  string image = 6;
 }
+// Object represeting the metadata of a media.
 message MediaMetadata {
-    string mimetype = 1;
-    string filename = 2;
+  // Mimetype of the media. 
+  string mimetype = 1;
+  // Filename of the media.
+  string filename = 2;
 }
 
+// Used in the `FetchLinkMetadata` endpoint.
 message FetchLinkMetadataRequest {
-    string url = 1;
+  // URL to fetch metadata from.
+  string url = 1;
 }
+// Used in the `FetchLinkMetadata` endpoint.
 message FetchLinkMetadataResponse {
-    oneof data {
-        SiteMetadata is_site = 1;
-        MediaMetadata is_media = 2;
-    }
+  // Data of the metadata.
+  oneof data {
+    // Site metadata for the URL.
+    SiteMetadata is_site = 1;
+    // Media metadata for the URL.
+    MediaMetadata is_media = 2;
+  }
 }
 
+// Used in the `InstantView` endpoint.
 message InstantViewRequest {
-    string url = 1;
+  // URL to get instant view for. 
+  string url = 1;
 }
+// Used in the `InstantView` endpoint.
 message InstantViewResponse {
-    SiteMetadata metadata = 1;
-    string content = 2;
-    bool is_valid = 3;
+  // Site metadata for the URL.
+  SiteMetadata metadata = 1;
+  // Instant view content.
+  string content = 2;
+  // Whether the instant view is valid.
+  bool is_valid = 3;
 }
+// Used in the `CanInstantView` endpoint.
+message CanInstantViewRequest {
+  // URL to query if server can instant view the website. 
+  string url = 1;
+}
+// Used in the `CanInstantView` endpoint.
 message CanInstantViewResponse {
-    bool can_instant_view = 1;
+  // Whether the server generate an instant view for the URL queried.
+  bool can_instant_view = 1;
 }
 
+// Harmony service for fetching metadata and generating instant view for URLs.
 service MediaProxyService {
+    // Endpoint to fetch metadata for a URL.
     rpc FetchLinkMetadata(FetchLinkMetadataRequest) returns (FetchLinkMetadataResponse) {
         option (harmonytypes.v1.metadata).requires_authentication = true;
     }
+    // Endpoint to instant view a website URL.
     rpc InstantView(InstantViewRequest) returns (InstantViewResponse) {
         option (harmonytypes.v1.metadata).requires_authentication = true;
     }
-    rpc CanInstantView(InstantViewRequest) returns (CanInstantViewResponse) {
+    // Endpoint to query if the server can generate an instant view for a website URL.
+    rpc CanInstantView(CanInstantViewRequest) returns (CanInstantViewResponse) {
         option (harmonytypes.v1.metadata).requires_authentication = true;
     }
 }

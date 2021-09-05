@@ -11,9 +11,9 @@ option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 // Overrides provide a way to override the name and avatar of a message.
 message Override {
   // the overridden username.
-  string username = 1;
+  optional string username = 1;
   // the overridden avatar.
-  string avatar = 2;
+  optional string avatar = 2;
   // the reason for overriding username and avatar.
   oneof reason {
     // a custom reason in case the builtin ones don't fit
@@ -28,8 +28,6 @@ message Override {
     google.protobuf.Empty bridge = 7;
   }
 }
-
-// EMBEDS AND ACTIONS
 
 // Actions are interactive elements that can exist within an embed.
 message Action {
@@ -58,64 +56,81 @@ message Action {
     // The options in the dropdown.
     repeated string options = 2;
   }
+  // A text input that users can type in to trigger an action.
   message Input {
+    // The label describing the input.
     string label = 1;
+    // Whether to display this input wide.
     bool wide = 2;
   }
 
+  // Type of the action.
   Type action_type = 1;
+  // ID of the action.
   string id = 2;
+  // The kind of the action.
   oneof kind {
+    // Button action.
     Button button = 3;
+    // Dropdown action.
     Dropdown dropdown = 4;
+    // Input action.
     Input input = 5;
   }
 }
 
-message EmbedHeading {
-  string text = 1;
-  string subtext = 2;
-  string url = 3;
-  string icon = 4;
-}
-
-message EmbedField {
-  enum Presentation {
-    Data = 0;
-    CaptionedImage = 1;
-    Row = 2;
+// Object representing a message embed.
+message Embed {
+  // Object representing an embed heading.
+  message EmbedHeading {
+    // Text of the heading.
+    string text = 1;
+    // Subtext of the heading.
+    optional string subtext = 2;
+    // URL of the heading.
+    optional string url = 3;
+    // Icon of the heading.
+    optional string icon = 4;
   }
 
+  // Object representing an embed field.
+  message EmbedField {
+    // Type representing how to present an embed field.
+    enum Presentation {
+      // Show the field as data.
+      PRESENTATION_DATA_UNSPECIFIED = 0;
+      // Show the field as a captioned image.
+      PRESENTATION_CAPTIONED_IMAGE = 1;
+      // Show the field as a row.
+      PRESENTATION_ROW = 2;
+    }
+
+    // Title of this field.
+    string title = 1;
+    // Subtitle of this field.
+    optional string subtitle = 2;
+    // Body text of this field (eg. a description).
+    optional harmonytypes.v1.FormattedText body = 3;
+    // Image URL of this field.
+    optional string image_url = 4;
+    // How to present this field.
+    Presentation presentation = 5;
+    // Actions of this field.
+    repeated Action actions = 6;
+  }
+
+  // Title of this embed.
   string title = 1;
-  string subtitle = 2;
-  harmonytypes.v1.FormattedText body = 3;
-
-  string image_url = 4;
-
-  Presentation presentation = 5;
-
-  repeated Action actions = 6;
-}
-
-message Embed {
-  string title = 1;
-  harmonytypes.v1.FormattedText body = 2;
-
-  int64 color = 3;
-
-  EmbedHeading header = 4;
-  EmbedHeading footer = 5;
-
+  // Body text of this embed.
+  optional harmonytypes.v1.FormattedText body = 2;
+  // Color of this embed.
+  optional int32 color = 3;
+  // Embed heading for the header.
+  optional EmbedHeading header = 4;
+  // Embed heading for the footer.
+  optional EmbedHeading footer = 5;
+  // Fields of this embed.
   repeated EmbedField fields = 6;
-}
-
-// TYPES
-message Attachment {
-  string id = 1;
-  string name = 2;
-  string type = 3;
-  int32 size = 4;
-  harmonytypes.v1.FormattedText caption = 5;
 }
 
 /*
@@ -126,10 +141,8 @@ message Attachment {
 message Minithumbnail {
   // The width of the minithumbnail
   uint32 width = 1;
-
   // The height of the minithumbnail
   uint32 height = 2;
-
   // The JPEG data of the minithumbnail
   bytes data = 3;
 }
@@ -164,52 +177,89 @@ message Photo {
   Minithumbnail minithumbnail = 7;
 }
 
-message ContentText {
-  harmonytypes.v1.FormattedText content = 1;
-}
-message ContentEmbed {
-  Embed embeds = 1;
-}
-message ContentFiles {
-  repeated Attachment attachments = 1;
-}
-message ContentPhotos {
-  repeated Photo photos = 1;
+// Object representing a generic message attachment.
+message Attachment {
+  // File ID of this attachment.
+  string id = 1;
+  // Filename of this attachment.
+  string name = 2;
+  // Mimetype of this attachment.
+  string mimetype = 3;
+  // Size of this attachment.
+  uint32 size = 4;
+  // Caption of this attachment.
+  optional harmonytypes.v1.FormattedText caption = 5;
 }
 
+// Object representing a message's content.
 message Content {
+  // Object representing text content.
+  message TextContent {
+    // Text content.
+    harmonytypes.v1.FormattedText content = 1;
+  }
+  // Object representing embed content.
+  message EmbedContent {
+    // Embed content.
+    Embed embed = 1;
+  }
+  // Object representing attachment content.
+  message AttachmentContent {
+    // A list of attachments.
+    repeated Attachment files = 1;
+  }
+  // Object representing photo content.
+  message PhotoContent {
+    // A list of photos.
+    repeated Photo photos = 1;
+  }
+
+  // Content data.
   oneof content {
-    ContentText text_message = 1;
-    ContentEmbed embed_message = 2;
-    ContentFiles files_message = 3;
-    ContentPhotos photos_message = 4;
+    // Text content.
+    TextContent text_message = 1;
+    // Embed content.
+    EmbedContent embed_message = 2;
+    // Attachment content.
+    AttachmentContent attachment_message = 3;
+    // Photo content.
+    PhotoContent photo_message = 4;
   }
 }
 
+// Object representing a message without the ID part.
 message Message {
-  harmonytypes.v1.Metadata metadata = 1;
+  // Metadata of this message.
+  optional harmonytypes.v1.Metadata metadata = 1;
+  // Overrides of this message.
   Override overrides = 2;
-
-  uint64 guild_id = 3;
-  uint64 channel_id = 4;
-  uint64 message_id = 5;
-  uint64 author_id = 6;
-  google.protobuf.Timestamp created_at = 7;
-  google.protobuf.Timestamp edited_at = 8;
-  uint64 in_reply_to = 9;
-  Content content = 10;
+  // User ID of the user who sent this message.
+  uint64 author_id = 3;
+  // When this message was created.
+  google.protobuf.Timestamp created_at = 4;
+  // The most recent time this message was edited.
+  optional google.protobuf.Timestamp edited_at = 5;
+  // The message this message is a reply to.
+  optional uint64 in_reply_to = 6;
+  // The content of the message.
+  Content content = 7;
 }
 
 // Used in the `GetChannelMessages` endpoint.
 message GetChannelMessagesRequest {
   // The direction relative to the `message_id` message to get messages from.
   enum Direction {
-    before = 0;
-    around = 1;
-    after = 2;
+    // Get messages before the anchor.
+    DIRECTION_BEFORE_UNSPECIFIED = 0;
+    // Get messages around the anchor, including the anchor.
+    DIRECTION_AROUND = 1;
+    // Get messages after the anchor.
+    DIRECTION_AFTER = 2;
   }
 
+  // Guild ID of the guild that has the channel.
   uint64 guild_id = 1;
+  // Channel ID of the channel to get messages from.
   uint64 channel_id = 2;
   // The ID of the message that will be used as an "anchor" point to figure out
   // where to get the messages.
@@ -225,7 +275,7 @@ message GetChannelMessagesRequest {
   // item of the list returned.
   // - If it is "after", you will get the messages after the `message_id`
   // message.
-  Direction direction = 4;
+  optional Direction direction = 4;
   // How many messages to get.
   //
   // - If `0`, a recommended message count to return is 25. If the direction is
@@ -235,59 +285,107 @@ message GetChannelMessagesRequest {
   // to return *for each direction*, before and after.
   // - Servers should enforce their own maximum limit, and clamp this value to
   // the limit.
-  uint32 count = 5;
+  optional uint32 count = 5;
 }
+// Used in the `GetChannelMessages` endpoint.
 message GetChannelMessagesResponse {
+  // Object representing a message with it's ID.
+  message MessageWithId {
+    // ID of the message.
+    uint64 message_id = 1;
+    // The message data.
+    Message message = 2;
+  }
+
+  // Has reached the top (first message) of the message history.
   bool reached_top = 1;
-  repeated Message messages = 2;
+  // Has reached the bottom (last message) of the message history.
+  bool reached_bottom = 2;
+  // The messages requested.
+  repeated MessageWithId messages = 3;
 }
 
+// Used in the `GetMessage` endpoint.
 message GetMessageRequest {
+  // Guild ID of the guild where the channel is.
   uint64 guild_id = 1;
+  // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
+  // Message ID of the message you want to get.
   uint64 message_id = 3;
 }
+// Used in the `GetMessage` endpoint.
 message GetMessageResponse {
+  // The message requested.
   Message message = 1;
 }
 
+// Used in the `DeleteMessage` endpoint.
 message DeleteMessageRequest {
+  // Guild ID of the guild where the channel is.
   uint64 guild_id = 1;
+  // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
+  // Message ID of the message you want to delete.
   uint64 message_id = 3;
 }
+// Used in the `DeleteMessage` endpoint.
+message DeleteMessageResponse {}
 
-// TRIGGERS
-
+// Used in the `TriggerAction` endpoint.
 message TriggerActionRequest {
+  // Guild ID of the guild where the channel is.
   uint64 guild_id = 1;
+  // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
+  // Message ID of the message you want to trigger an action in.
   uint64 message_id = 3;
+  // Action ID of the action you want to trigger.
   string action_id = 4;
+  // Action data to be passed to the action.
   string action_data = 5;
 }
+// Used in the `TriggerAction` endpoint.
+message TriggerActionResponse {}
 
-// SendMessage
+// Used in the `SendMessage` endpoint.
 message SendMessageRequest {
+  // Guild ID of the guild where the channel is.
   uint64 guild_id = 1;
+  // Channel ID of the channel you want to send a message in.
   uint64 channel_id = 2;
+  // Content of the new message.
   Content content = 3;
-  uint64 echo_id = 4;
-  Override overrides = 6;
-  uint64 in_reply_to = 7;
+  // Echo ID of the new message. This can be used by clients to
+  // determine whether a message is sent.
+  optional uint64 echo_id = 4;
+  // The overrides of this new message.
+  optional Override overrides = 6;
+  // The message this new message is a reply to.
+  optional uint64 in_reply_to = 7;
 
-  harmonytypes.v1.Metadata metadata = 5;
+  // The metadata of this new message.
+  optional harmonytypes.v1.Metadata metadata = 5;
 }
+// Used in the `SendMessage` endpoint.
 message SendMessageResponse {
+  // Message ID of the message sent.
   uint64 message_id = 1;
 }
 
+// Used in the `UpdateMessageText` endpoint.
 message UpdateMessageTextRequest {
+  // Guild ID of the guild where the channel is.
   uint64 guild_id = 1;
+  // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
+  // Message ID of the message you want to edit the text of.
   uint64 message_id = 3;
+  // New content for this message.
   harmonytypes.v1.FormattedText new_content = 4;
 }
+// Used in the `UpdateMessageText` endpoint.
+message UpdateMessageTextResponse {}
 
 // Used in the `PinMessage` endpoint.
 message PinMessageRequest {

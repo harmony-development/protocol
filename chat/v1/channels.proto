@@ -6,6 +6,24 @@ package protocol.chat.v1;
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
+// An object representing a channel, without the ID.
+message Channel {
+  // The name of this channel.
+  string channel_name = 1;
+  // Whether this channel is a category or not.
+  bool is_category = 2;
+  // The metadata of this channel.
+  optional harmonytypes.v1.Metadata metadata = 3;
+}
+
+// The channel alongside with an ID.
+message ChannelWithId {
+  // ID of the channel.
+  uint64 channel_id = 1;
+  // The channel data.
+  Channel channel = 2;
+}
+
 // Channel Kinds:
 //
 // Channel kinds specified in an official Harmony protocol will start with a
@@ -16,40 +34,63 @@ option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 // h.voice can indicate that a channel has voice functionalities alongside
 // the usual text fare.
 //
+// Used in the `CreateChannel` endpoint.
 message CreateChannelRequest {
+  // Guild ID of the guild to create a channel in.
   uint64 guild_id = 1;
-  string channel_name = 2; //  [(validate.rules).string.min_len = 1]
+  // The name of this channel.
+  string channel_name = 2;
+  // Whether this channel is a category or not.
   bool is_category = 3;
-  harmonytypes.v1.ItemPosition position = 4;
-  harmonytypes.v1.Metadata metadata = 5;
+  // The metadata of this channel.
+  optional harmonytypes.v1.Metadata metadata = 4;
+  // The position of your new channel in the channel list.
+  //
+  // If not specified, it will be put at the bottom of the channel list.
+  optional harmonytypes.v1.ItemPosition position = 5;
 }
-message CreateChannelResponse { uint64 channel_id = 1; }
-
-message GetGuildChannelsRequest { uint64 guild_id = 1; }
-message GetGuildChannelsResponse {
-  message Channel {
-    harmonytypes.v1.Metadata metadata = 4;
-
-    uint64 channel_id = 1;
-    string channel_name = 2;
-    bool is_category = 3;
-  }
-
-  repeated Channel channels = 1;
+// Used in the `CreateChannel` endpoint. 
+message CreateChannelResponse {
+  // ID of the channel that was created.
+  uint64 channel_id = 1;
 }
 
-message UpdateChannelInformationRequest {
+// Used in the `GetGuildChannels` endpoint.
+message GetGuildChannelsRequest {
+  // Guild ID of the guild you want to get channels from.
   uint64 guild_id = 1;
+}
+// Used in the `GetGuildChannels` endpoint.
+message GetGuildChannelsResponse {
+  // Channels' data and ID the server responded with.
+  repeated ChannelWithId channels = 1;
+}
+
+// Used in the `UpdateChannelInformation` endpoint.
+message UpdateChannelInformationRequest {
+  // Guild ID of the guild where the channel is.
+  uint64 guild_id = 1;
+  // Channel ID of the channel you want to change the information of.
   uint64 channel_id = 2;
+  // New name to set for this channel.
   optional string new_name = 3;
+  // New metadata to set for this channel.
   optional harmonytypes.v1.Metadata new_metadata = 4;
 }
+// Used in the `UpdateChannelInformation` endpoint.
+message UpdateChannelInformationResponse {}
 
+// Used in the `UpdateChannelOrder` endpoint.
 message UpdateChannelOrderRequest {
+  // Guild ID of the guild that has the channel.
   uint64 guild_id = 1;
+  // Channel ID of the channel that you want to move.
   uint64 channel_id = 2;
-  optional harmonytypes.v1.ItemPosition new_position = 3;
+  // The new position of this channel.
+  harmonytypes.v1.ItemPosition new_position = 3;
 }
+// Used in the `UpdateChannelOrder` endpoint.
+message UpdateChannelOrderResponse {}
 
 // Request specifiying the order of all channels in a guild at once
 message UpdateAllChannelOrderRequest {
@@ -58,11 +99,18 @@ message UpdateAllChannelOrderRequest {
   // channel_ids: the new order of channel ids
   repeated uint64 channel_ids = 2;
 }
+// Used in the `UpdateAllChannelOrder` endpoint.
+message UpdateAllChannelOrderResponse {}
 
+// Used in the `DeleteChannel` endpoint.
 message DeleteChannelRequest {
+  // Guild ID of the guild that has the channel.
   uint64 guild_id = 1;
+  // Channel ID of the channel you want to delete.
   uint64 channel_id = 2;
 }
+// Used in the `DeleteChannel` endpoint.
+message DeleteChannelResponse {}
 
 // Used in `Typing` endpoint.
 message TypingRequest {

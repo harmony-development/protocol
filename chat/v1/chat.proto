@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-import "google/protobuf/empty.proto";
 import "harmonytypes/v1/types.proto";
 import "chat/v1/guilds.proto";
 import "chat/v1/channels.proto";
@@ -85,7 +84,7 @@ service ChatService {
 
   // Endpoint to update a guild's information.
   rpc UpdateGuildInformation(UpdateGuildInformationRequest)
-      returns (google.protobuf.Empty) {
+      returns (UpdateGuildInformationResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "guild.manage.change-information";
@@ -93,7 +92,7 @@ service ChatService {
 
   // Endpoint to update a channel's information.
   rpc UpdateChannelInformation(UpdateChannelInformationRequest)
-      returns (google.protobuf.Empty) {
+      returns (UpdateChannelInformationResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "channels.manage.change-information";
@@ -101,7 +100,7 @@ service ChatService {
 
   // Endpoint to change the position of a channel in the channel list.
   rpc UpdateChannelOrder(UpdateChannelOrderRequest)
-      returns (google.protobuf.Empty) {
+      returns (UpdateChannelOrderResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "channels.manage.move";
@@ -110,36 +109,35 @@ service ChatService {
   // Endpoint to change the position of all channels in the guild;
   // must specifcy all channels or fails
   rpc UpdateAllChannelOrder(UpdateAllChannelOrderRequest)
-      returns (google.protobuf.Empty) {
+      returns (UpdateAllChannelOrderResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "channels.manage.move";
   }
 
   // Endpoint to change the text of a message.
-  rpc UpdateMessageText(UpdateMessageTextRequest)
-      returns (google.protobuf.Empty) {
+  rpc UpdateMessageText(UpdateMessageTextRequest) returns (UpdateMessageTextResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "messages.send";
   }
 
   // Endpoint to delete a guild.
-  rpc DeleteGuild(DeleteGuildRequest) returns (google.protobuf.Empty) {
+  rpc DeleteGuild(DeleteGuildRequest) returns (DeleteGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "guild.manage.delete";
   }
 
   // Endpoint to delete an invite.
-  rpc DeleteInvite(DeleteInviteRequest) returns (google.protobuf.Empty) {
+  rpc DeleteInvite(DeleteInviteRequest) returns (DeleteInviteResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "invites.manage.delete";
   }
 
   // Endpoint to delete a channel.
-  rpc DeleteChannel(DeleteChannelRequest) returns (google.protobuf.Empty) {
+  rpc DeleteChannel(DeleteChannelRequest) returns (DeleteChannelResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "channels.manage.delete";
@@ -149,7 +147,7 @@ service ChatService {
   //
   // This requires the "messages.manage.delete" permission if you are not the
   // message author.
-  rpc DeleteMessage(DeleteMessageRequest) returns (google.protobuf.Empty) {
+  rpc DeleteMessage(DeleteMessageRequest) returns (DeleteMessageResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
@@ -159,12 +157,12 @@ service ChatService {
   }
 
   // Endpoint to leave a guild.
-  rpc LeaveGuild(LeaveGuildRequest) returns (google.protobuf.Empty) {
+  rpc LeaveGuild(LeaveGuildRequest) returns (LeaveGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
   // Endpont to trigger an action.
-  rpc TriggerAction(TriggerActionRequest) returns (google.protobuf.Empty) {
+  rpc TriggerAction(TriggerActionRequest) returns (TriggerActionResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "actions.trigger";
@@ -178,8 +176,7 @@ service ChatService {
   }
 
   // Endpoint to query if a user has a permission.
-  rpc QueryHasPermission(QueryPermissionsRequest)
-      returns (QueryPermissionsResponse) {
+  rpc QueryHasPermission(QueryHasPermissionRequest) returns (QueryHasPermissionResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     // This permissions node is only required if you're trying
     // to see if someone besides yourself has a permission.
@@ -189,7 +186,7 @@ service ChatService {
   }
 
   // Endpoint to set permissions for a role in a guild.
-  rpc SetPermissions(SetPermissionsRequest) returns (google.protobuf.Empty) {
+  rpc SetPermissions(SetPermissionsRequest) returns (SetPermissionsResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "permissions.manage.set";
@@ -221,19 +218,19 @@ service ChatService {
   }
 
   // Endpoint to a modify a role from a guild.
-  rpc ModifyGuildRole(ModifyGuildRoleRequest) returns (google.protobuf.Empty) {
+  rpc ModifyGuildRole(ModifyGuildRoleRequest) returns (ModifyGuildRoleResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "roles.manage";
   }
 
   // Endpoint to delete a role from a guild.
-  rpc DeleteGuildRole(DeleteGuildRoleRequest) returns (google.protobuf.Empty) {
+  rpc DeleteGuildRole(DeleteGuildRoleRequest) returns (DeleteGuildRoleResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node = "roles.manage";
   }
 
   // Endpoint to manage the roles of a guild member.
-  rpc ManageUserRoles(ManageUserRolesRequest) returns (google.protobuf.Empty) {
+  rpc ManageUserRoles(ManageUserRolesRequest) returns (ManageUserRolesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "roles.user.manage";

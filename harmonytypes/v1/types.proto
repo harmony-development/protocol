@@ -20,17 +20,25 @@ message HarmonyMethodMetadata {
 }
 
 extend google.protobuf.MethodOptions {
+  // Harmony method metadata.
   HarmonyMethodMetadata metadata = 1091;
 }
 
+// Metadata type used by many messages.
 message Metadata {
+  // Kind of this metadata.
   string kind = 1;
+  // A map containing information.
   map<string, google.protobuf.Any> extension = 2;
 }
 
+// Error type that will be returned by servers. 
 message Error {
+  // The identifier of this error, can be used as an i18n key.
   string identifier = 1;
+  // A (usually english) human message for this error.
   string human_message = 2;
+  // More details about this message. Is dependent on the endpoint.
   bytes more_details = 3;
 }
 
@@ -176,21 +184,29 @@ message FormattedText {
 message ItemPosition {
   // An object that represents the top of an ordered list.
   message Top {
+    // The ID of the next item.
     uint64 next_id = 1;
   }
   // An object that represents a place between two items in an ordered list.
   message Between {
+    // The ID of the previous item.
     uint64 previous_id = 1;
+    // The ID of the next item.
     uint64 next_id = 2;
   }
   // An object that represents the bottom of an ordered list.
   message Bottom {
+    // The ID of the previous item.
     uint64 previous_id = 1;
   }
 
+  // Position of this item.
   oneof position {
+    // The item is at the top.
     Top top = 1;
+    // The item is in between two other items.
     Between between = 2;
+    // The item is at the bottom.
     Bottom bottom = 3;
   }
 }
