@@ -115,17 +115,17 @@ message Format {
 		// The kind of colour modification to apply
 		enum Kind {
 			// Dimmed colour
-			DIM = 0;
+			KIND_DIM_UNSPECIFIED = 0;
 			// Brightened colour
-			BRIGHT = 1;
+			KIND_BRIGHT = 1;
 			// Negative colour (usually red)
-			NEGATIVE = 2;
+			KIND_NEGATIVE = 2;
 			// Positive colour (usually green)
-			POSITIVE = 3;
+			KIND_POSITIVE = 3;
 			// Informational colour (usually blue)
-			INFO = 4;
+			KIND_INFO = 4;
 			// Warning colour (usually yellow-orange)
-			WARNING = 5;
+			KIND_WARNING = 5;
 		}
 
 		// The kind of colour modification to apply
