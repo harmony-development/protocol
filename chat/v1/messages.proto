@@ -245,6 +245,14 @@ message Message {
   Content content = 7;
 }
 
+// Object representing a message with it's ID.
+message MessageWithId {
+  // ID of the message.
+  uint64 message_id = 1;
+  // The message data.
+  Message message = 2;
+}
+
 // Used in the `GetChannelMessages` endpoint.
 message GetChannelMessagesRequest {
   // The direction relative to the `message_id` message to get messages from.
@@ -289,14 +297,6 @@ message GetChannelMessagesRequest {
 }
 // Used in the `GetChannelMessages` endpoint.
 message GetChannelMessagesResponse {
-  // Object representing a message with it's ID.
-  message MessageWithId {
-    // ID of the message.
-    uint64 message_id = 1;
-    // The message data.
-    Message message = 2;
-  }
-
   // Has reached the top (first message) of the message history.
   bool reached_top = 1;
   // Has reached the bottom (last message) of the message history.
