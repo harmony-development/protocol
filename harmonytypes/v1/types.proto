@@ -56,6 +56,130 @@ message Token {
   bytes data = 2;
 }
 
+// A format for text
+message Format {
+	// Bold text
+	message Bold { }
+	// Italic text
+	message Italic { }
+	// Underlined text
+	message Underline { }
+	// Monospace text
+	message Monospace { }
+	// Superscript text
+	message Superscript { }
+	// Subscript text
+	message Subscript { }
+	// A larger codeblock, with a programming language specified
+	// Clients should ideally not bound the width of codeblock messages,
+	// possibly scrolling the codeblock horizontally separately from the
+	// rest of the message
+	message CodeBlock {
+		// programming language of the code block
+		string language = 1;
+	}
+
+	// Mention of a user (on the current homeserver)
+	message UserMention {
+		// user_id of the user being mentioned
+		uint64 user_id = 1;
+	}
+	// Mention of a role (on the current guild)
+	message RoleMention {
+    // the role being mentioned
+		uint64 role_id = 1;
+	}
+	// Mention of a channel (on the current guild)
+	message ChannelMention {
+    // the channel being mentioned
+		uint64 channel_id = 1;
+	}
+	// Mention of a guild
+	message GuildMention {
+    // the guild being mentioned
+		uint64 guild_id = 1;
+    // which homeserver it belongs to
+		string homeserver = 2;
+	}
+
+	// An emoji
+	message Emoji {
+		// The HMC URL of the emoji
+		string image_hmc = 1;
+		// The ID of the emoji pack the emoji is from
+		uint64 pack_id = 2;
+	}
+
+	// Colour modification
+	message Color {
+		// The kind of colour modification to apply
+		enum Kind {
+			// Dimmed colour
+			DIM = 0;
+			// Brightened colour
+			BRIGHT = 1;
+			// Negative colour (usually red)
+			NEGATIVE = 2;
+			// Positive colour (usually green)
+			POSITIVE = 3;
+			// Informational colour (usually blue)
+			INFO = 4;
+			// Warning colour (usually yellow-orange)
+			WARNING = 5;
+		}
+
+		// The kind of colour modification to apply
+		Kind kind = 1;
+	}
+
+  // where the format begins to apply to
+	uint32 start = 1;
+  // how many characters the format is
+	uint32 length = 2;
+
+  // the style if format to apply to this text
+	oneof format {
+		// a text format for bold text
+    Bold bold = 3;
+		// a text format for italic text
+    Italic italic = 4;
+		// a text format for underline text
+    Underline underline = 5;
+		// a text format for monospace text
+    Monospace monospace = 6;
+		// a text format for superscript text
+    Superscript superscript = 7;
+		// a text format for subscript text
+    Subscript subscript = 8;
+		// a text format for a codeblock
+    CodeBlock code_block = 9;
+
+		// a text format for a user mention
+    UserMention user_mention = 10;
+		// a text format for a role mention
+    RoleMention role_mention = 11;
+		// a text format for a channel mention
+    ChannelMention channel_mention = 12;
+		// a text format for a guild mention
+    GuildMention guild_mention = 13;
+
+		// a text format for an emoji
+    Emoji emoji = 14;
+
+		// a text format for coloured text
+    Color color = 16;
+	}
+};
+
+// Formatted text
+message FormattedText {
+	// The textual content of a message
+	string text = 1;
+
+	// The formats for a message
+	repeated Format format = 2;
+}
+
 // An object representing an item position between two other items.
 message ItemPosition {
   // An object that represents the top of an ordered list.

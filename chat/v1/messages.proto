@@ -110,7 +110,7 @@ message Embed {
     // Subtitle of this field.
     optional string subtitle = 2;
     // Body text of this field (eg. a description).
-    optional string body = 3;
+    optional harmonytypes.v1.FormattedText body = 3;
     // Image URL of this field.
     optional string image_url = 4;
     // How to present this field.
@@ -122,7 +122,7 @@ message Embed {
   // Title of this embed.
   string title = 1;
   // Body text of this embed.
-  optional string body = 2;
+  optional harmonytypes.v1.FormattedText body = 2;
   // Color of this embed.
   optional int32 color = 3;
   // Embed heading for the header.
@@ -172,7 +172,7 @@ message Photo {
   // The width of the photo, in pixels.
   uint32 width = 5;
   // The photo's caption.
-  optional string caption = 6;
+  harmonytypes.v1.FormattedText caption = 6;
   // A thumbnail representing the photo.
   Minithumbnail minithumbnail = 7;
 }
@@ -188,7 +188,7 @@ message Attachment {
   // Size of this attachment.
   uint32 size = 4;
   // Caption of this attachment.
-  optional string caption = 5;
+  optional harmonytypes.v1.FormattedText caption = 5;
 }
 
 // Object representing a message's content.
@@ -196,7 +196,7 @@ message Content {
   // Object representing text content.
   message TextContent {
     // Text content.
-    string content = 1;
+    harmonytypes.v1.FormattedText content = 1;
   }
   // Object representing embed content.
   message EmbedContent {
@@ -382,7 +382,7 @@ message UpdateMessageTextRequest {
   // Message ID of the message you want to edit the text of.
   uint64 message_id = 3;
   // New content for this message.
-  string new_content = 4;
+  harmonytypes.v1.FormattedText new_content = 4;
 }
 // Used in the `UpdateMessageText` endpoint.
 message UpdateMessageTextResponse {}
