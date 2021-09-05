@@ -26,6 +26,22 @@ message Invite {
   uint32 use_count = 2;
 }
 
+// Invite with ID.
+message InviteWithId {
+  // ID of the invite.
+  string invite_id = 1;
+  // The invite data.
+  Invite invite = 2;
+}
+
+// Object representing a guild list entry.
+message GuildListEntry {
+  // Guild ID of this guild entry.
+  uint64 guild_id = 1;
+  // Homeserver of this guild.
+  string host = 2;
+}
+
 // Request type used in `CreateGuild` RPC. 
 message CreateGuildRequest {
   // The guild data to create a request with.
@@ -59,14 +75,6 @@ message CreateInviteResponse {
 message GetGuildListRequest {}
 // Used in the `GetGuildList` endpoint.
 message GetGuildListResponse {
-  // Object representing a guild list entry.
-  message GuildListEntry {
-    // Guild ID of this guild entry.
-    uint64 guild_id = 1;
-    // Homeserver of this guild.
-    string host = 2;
-  }
-
   // Guild list returned by the server.
   repeated GuildListEntry guilds = 1;
 }
@@ -89,14 +97,6 @@ message GetGuildInvitesRequest {
 }
 // Used in the `GetGuildInvites` endpoint.
 message GetGuildInvitesResponse {
-  // Object representing invite data with that invite's ID.
-  message InviteWithId {
-    // ID of the invite.
-    string invite_id = 1;
-    // The invite data.
-    Invite invite = 2;
-  }
-
   // The invites of the guild, with IDs.
   repeated InviteWithId invites = 1;
 }

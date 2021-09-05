@@ -16,6 +16,14 @@ message Channel {
   optional harmonytypes.v1.Metadata metadata = 3;
 }
 
+// The channel alongside with an ID.
+message ChannelWithId {
+  // ID of the channel.
+  uint64 channel_id = 1;
+  // The channel data.
+  Channel channel = 2;
+}
+
 // Channel Kinds:
 //
 // Channel kinds specified in an official Harmony protocol will start with a
@@ -50,13 +58,6 @@ message GetGuildChannelsRequest {
 }
 // Used in the `GetGuildChannels` endpoint.
 message GetGuildChannelsResponse {
-  // The channel data, alongside with an ID.
-  message ChannelWithId {
-    // ID of the channel.
-    uint64 channel_id = 1;
-    // The channel data.
-    Channel channel = 2;
-  }
   // Channels' data and ID the server responded with.
   repeated ChannelWithId channels = 1;
 }

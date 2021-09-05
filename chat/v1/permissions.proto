@@ -6,6 +6,18 @@ import "harmonytypes/v1/types.proto";
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
+// Object representing a role without the ID.
+message Role {
+  // the role name.
+  string name = 1;
+  // the role color.
+  int32 color = 2;
+  // whether the role is hoisted or not.
+  bool hoist = 3;
+  // whether the role is mentionable or not.
+  bool pingable = 4;
+}
+
 // Used in the `QueryHasPermission` endpoint.
 message QueryHasPermissionRequest {
   // the guild ID to query permissions for
@@ -65,18 +77,6 @@ message GetPermissionsRequest {
 message GetPermissionsResponse {
   // the permissions list for the given role.
   repeated Permission perms = 1;
-}
-
-// Object representing a role without the ID.
-message Role {
-  // the role name.
-  string name = 1;
-  // the role color.
-  int32 color = 2;
-  // whether the role is hoisted or not.
-  bool hoist = 3;
-  // whether the role is mentionable or not.
-  bool pingable = 4;
 }
 
 // Used in the `MoveRole` endpoint.
