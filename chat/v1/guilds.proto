@@ -42,6 +42,16 @@ message GuildListEntry {
   string host = 2;
 }
 
+// A reason for why a user has left a guild.
+enum LeaveReason {
+  // The user left the guild willingly.
+  LEAVE_REASON_WILLINGLY_UNSPECIFIED = 0;
+  // The user was banned from the guild.
+  LEAVE_REASON_BANNED = 1;
+  // The user was kicked from the guild.
+  LEAVE_REASON_KICKED = 2;
+}
+
 // Request type used in `CreateGuild` RPC. 
 message CreateGuildRequest {
   // The name of the guild.

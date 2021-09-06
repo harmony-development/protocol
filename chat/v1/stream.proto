@@ -6,6 +6,7 @@ import "harmonytypes/v1/types.proto";
 import "google/protobuf/timestamp.proto";
 import "chat/v1/permissions.proto";
 import "chat/v1/messages.proto";
+import "chat/v1/guilds.proto";
 import "emote/v1/stream.proto";
 import "profile/v1/stream.proto";
 
@@ -49,16 +50,6 @@ message StreamEventsResponse {
 
 // Describes an event.
 message StreamEvent {
-  // A reason for why a user has left a guild.
-  enum LeaveReason {
-    // The user left the guild willingly.
-    LEAVE_REASON_WILLINGLY_UNSPECIFIED = 0;
-    // The user was banned from the guild.
-    LEAVE_REASON_BANNED = 1;
-    // The user was kicked from the guild.
-    LEAVE_REASON_KICKED = 2;
-  }
-
   // Event sent when a new message is sent.
   message MessageSent {
     // ID that is sent by your client it can use to confirm that the message is sent.
@@ -184,7 +175,7 @@ message StreamEvent {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 2;
     // Why this member left the guild.
-    LeaveReason leave_reason = 3;
+    chat.v1.LeaveReason leave_reason = 3;
   }
 
   // Event sent when you join a new guild.
