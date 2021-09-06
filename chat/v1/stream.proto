@@ -75,7 +75,7 @@ message StreamEvent {
     // When this message was edited.
     google.protobuf.Timestamp edited_at = 4;
     // New message content.
-    string new_content = 5;
+    harmonytypes.v1.FormattedText new_content = 5;
   }
 
   // Event sent when a message is deleted.
