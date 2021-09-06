@@ -241,8 +241,14 @@ message StreamEvent {
     uint64 guild_id = 1;
     // Role ID of the role that was created.
     uint64 role_id = 2;
-    // The actual role.
-    chat.v1.Role role = 3;
+    // The name of the role.
+    string name = 3;
+    // The color of the role.
+    int32 color = 4;
+    // The hoist status of the role.
+    bool hoist = 5;
+    // The pingable status of the role.
+    bool pingable = 6;
   }
 
   // Event sent when a role's information is changed.
@@ -303,7 +309,7 @@ message StreamEvent {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
     // Channel ID of the channel where this event happened.
-    uint64 channel_id = 2;
+    optional uint64 channel_id = 2;
     // The permission node that was changed.
     string query = 3;
     // Whether you have the permission or not.
