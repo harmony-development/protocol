@@ -5,6 +5,7 @@ package protocol.chat.v1;
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 import "harmonytypes/v1/types.proto";
+import "emote/v1/types.proto";
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
@@ -227,6 +228,18 @@ message Content {
   }
 }
 
+// Object representing a reaction.
+message Reaction {
+  // Emote data for this reaction.
+  //
+  // Emote's image ID is used as an identifier for unique reactions.
+  // Emotes with the same names should be "deduplicated" by a client, by suffixing
+  // their names with `~1`, `~2` and so on.
+  emote.v1.Emote emote = 1;
+  // How many reactions this reaction has.
+  uint32 count = 2;
+}
+
 // Object representing a message without the ID part.
 message Message {
   // Metadata of this message.
@@ -243,6 +256,8 @@ message Message {
   optional uint64 in_reply_to = 6;
   // The content of the message.
   Content content = 7;
+  // The reactions of the message.
+  repeated Reaction reactions = 8;
 }
 
 // Object representing a message with it's ID.
@@ -424,3 +439,31 @@ message GetPinnedMessagesResponse {
   // The IDs of the pinned messages.
   repeated uint64 pinned_message_ids = 1;
 }
+
+// Used in `AddReaction` endpoint.
+message AddReactionRequest {
+  // Guild ID of the guild where the channel is.
+  uint64 guild_id = 1;
+  // Channel ID of the channel where the message is.
+  uint64 channel_id = 2;
+  // Message ID of the message we want to add a reaction to.
+  uint64 message_id = 3;
+  // The emote we want to react with.
+  emote.v1.Emote emote = 4;
+}
+// Used in `AddReaction` endpoint.
+message AddReactionResponse {}
+
+// Used in `RemoveReaction` endpoint.
+message RemoveReactionRequest {
+  // Guild ID of the guild where the channel is.
+  uint64 guild_id = 1;
+  // Channel ID of the channel where the message is.
+  uint64 channel_id = 2;
+  // Message ID of the message we want to remove a reaction.
+  uint64 message_id = 3;
+  // The emote we want to remove the react of.
+  emote.v1.Emote emote = 4;
+}
+// Used in `RemoveReaction` endpoint.
+message RemoveReactionResponse {}

@@ -333,6 +333,18 @@ message StreamEvent {
     uint64 message_id = 3;
   }
 
+  // Sent when a message's reaction is changed.
+  message ReactionUpdated {
+    // Guild ID of the guild where this event occured.
+    uint64 guild_id = 1;
+    // Channel ID of the channel where this event occured.
+    uint64 channel_id = 2;
+    // Message ID of the message that had a reaction updated.
+    uint64 message_id = 3;
+    // The reaction.
+    chat.v1.Reaction reaction = 4;
+  }
+
   // Which event to send.
   oneof event {
     // Send the guild added to list event.
@@ -385,5 +397,7 @@ message StreamEvent {
     MessagePinned message_pinned = 24;
     // Send the message unpinned event.
     MessageUnpinned message_unpinned = 25;
+    // Send the reaction updated event.
+    ReactionUpdated reaction_updated = 26;
   }
 }

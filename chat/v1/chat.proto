@@ -313,4 +313,18 @@ service ChatService {
   rpc StreamEvents(stream StreamEventsRequest) returns (stream StreamEventsResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
+
+  // Endpoint to add a reaction to a message.
+  rpc AddReaction(AddReactionRequest) returns (AddReactionResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "messages.reactions.add";
+  }
+
+  // Endpoint to remove a reaction from a message.
+  rpc RemoveReaction(RemoveReactionRequest) returns (RemoveReactionResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "messages.reactions.remove";
+  }
 }
