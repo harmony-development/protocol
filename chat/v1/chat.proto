@@ -259,6 +259,13 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = false;
   }
 
+  // Endpoint to get banned users in a guild.
+  rpc GetBannedUsers(GetBannedUsersRequest) returns (GetBannedUsersResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "guild.manage.change-information";
+  }
+
   // Endpoint to ban a user from a guild.
   rpc BanUser(BanUserRequest) returns (BanUserResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
