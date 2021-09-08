@@ -1,17 +1,19 @@
-project('harmony-protocol')
+project('harmony-protocol', 'c')
 
-declare_dependency(
-    'protocols',
-    sources : [
-        'auth/v1/auth.proto',
-        'harmonytypes/v1/types.proto',
-        'chat/v1/messages.proto',
-        'chat/v1/channels.proto',
-        'chat/v1/emotes.proto',
-        'chat/v1/guilds.proto',
-        'chat/v1/permissions.proto',
-        'chat/v1/profile.proto',
-        'chat/v1/streaming.proto',
-        'chat/v1/chat.proto',
-    ]
-)
+pkg = import('pkgconfig')
+
+harmony = get_option('includedir') / 'harmony-protocols'
+
+install_subdir('auth', install_dir: harmony)
+install_subdir('batch', install_dir: harmony)
+install_subdir('chat', install_dir: harmony)
+install_subdir('emote', install_dir: harmony)
+install_subdir('harmonytypes', install_dir: harmony)
+install_subdir('mediaproxy', install_dir: harmony)
+install_subdir('profile', install_dir: harmony)
+install_subdir('sync', install_dir: harmony)
+install_subdir('voice', install_dir: harmony)
+
+lib = library('harmony-protocol')
+
+pkg.generate(lib)
