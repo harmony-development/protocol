@@ -220,3 +220,14 @@ message UnbanUserRequest {
 }
 // Used in `UnbanUser` endpoint.
 message UnbanUserResponse {}
+
+// Used in `GetBannedUsers` endpoint.
+message GetBannedUsersRequest {
+  // Guild ID to get banned users for.
+  uint64 guild_id = 1;
+}
+// Used in `GetBannedUsers` endpoint.
+message GetBannedUsersResponse {
+  // The user IDs of banned users.
+  repeated uint64 banned_users = 1;
+}
