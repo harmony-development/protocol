@@ -181,9 +181,8 @@ message StreamStepsResponse {
 
 // The request to federate with a foreign server.
 message FederateRequest {
-  // target: the foreign server you want to
-  // federate with
-  string target = 1;
+  // The server ID foreign server you want to federate with
+  string server_id = 1;
 }
 
 // The reply to a successful federation request,
@@ -210,8 +209,8 @@ message LoginFederatedRequest {
   // A `harmonytypes.v1.Token` whose `data` field is a serialized `TokenData` message.
   // It is signed with the homeserver's private key.
   harmonytypes.v1.Token auth_token = 1;
-  // domain: the homeserver that the auth token is from
-  string domain = 2;
+  // The server ID of the homeserver that the auth token is from
+  string server_id = 2;
 }
 
 // Used in `LoginFederated` endpoint.
@@ -225,8 +224,8 @@ message LoginFederatedResponse {
 message TokenData {
   // The client's user ID on the homeserver.
   uint64 user_id = 1;
-  // The foreignserver's server name.
-  string target = 2;
+  // The foreignserver's server ID.
+  string server_id = 2;
   // The username of the client.
   string username = 3;
   // The avatar of the client.

@@ -6,11 +6,11 @@ option go_package = "github.com/harmony-development/legato/gen/sync/v1";
 
 // Authentication data that will be sent in a `harmonytypes.v1.Token`.
 message AuthData {
-  // The server name of the server initiating the transaction. For Pull,
+  // The server ID of the server initiating the transaction. For Pull,
   // this tells the server being connected to which homeservers' events it should send.
   // For Push, this tells the server being connected to which homeservers' events it is
   // receiving.
-  string host = 1;
+  string server_id = 1;
   // The UTC UNIX time in seconds of when the request is started. Servers should reject
   // tokens with a time too far from the current time, at their discretion. A recommended
   // variance is 1 minute.
@@ -59,6 +59,14 @@ message PushRequest {
 // Used in `Push` endpoint.
 message PushResponse {}
 
+// Used in `NotifyNewId` endpoint.
+message NotifyNewIdRequest {
+  // The new server ID of the server.
+  string new_server_id = 1;
+}
+// Used in `NotifyNewId` endpoint.
+message NotifyNewIdResponse {}
+
 // # Postbox
 //
 // The postbox service forms the core of Harmony's server <-> server communications.
@@ -68,6 +76,13 @@ message PushResponse {}
 //
 // The semantics of events are documented in the event types. The postbox service
 // is solely reliable for reliable pushing and pulling.
+//
+// ## Server Identification
+//
+// Servers are identified using their domain, and the port which they serve. This is
+// called the "server ID", and must be formatted as `domain:port`. The port is NOT
+// optional. Converting this ID to a URL for communicating can simply be done via
+// prefixing the ID with a protocol, eg. `https://`.
 //
 // ## Authorisation
 //
@@ -98,4 +113,7 @@ service PostboxService {
   rpc Pull(PullRequest) returns (PullResponse) {}
   // Endpoint to push events.
   rpc Push(PushRequest) returns (PushResponse) {}
+  // Endpoint to notify a server of a server ID change. It is called by the server
+  // that had it's server ID changed for all servers it has federated with.
+  rpc NotifyNewId(NotifyNewIdRequest) returns (NotifyNewIdResponse) {}
 }
