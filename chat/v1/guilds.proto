@@ -38,8 +38,8 @@ message InviteWithId {
 message GuildListEntry {
   // Guild ID of this guild entry.
   uint64 guild_id = 1;
-  // Homeserver of this guild.
-  string host = 2;
+  // Server ID of the homeserver of this guild.
+  string server_id = 2;
 }
 
 // A reason for why a user has left a guild.
