@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package protocol.chat.v1;
 
-import "google/protobuf/timestamp.proto";
-import "google/protobuf/empty.proto";
 import "harmonytypes/v1/types.proto";
 import "emote/v1/types.proto";
 
@@ -20,13 +18,13 @@ message Override {
     // a custom reason in case the builtin ones don't fit
     string user_defined = 3;
     // the override occured because of a webhook
-    google.protobuf.Empty webhook = 4;
+    harmonytypes.v1.Empty webhook = 4;
     // plurality, not system as in computer
-    google.protobuf.Empty system_plurality = 5;
+    harmonytypes.v1.Empty system_plurality = 5;
     // the override occured because it was made by the server
-    google.protobuf.Empty system_message = 6;
+    harmonytypes.v1.Empty system_message = 6;
     // the override occured because of bridging
-    google.protobuf.Empty bridge = 7;
+    harmonytypes.v1.Empty bridge = 7;
   }
 }
 
@@ -248,10 +246,10 @@ message Message {
   Override overrides = 2;
   // User ID of the user who sent this message.
   uint64 author_id = 3;
-  // When this message was created.
-  google.protobuf.Timestamp created_at = 4;
-  // The most recent time this message was edited.
-  optional google.protobuf.Timestamp edited_at = 5;
+  // When this message was created, in miliseconds since unix epoch
+  uint64 created_at = 4;
+  // The most recent time this message was edited, in milliseconds since unix epoch
+  optional uint64 edited_at = 5;
   // The message this message is a reply to.
   optional uint64 in_reply_to = 6;
   // The content of the message.

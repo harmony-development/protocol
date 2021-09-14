@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-import "google/protobuf/empty.proto";
 import "harmonytypes/v1/types.proto";
 
 package protocol.voice.v1;
@@ -14,7 +13,7 @@ message Signal {
     // WebRTC ICE candidate event.
     string ice_candidate = 1;
     // Event sent when a renegotiation is needed in the WebRTC connection.
-    google.protobuf.Empty renegotiation_needed = 2;
+    harmonytypes.v1.Empty renegotiation_needed = 2;
   }
 }
 
