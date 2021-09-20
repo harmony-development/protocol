@@ -12,13 +12,13 @@ message ProfileUpdated {
   // User ID of the user that had it's profile updated.
   uint64 user_id = 1;
   // New username for this user.
-  optional string new_username = 2;
+  oneof optional_new_username { string new_username = 2; }
   // New avatar for this user.
-  optional string new_avatar = 3;
+  oneof optional_new_avatar { string new_avatar = 3; }
   // New status for this user.
-  optional UserStatus new_status = 4;
+  oneof optional_new_status { UserStatus new_status = 4; }
   // New is bot or not for this user.
-  optional bool new_is_bot = 5;
+  oneof optional_new_is_bot { bool new_is_bot = 5; }
 }
 
 // Describes an emote service event.

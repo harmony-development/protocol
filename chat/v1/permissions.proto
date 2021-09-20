@@ -40,10 +40,10 @@ message QueryHasPermissionRequest {
   uint64 guild_id = 1;
   // the channel ID to query permissions for. If not set, it will query
   // permissions for the guild.
-  optional uint64 channel_id = 2;
+  oneof optional_channel_id { uint64 channel_id = 2; }
   // the user ID to query permissions for (if not provided, the current user is
   // assumed).
-  optional uint64 as = 4;
+  oneof optional_as { uint64 as = 4; }
   // the permission node to check for.
   string check_for = 3;
 }
@@ -59,7 +59,7 @@ message SetPermissionsRequest {
   uint64 guild_id = 1;
   // the channel ID to set permissions for. Only set if the role is for a
   // channel.
-  optional uint64 channel_id = 2;
+  oneof optional_channel_id { uint64 channel_id = 2; }
   // the role ID to set permissions for.
   uint64 role_id = 3;
   // the permission list to give.
@@ -77,7 +77,7 @@ message GetPermissionsRequest {
   uint64 guild_id = 1;
   // the channel ID to get permissions for. Only applicable for roles in a
   // channel.
-  optional uint64 channel_id = 2;
+  oneof optional_channel_id { uint64 channel_id = 2; }
   // the role ID to get permissions for.
   uint64 role_id = 3;
 }
@@ -146,13 +146,13 @@ message ModifyGuildRoleRequest {
   // the ID of the role to modify
   uint64 role_id = 2;
   // the new name of the role
-  optional string new_name = 3;
+  oneof optional_new_name { string new_name = 3; }
   // the new color of the role
-  optional int32 new_color = 4;
+  oneof optional_new_color { int32 new_color = 4; }
   // the new hoist status of the role
-  optional bool new_hoist = 5;
+  oneof optional_new_hoist { bool new_hoist = 5; }
   // the new pingable status of the role
-  optional bool new_pingable = 6;
+  oneof optional_new_pingable { bool new_pingable = 6; }
 }
 // Used in the `ModifyGuildRole` endpoint.
 message ModifyGuildRoleResponse {}

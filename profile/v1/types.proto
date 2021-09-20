@@ -45,13 +45,13 @@ message GetProfileResponse {
 // Used in `UpdateProfile` endpoint.
 message UpdateProfileRequest {
   // new name of the user.
-  optional string new_user_name = 1;
+  oneof optional_new_user_name { string new_user_name = 1; }
   // new user avatar.
-  optional string new_user_avatar = 2;
+  oneof optional_new_user_avatar { string new_user_avatar = 2; }
   // new status of the user.
-  optional UserStatus new_user_status = 3;
+  oneof optional_new_user_status { UserStatus new_user_status = 3; }
   // new whether the user is a bot or not.
-  optional bool new_is_bot = 4;
+  oneof optional_new_is_bot { bool new_is_bot = 4; }
 }
 
 // Used in `UpdateProfile` endpoint.

@@ -52,7 +52,7 @@ message StreamEvent {
   // Event sent when a new message is sent.
   message MessageSent {
     // ID that is sent by your client it can use to confirm that the message is sent.
-    optional uint64 echo_id = 1;
+    oneof optional_echo_id { uint64 echo_id = 1; }
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 2;
     // Channel ID of the channel where this event happened.
@@ -100,7 +100,7 @@ message StreamEvent {
     // Is this channel a category or not.
     bool is_category = 5;
     // Metadata for this channel.
-    optional harmonytypes.v1.Metadata metadata = 6;
+    oneof optional_metadata { harmonytypes.v1.Metadata metadata = 6; }
   }
 
   // Event sent when a channel's information is changed.
@@ -110,9 +110,9 @@ message StreamEvent {
     // Channel ID of the channel that was changed.
     uint64 channel_id = 2;
     // The new name of the channel. 
-    optional string new_name = 3;
+    oneof optional_new_name { string new_name = 3; }
     // The new metadata of the channel.
-    optional harmonytypes.v1.Metadata new_metadata = 4;
+    oneof optional_new_metadata { harmonytypes.v1.Metadata new_metadata = 4; }
   }
 
   // Event sent when a channel's position in the channel list is changed.
@@ -122,7 +122,7 @@ message StreamEvent {
     // Channel ID of the channel that was changed.
     uint64 channel_id = 2;
     // The new position of the channel.
-    optional harmonytypes.v1.ItemPosition new_position = 3;
+    oneof optional_new_position { harmonytypes.v1.ItemPosition new_position = 3; }
   }
 
   // Event sent when all channels have been reordered
@@ -146,11 +146,11 @@ message StreamEvent {
     // Guild ID of the guild that was changed.
     uint64 guild_id = 1;
     // The new name of the guild.
-    optional string new_name = 2;
+    oneof optional_new_name { string new_name = 2; }
     // The new picture of the guild.
-    optional string new_picture = 3;
+    oneof optional_new_picture { string new_picture = 3; }
     // The new metadata of the guild.
-    optional harmonytypes.v1.Metadata new_metadata = 4;
+    oneof optional_new_metadata { harmonytypes.v1.Metadata new_metadata = 4; }
   }
 
   // Event sent when a guild is deleted.
@@ -248,13 +248,13 @@ message StreamEvent {
     // Role ID of the role that was changed.
     uint64 role_id = 2;
     // The new name of the role.
-    optional string new_name = 3;
+    oneof optional_new_name { string new_name = 3; }
     // The new color of the role.
-    optional int32 new_color = 4;
+    oneof optional_new_color { int32 new_color = 4; }
     // The new hoist status of the role.
-    optional bool new_hoist = 5;
+    oneof optional_new_hoist { bool new_hoist = 5; }
     // The new pingable status of the role.
-    optional bool new_pingable = 6;
+    oneof optional_new_pingable { bool new_pingable = 6; }
   }
 
   // Event sent when a role's permissions are changed.
@@ -264,7 +264,7 @@ message StreamEvent {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
     // Channel ID of the channel where this event happened.
-    optional uint64 channel_id = 2;
+    oneof optional_channel_id { uint64 channel_id = 2; }
     // Role ID of the role that had it's permissions changed.
     uint64 role_id = 3;
     // The new permissions.
@@ -299,7 +299,7 @@ message StreamEvent {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
     // Channel ID of the channel where this event happened.
-    optional uint64 channel_id = 2;
+    oneof optional_channel_id { uint64 channel_id = 2; }
     // The permission node that was changed.
     string query = 3;
     // Whether you have the permission or not.

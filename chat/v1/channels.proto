@@ -13,7 +13,7 @@ message Channel {
   // Whether this channel is a category or not.
   bool is_category = 2;
   // The metadata of this channel.
-  optional harmonytypes.v1.Metadata metadata = 3;
+  oneof optional_metadata { harmonytypes.v1.Metadata metadata = 3; }
 }
 
 // The channel alongside with an ID.
@@ -43,11 +43,11 @@ message CreateChannelRequest {
   // Whether this channel is a category or not.
   bool is_category = 3;
   // The metadata of this channel.
-  optional harmonytypes.v1.Metadata metadata = 4;
+  oneof optional_metadata { harmonytypes.v1.Metadata metadata = 4; }
   // The position of your new channel in the channel list.
   //
   // If not specified, it will be put at the bottom of the channel list.
-  optional harmonytypes.v1.ItemPosition position = 5;
+  oneof optional_position { harmonytypes.v1.ItemPosition position = 5; }
 }
 // Used in the `CreateChannel` endpoint. 
 message CreateChannelResponse {
@@ -73,9 +73,9 @@ message UpdateChannelInformationRequest {
   // Channel ID of the channel you want to change the information of.
   uint64 channel_id = 2;
   // New name to set for this channel.
-  optional string new_name = 3;
+  oneof optional_new_name { string new_name = 3; }
   // New metadata to set for this channel.
-  optional harmonytypes.v1.Metadata new_metadata = 4;
+  oneof optional_new_metadata { harmonytypes.v1.Metadata new_metadata = 4; }
 }
 // Used in the `UpdateChannelInformation` endpoint.
 message UpdateChannelInformationResponse {}

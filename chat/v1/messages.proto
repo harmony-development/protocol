@@ -10,9 +10,9 @@ option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 // Overrides provide a way to override the name and avatar of a message.
 message Override {
   // the overridden username.
-  optional string username = 1;
+  oneof optional_username { string username = 1; }
   // the overridden avatar.
-  optional string avatar = 2;
+  oneof optional_avatar { string avatar = 2; }
   // the reason for overriding username and avatar.
   oneof reason {
     // a custom reason in case the builtin ones don't fit
@@ -46,7 +46,7 @@ message Action {
     // The text to show on the button.
     string text = 1;
     // The url the button should link to.
-    optional string url = 2;
+    oneof optional_url { string url = 2; }
   }
   // A dropdown menu that users can click on to trigger an action.
   message Dropdown {
@@ -85,11 +85,11 @@ message Embed {
     // Text of the heading.
     string text = 1;
     // Subtext of the heading.
-    optional string subtext = 2;
+    oneof optional_subtext { string subtext = 2; }
     // URL of the heading.
-    optional string url = 3;
+    oneof optional_url { string url = 3; }
     // Icon of the heading.
-    optional string icon = 4;
+    oneof optional_icon { string icon = 4; }
   }
 
   // Object representing an embed field.
@@ -107,11 +107,11 @@ message Embed {
     // Title of this field.
     string title = 1;
     // Subtitle of this field.
-    optional string subtitle = 2;
+    oneof optional_subtitle { string subtitle = 2; }
     // Body text of this field (eg. a description).
-    optional harmonytypes.v1.FormattedText body = 3;
+    oneof optional_body { harmonytypes.v1.FormattedText body = 3; }
     // Image URL of this field.
-    optional string image_url = 4;
+    oneof optional_image_url { string image_url = 4; }
     // How to present this field.
     Presentation presentation = 5;
     // Actions of this field.
@@ -121,13 +121,13 @@ message Embed {
   // Title of this embed.
   string title = 1;
   // Body text of this embed.
-  optional harmonytypes.v1.FormattedText body = 2;
+  oneof optional_body { harmonytypes.v1.FormattedText body = 2; }
   // Color of this embed.
-  optional int32 color = 3;
+  oneof optional_color { int32 color = 3; }
   // Embed heading for the header.
-  optional EmbedHeading header = 4;
+  oneof optional_header { EmbedHeading header = 4; }
   // Embed heading for the footer.
-  optional EmbedHeading footer = 5;
+  oneof optional_footer { EmbedHeading footer = 5; }
   // Fields of this embed.
   repeated EmbedField fields = 6;
 }
@@ -187,7 +187,7 @@ message Attachment {
   // Size of this attachment.
   uint32 size = 4;
   // Caption of this attachment.
-  optional harmonytypes.v1.FormattedText caption = 5;
+  oneof optional_caption { harmonytypes.v1.FormattedText caption = 5; }
 }
 
 // Object representing a message's content.
@@ -241,7 +241,7 @@ message Reaction {
 // Object representing a message without the ID part.
 message Message {
   // Metadata of this message.
-  optional harmonytypes.v1.Metadata metadata = 1;
+  oneof optional_metadata { harmonytypes.v1.Metadata metadata = 1; }
   // Overrides of this message.
   Override overrides = 2;
   // User ID of the user who sent this message.
@@ -249,9 +249,9 @@ message Message {
   // When this message was created, in miliseconds since unix epoch
   uint64 created_at = 4;
   // The most recent time this message was edited, in milliseconds since unix epoch
-  optional uint64 edited_at = 5;
+  oneof optional_edited_at { uint64 edited_at = 5; }
   // The message this message is a reply to.
-  optional uint64 in_reply_to = 6;
+  oneof optional_in_reply_to { uint64 in_reply_to = 6; }
   // The content of the message.
   Content content = 7;
   // The reactions of the message.
@@ -296,7 +296,7 @@ message GetChannelMessagesRequest {
   // item of the list returned.
   // - If it is "after", you will get the messages after the `message_id`
   // message.
-  optional Direction direction = 4;
+  oneof optional_direction { Direction direction = 4; }
   // How many messages to get.
   //
   // - If `0`, a recommended message count to return is 25. If the direction is
@@ -306,7 +306,7 @@ message GetChannelMessagesRequest {
   // to return *for each direction*, before and after.
   // - Servers should enforce their own maximum limit, and clamp this value to
   // the limit.
-  optional uint32 count = 5;
+  oneof optional_count { uint32 count = 5; }
 }
 // Used in the `GetChannelMessages` endpoint.
 message GetChannelMessagesResponse {
@@ -371,14 +371,14 @@ message SendMessageRequest {
   Content content = 3;
   // Echo ID of the new message. This can be used by clients to
   // determine whether a message is sent.
-  optional uint64 echo_id = 4;
+  oneof optional_echo_id { uint64 echo_id = 4; }
   // The overrides of this new message.
-  optional Override overrides = 6;
+  oneof optional_overrides { Override overrides = 6; }
   // The message this new message is a reply to.
-  optional uint64 in_reply_to = 7;
+  oneof optional_in_reply_to { uint64 in_reply_to = 7; }
 
   // The metadata of this new message.
-  optional harmonytypes.v1.Metadata metadata = 5;
+  oneof optional_metadata { harmonytypes.v1.Metadata metadata = 5; }
 }
 // Used in the `SendMessage` endpoint.
 message SendMessageResponse {

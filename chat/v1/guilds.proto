@@ -15,7 +15,7 @@ message Guild {
   // User ID of the owner of the guild.
   uint64 owner_id = 3;
   // Metadata of the guild.
-  optional harmonytypes.v1.Metadata metadata = 4;
+  oneof optional_metadata { harmonytypes.v1.Metadata metadata = 4; }
 }
 
 // Object representing an invite without the ID part.
@@ -59,7 +59,7 @@ message CreateGuildRequest {
   // The picture HMC of the guild.
   string picture = 2;
   // Metadata of the guild.
-  optional harmonytypes.v1.Metadata metadata = 3;
+  oneof optional_metadata { harmonytypes.v1.Metadata metadata = 3; }
 }
 // Used in the `CreateGuild` endpoint.
 message CreateGuildResponse {
@@ -130,11 +130,11 @@ message UpdateGuildInformationRequest {
   // Guild ID of the guild you want to update the information of.
   uint64 guild_id = 1;
   // New name for the guild.
-  optional string new_guild_name = 2;
+  oneof optional_new_guild_name { string new_guild_name = 2; }
   // New picture for the guild.
-  optional string new_guild_picture = 3;
+  oneof optional_new_guild_picture { string new_guild_picture = 3; }
   // New metadata for the guild.
-  optional harmonytypes.v1.Metadata new_metadata = 4;
+  oneof optional_new_metadata { harmonytypes.v1.Metadata new_metadata = 4; }
 }
 // Used in the `UpdateGuildInformation` endpoint.
 message UpdateGuildInformationResponse {}
