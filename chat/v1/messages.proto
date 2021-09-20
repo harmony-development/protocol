@@ -109,7 +109,7 @@ message Embed {
     // Subtitle of this field.
     optional string subtitle = 2;
     // Body text of this field (eg. a description).
-    optional harmonytypes.v1.FormattedText body = 3;
+    optional FormattedText body = 3;
     // Image URL of this field.
     optional string image_url = 4;
     // How to present this field.
@@ -121,7 +121,7 @@ message Embed {
   // Title of this embed.
   string title = 1;
   // Body text of this embed.
-  optional harmonytypes.v1.FormattedText body = 2;
+  optional FormattedText body = 2;
   // Color of this embed.
   optional int32 color = 3;
   // Embed heading for the header.
@@ -171,7 +171,7 @@ message Photo {
   // The width of the photo, in pixels.
   uint32 width = 5;
   // The photo's caption.
-  harmonytypes.v1.FormattedText caption = 6;
+  FormattedText caption = 6;
   // A thumbnail representing the photo.
   Minithumbnail minithumbnail = 7;
 }
@@ -187,7 +187,7 @@ message Attachment {
   // Size of this attachment.
   uint32 size = 4;
   // Caption of this attachment.
-  optional harmonytypes.v1.FormattedText caption = 5;
+  optional FormattedText caption = 5;
 }
 
 // Object representing a message's content.
@@ -195,7 +195,7 @@ message Content {
   // Object representing text content.
   message TextContent {
     // Text content.
-    harmonytypes.v1.FormattedText content = 1;
+    FormattedText content = 1;
   }
   // Object representing embed content.
   message EmbedContent {
@@ -236,6 +236,123 @@ message Reaction {
   emote.v1.Emote emote = 1;
   // How many reactions this reaction has.
   uint32 count = 2;
+}
+
+// A format for text
+message Format {
+  // Bold text
+  message Bold { }
+  // Italic text
+  message Italic { }
+  // Underlined text
+  message Underline { }
+  // Monospace text
+  message Monospace { }
+  // Superscript text
+  message Superscript { }
+  // Subscript text
+  message Subscript { }
+  // A larger codeblock, with a programming language specified
+  // Clients should ideally not bound the width of codeblock messages,
+  // possibly scrolling the codeblock horizontally separately from the
+  // rest of the message
+  message CodeBlock {
+    // programming language of the code block
+    string language = 1;
+  }
+  // Mention of a user (on the current homeserver)
+  message UserMention {
+    // user_id of the user being mentioned
+    uint64 user_id = 1;
+  }
+  // Mention of a role (on the current guild)
+  message RoleMention {
+    // the role being mentioned
+    uint64 role_id = 1;
+  }
+  // Mention of a channel (on the current guild)
+  message ChannelMention {
+    // the channel being mentioned
+    uint64 channel_id = 1;
+  }
+  // Mention of a guild
+  message GuildMention {
+    // the guild being mentioned
+    uint64 guild_id = 1;
+    // which homeserver it belongs to
+    string homeserver = 2;
+  }
+  // An emoji
+  message Emoji {
+    // The HMC URL of the emoji
+    string image_hmc = 1;
+    // The ID of the emoji pack the emoji is from
+    uint64 pack_id = 2;
+  }
+  // Colour modification
+  message Color {
+    // The kind of colour modification to apply
+    enum Kind {
+      // Dimmed colour
+      KIND_DIM_UNSPECIFIED = 0;
+      // Brightened colour
+      KIND_BRIGHT = 1;
+      // Negative colour (usually red)
+      KIND_NEGATIVE = 2;
+      // Positive colour (usually green)
+      KIND_POSITIVE = 3;
+      // Informational colour (usually blue)
+      KIND_INFO = 4;
+      // Warning colour (usually yellow-orange)
+      KIND_WARNING = 5;
+    }
+
+    // The kind of colour modification to apply
+    Kind kind = 1;
+  }
+
+    // where the format begins to apply to
+  uint32 start = 1;
+    // how many characters the format is
+  uint32 length = 2;
+
+   // the style if format to apply to this text
+  oneof format {
+    // a text format for bold text
+    Bold bold = 3;
+    // a text format for italic text
+    Italic italic = 4;
+    // a text format for underline text
+    Underline underline = 5;
+    // a text format for monospace text
+    Monospace monospace = 6;
+    // a text format for superscript text
+    Superscript superscript = 7;
+    // a text format for subscript text
+    Subscript subscript = 8;
+    // a text format for a codeblock
+    CodeBlock code_block = 9;
+    // a text format for a user mention
+    UserMention user_mention = 10;
+    // a text format for a role mention
+    RoleMention role_mention = 11;
+    // a text format for a channel mention
+    ChannelMention channel_mention = 12;
+    // a text format for a guild mention
+    GuildMention guild_mention = 13;
+    // a text format for an emoji
+    Emoji emoji = 14;
+    // a text format for coloured text
+    Color color = 15;
+  }
+}
+
+// Formatted text
+message FormattedText {
+  // The textual content of a message
+  string text = 1;
+  // The formats for a message
+  repeated Format format = 2;
 }
 
 // Object representing a message without the ID part.
@@ -395,7 +512,7 @@ message UpdateMessageTextRequest {
   // Message ID of the message you want to edit the text of.
   uint64 message_id = 3;
   // New content for this message.
-  harmonytypes.v1.FormattedText new_content = 4;
+  FormattedText new_content = 4;
 }
 // Used in the `UpdateMessageText` endpoint.
 message UpdateMessageTextResponse {}

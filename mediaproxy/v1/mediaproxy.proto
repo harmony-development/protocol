@@ -71,16 +71,16 @@ message CanInstantViewResponse {
 
 // Harmony service for fetching metadata and generating instant view for URLs.
 service MediaProxyService {
-    // Endpoint to fetch metadata for a URL.
-    rpc FetchLinkMetadata(FetchLinkMetadataRequest) returns (FetchLinkMetadataResponse) {
-        option (harmonytypes.v1.metadata).requires_authentication = true;
-    }
-    // Endpoint to instant view a website URL.
-    rpc InstantView(InstantViewRequest) returns (InstantViewResponse) {
-        option (harmonytypes.v1.metadata).requires_authentication = true;
-    }
-    // Endpoint to query if the server can generate an instant view for a website URL.
-    rpc CanInstantView(CanInstantViewRequest) returns (CanInstantViewResponse) {
-        option (harmonytypes.v1.metadata).requires_authentication = true;
-    }
+  // Endpoint to fetch metadata for a URL.
+  rpc FetchLinkMetadata(FetchLinkMetadataRequest) returns (FetchLinkMetadataResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+  // Endpoint to instant view a website URL.
+  rpc InstantView(InstantViewRequest) returns (InstantViewResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+  // Endpoint to query if the server can generate an instant view for a website URL.
+  rpc CanInstantView(CanInstantViewRequest) returns (CanInstantViewResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
 }
