@@ -8,7 +8,7 @@ import "emote/v1/types.proto";
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
 // Overrides provide a way to override the name and avatar of a message.
-message Override {
+message Overrides {
   // the overridden username.
   optional string username = 1;
   // the overridden avatar.
@@ -243,7 +243,7 @@ message Message {
   // Metadata of this message.
   optional harmonytypes.v1.Metadata metadata = 1;
   // Overrides of this message.
-  Override overrides = 2;
+  Overrides overrides = 2;
   // User ID of the user who sent this message.
   uint64 author_id = 3;
   // When this message was created, in miliseconds since unix epoch
@@ -373,7 +373,7 @@ message SendMessageRequest {
   // determine whether a message is sent.
   optional uint64 echo_id = 4;
   // The overrides of this new message.
-  optional Override overrides = 6;
+  optional Overrides overrides = 6;
   // The message this new message is a reply to.
   optional uint64 in_reply_to = 7;
 
