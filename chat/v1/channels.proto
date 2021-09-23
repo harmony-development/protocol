@@ -6,12 +6,23 @@ package protocol.chat.v1;
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
+// What kind the channel is.
+enum ChannelKind {
+  // A text channel. Allows you to simply send messages to a group of people.
+  CHANNEL_KIND_TEXT_UNSPECIFIED = 0;
+  // A voice channel. Allows you to talk to other people with voice.
+  CHANNEL_KIND_VOICE_MEDIA = 1;
+}
+
 // An object representing a channel, without the ID.
 message Channel {
   // The name of this channel.
   string channel_name = 1;
-  // Whether this channel is a category or not.
-  bool is_category = 2;
+  // The kind of channel this is.
+  // Data does not get inherently stored in the Channel type
+  // Instead, clients who understand a certain ChannelKind should
+  // fetch them from a separate RPC.
+  ChannelKind kind = 2;
   // The metadata of this channel.
   optional harmonytypes.v1.Metadata metadata = 3;
 }
@@ -49,7 +60,7 @@ message CreateChannelRequest {
   // If not specified, it will be put at the bottom of the channel list.
   optional harmonytypes.v1.ItemPosition position = 5;
 }
-// Used in the `CreateChannel` endpoint. 
+// Used in the `CreateChannel` endpoint.
 message CreateChannelResponse {
   // ID of the channel that was created.
   uint64 channel_id = 1;
