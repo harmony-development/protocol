@@ -201,10 +201,10 @@ message StreamEvent {
     uint64 channel_id = 2;
     // Message ID where this event happened.
     uint64 message_id = 3;
-    // Action ID of the action that was performed.
-    string action_id = 4;
-    // Action data.
-    string action_data = 5;
+    // User ID of the user that triggered the action
+    uint64 user_id = 4;
+    // The action data payload
+    ActionPayload payload = 5;
   }
 
   // Event sent when a role's position in the role list is changed.

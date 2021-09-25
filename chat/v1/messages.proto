@@ -28,6 +28,36 @@ message Overrides {
   }
 }
 
+// The payload sent to the bot when an action is triggered.
+message ActionPayload {
+  // The payload data for a button action
+  message Button {
+    // The data from the Button action
+    bytes data = 1;
+  }
+  // The payload for a dropdown action
+  message Dropdown {
+    // The user choice from the dropdown.
+    bytes choice = 1;
+  }
+  // The payload for a text input action
+  message Input {
+    // The user input.
+    string input = 1;
+    // The bot-provided data
+    bytes data = 2;
+  }
+  // The payload data
+  oneof payload {
+    // Payload for a button
+    Button button = 1;
+    // Payload for a dropdown
+    Dropdown dropdown = 2;
+    // Payload for a text input
+    Input input = 3;
+  }
+}
+
 // Actions are interactive elements that can exist within an embed.
 message Action {
   // The action type. This is primarily used to change the look of the action to
@@ -45,36 +75,54 @@ message Action {
   message Button {
     // The text to show on the button.
     string text = 1;
-    // The url the button should link to.
-    optional string url = 2;
+
+    // Action data, which should be used in the call to perform the action.
+    bytes data = 2;
+
+    // An external URL that the button links to.
+    // This makes it so that tapping this button will open said URL instead
+    // of triggering the action.
+    optional string url = 3;
   }
+
   // A dropdown menu that users can click on to trigger an action.
   message Dropdown {
     // The text describing the dropdown.
-    string text = 1;
+    string label = 1;
+
+    // An entry in the dropdown
+    message Entry {
+      // The dropdown's UI label.
+      string label = 1;
+
+      // The dropdown's associated data.
+      bytes data = 2;
+    }
+
     // The options in the dropdown.
-    repeated string options = 2;
+    repeated Entry entries = 2;
   }
   // A text input that users can type in to trigger an action.
   message Input {
     // The label describing the input.
     string label = 1;
-    // Whether to display this input wide.
-    bool wide = 2;
+    // Whether this text input should be a multiline one or not.
+    bool multiline = 2;
+    // Contextual data allowing the bot to discern what the user input is for
+    bytes data = 3;
   }
 
   // Type of the action.
   Type action_type = 1;
-  // ID of the action.
-  string id = 2;
+
   // The kind of the action.
   oneof kind {
     // Button action.
-    Button button = 3;
+    Button button = 2;
     // Dropdown action.
-    Dropdown dropdown = 4;
+    Dropdown dropdown = 3;
     // Input action.
-    Input input = 5;
+    Input input = 4;
   }
 }
 
@@ -470,10 +518,8 @@ message TriggerActionRequest {
   uint64 channel_id = 2;
   // Message ID of the message you want to trigger an action in.
   uint64 message_id = 3;
-  // Action ID of the action you want to trigger.
-  string action_id = 4;
-  // Action data to be passed to the action.
-  string action_data = 5;
+  // Payload of action data.
+  ActionPayload payload = 4;
 }
 // Used in the `TriggerAction` endpoint.
 message TriggerActionResponse {}
