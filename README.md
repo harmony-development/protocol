@@ -2,7 +2,9 @@
 
 This is the repository containing the Harmony protocol specification and documentation.
 
-To read about protocol conventions, please read [GUIDELINES](GUIDELINES.md)
+Read [here](FAQ.md) for frequently asked questions.
+
+To read about protocol conventions, please read [GUIDELINES](GUIDELINES.md).
 
 If you are looking for:
 
