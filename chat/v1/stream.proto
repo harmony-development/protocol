@@ -74,7 +74,7 @@ message StreamEvent {
     // When this message was edited, in milliseconds since unix epoch
     uint64 edited_at = 4;
     // New message content.
-    harmonytypes.v1.FormattedText new_content = 5;
+    chat.v1.FormattedText new_content = 5;
   }
 
   // Event sent when a message is deleted.
