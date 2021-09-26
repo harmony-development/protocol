@@ -3,9 +3,10 @@ syntax = "proto3";
 package protocol.chat.v1;
 
 import "harmonytypes/v1/types.proto";
-import "chat/v1/permissions.proto";
-import "chat/v1/messages.proto";
+import "chat/v1/channels.proto";
 import "chat/v1/guilds.proto";
+import "chat/v1/messages.proto";
+import "chat/v1/permissions.proto";
 import "emote/v1/stream.proto";
 import "profile/v1/stream.proto";
 
@@ -95,10 +96,10 @@ message StreamEvent {
     uint64 channel_id = 2;
     // Name of this channel.
     string name = 3;
-    // the position in the channel list.
+    // The position in the channel list.
     harmonytypes.v1.ItemPosition position = 4;
-    // Is this channel a category or not.
-    bool is_category = 5;
+    // The kind of this channel.
+    chat.v1.ChannelKind kind = 5;
     // Metadata for this channel.
     optional harmonytypes.v1.Metadata metadata = 6;
   }

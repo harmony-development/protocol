@@ -12,6 +12,9 @@ enum ChannelKind {
   CHANNEL_KIND_TEXT_UNSPECIFIED = 0;
   // A voice channel. Allows you to talk to other people with voice.
   CHANNEL_KIND_VOICE_MEDIA = 1;
+  // A category channel. All channels under this channel down to another
+  // category channel belongs to this category channel.
+  CHANNEL_KIND_CATEGORY = 2;
 }
 
 // An object representing a channel, without the ID.
@@ -51,8 +54,8 @@ message CreateChannelRequest {
   uint64 guild_id = 1;
   // The name of this channel.
   string channel_name = 2;
-  // Whether this channel is a category or not.
-  bool is_category = 3;
+  // The kind of this channel.
+  ChannelKind kind = 3;
   // The metadata of this channel.
   optional harmonytypes.v1.Metadata metadata = 4;
   // The position of your new channel in the channel list.
