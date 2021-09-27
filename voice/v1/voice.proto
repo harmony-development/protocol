@@ -144,8 +144,8 @@ message JoinChannelResponse {
   TransportOptions consumer_transport_options = 1;
   // Producer transport options
   TransportOptions producer_transport_options = 2;
-  // Router (aka server) RTP capabilities in JSON.
-  string router_rtp_capabilities = 3;
+  // Finalized router (aka server) RTP capabilities in JSON.
+  string finalized_rtp_capabilities = 3;
 }
 
 message LeaveChannelRequest {
@@ -158,6 +158,13 @@ message LeaveChannelRequest {
 message LeaveChannelResponse { }
 
 // Harmony service for facilitating voice operations using WebRTC.
+//
+// # Usage
+// 1. Call StreamMessage to be able to send RTC commands to server
+// 2. Call JoinChannel with the client RTP capabilities
+// 3. Use the returned transport options and finalized RTP capabilities to connect transports
+//   - Wait for the ConnectedTransport messages to arrive in stream
+// 4. Don't forget to handle incoming messages
 service VoiceService {
   // Endpoint to stream messages between client and server.
   rpc StreamMessage(stream StreamMessageRequest) returns (stream StreamMessageResponse) {
