@@ -29,36 +29,28 @@ message TransportOptions {
 
 // Used in `StreamMessage` endpoint.
 message StreamMessageRequest {
-  // Message to create a producer
-  message Produce {
-    // The media kind to be used in the producer.
-    MediaKind kind = 1;
-    // RTP paramaters in JSON.
-    string rtp_paramaters = 2;
+  message PrepareForJoinChannel {
+    // RTP capabilities in JSON.
+    string rtp_capabilities = 1;
   }
 
-  // Message to consume specified producer
-  message Consume {
-    // ID of the producer to consume.
-    string producer_id = 1;
+  // Join a channel after connecting transports
+  //
+  // This takes one RTP paramaters for one track, which will be
+  // assumed to be Audio
+  //
+  // It also takes DTLS paramaters for connecting both producer and consumer
+  message JoinChannel {
+    // RTP paramaters in JSON.
+    string rtp_paramaters = 1;
+    string producer_dtls_paramaters = 2;
+    string consumer_dtls_paramaters = 3;
   }
 
   // Message to resume a consumer
   message ConsumerResume {
     // ID of the consumer to resume.
     string consumer_id = 1;
-  }
-
-  // Message to connect producer transport
-  message ConnectProducerTransport {
-    // DTLS paramaters in JSON.
-    string dtls_paramaters = 1;
-  }
-
-  // Message to connect consumer transport
-  message ConnectConsumerTransport {
-    // DTLS parameters in JSON.
-    string dtls_paramaters = 1;
   }
 
   // Guild ID of the guild where the channel is.
@@ -68,44 +60,44 @@ message StreamMessageRequest {
 
   // Message for this response
   oneof message {
-    // Sent to connect producer transport
-    ConnectProducerTransport connect_producer_transport = 3;
-    // Sent to connect consumer transport
-    ConnectConsumerTransport connect_consumer_transport = 4;
-    // Sent to consume a producer
-    Consume consume = 5;
+    PrepareForJoinChannel prepare_for_join_channel = 3;
+    JoinChannel join_channel = 4;
     // Sent to resume a consumer
-    ConsumerResume consumer_resume = 6;
-    // Sent to create a producer
-    Produce produce = 7;
+    ConsumerResume consumer_resume = 5;
   }
 }
 // Used in `StreamMessage` endpoint.
 message StreamMessageResponse {
+  // Sent when client first connects the socket, clients have to wait for this message
+  message Initialize {
+    // Finalized router (aka server) RTP capabilities in JSON.
+    string finalized_rtp_capabilities = 1;
+  }
+
+  message PreparedForJoinChannel {
+    // Consumer transport options
+    TransportOptions consumer_transport_options = 1;
+    // Producer transport options
+    TransportOptions producer_transport_options = 2;
+  }
+
+  // Producer for voice created; consumer and producer transports are connected
+  message JoinedChannel {
+    string producer_id = 1;
+  }
+
   // Data for the user that joined the room and it's producer
   message UserJoined {
     uint64 user_id = 1;
     string producer_id = 2;
+    string consumer_id = 3;
+    string rtp_paramaters = 4;
   }
 
   // Data for the user that left the room and the producer
   message UserLeft {
     uint64 user_id = 1;
     string producer_id = 2;
-  }
-
-  // Notification message that a producer was created on server
-  message Produced {
-    string producer_id = 1;
-  }
-
-  // Notification that consumer was successfully created server-side
-  // A client can resume the consumer after this.
-  message Consumed {
-    string consumer_id = 1;
-    string producer_id = 2;
-    MediaKind kind = 3;
-    string rtp_paramaters = 4;
   }
   
   // Guild ID of the guild where the channel is.
@@ -115,69 +107,34 @@ message StreamMessageResponse {
 
   // Message for this response
   oneof message {
+    PreparedForJoinChannel prepared_for_join_channel = 3;
+    JoinedChannel joined_channel = 4;
     // Sent when a user joins the channel
-    UserJoined user_joined = 3;
+    UserJoined user_joined = 5;
     // Sent when a user leaves the channel
-    UserLeft user_left = 4;
-    // Sent when a producer is created on server
-    Produced produced = 5;
-    // Sent when a consumer is created on server
-    Consumed consumed = 6;
-    // Producer transport was connected successfully
-    harmonytypes.v1.Empty connected_producer_transport = 7;
-    // Consumer transport was connected successfully
-    harmonytypes.v1.Empty connected_consumer_transport = 8;
+    UserLeft user_left = 6;
   }
 }
-
-message JoinChannelRequest {
-  // Guild ID of the guild where the channel is.
-  uint64 guild_id = 1;
-  // Channel ID of the voice channel to join.
-  uint64 channel_id = 2;
-  // RTP capabilities in JSON.
-  string rtp_capabilities = 3;
-}
-
-message JoinChannelResponse {
-  // Consumer transport options
-  TransportOptions consumer_transport_options = 1;
-  // Producer transport options
-  TransportOptions producer_transport_options = 2;
-  // Finalized router (aka server) RTP capabilities in JSON.
-  string finalized_rtp_capabilities = 3;
-}
-
-message LeaveChannelRequest {
-  // Guild ID of the guild where the channel is.
-  uint64 guild_id = 1;
-  // Channel ID of the voice channel to leave.
-  uint64 channel_id = 2;
-}
-
-message LeaveChannelResponse { }
 
 // Harmony service for facilitating voice operations using WebRTC.
 //
-// # Usage
+// # Usage (for client)
 // 1. Call StreamMessage to be able to send RTC commands to server
-// 2. Call JoinChannel with the client RTP capabilities
-// 3. Use the returned transport options and finalized RTP capabilities to connect transports
-//   - Wait for the ConnectedTransport messages to arrive in stream
-// 4. Don't forget to handle incoming messages
+// 2. Init device by using the rtp capabilities sent in the first message
+// 3. Send PrepareForJoinChannel over stream with client rtp capabilities
+// 4. Wait for PreparedForJoinChannel, which contains transport options
+// 5. Connect both transports using the transport options on client
+// 6. Send JoinChannel over stream containing RTP paramaters for your Audio track
+// and DTLS paramaters for both consumer and producer
+// 7. Wait for JoinedChannel, which confirms you have successfully joined the voice channel
+// 8. Handle UserJoined and UserLeft events appropiately
+//   - For UserJoined, use the received consumer ID, producer ID and RTP parameters on your
+//     consumer transport to consume the producer, afterwards send ConsumerResume message
+//     with the consumer ID, then add the track to wherever you store data for users
+//   - For UserLeft, just remove the user by producer ID from wherever you store data for users
 service VoiceService {
   // Endpoint to stream messages between client and server.
   rpc StreamMessage(stream StreamMessageRequest) returns (stream StreamMessageResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
-  // Endpoint to join a channel.
-  rpc JoinChannel(JoinChannelRequest) returns (JoinChannelResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
-  // Endpoint to leave a channel.
-  rpc LeaveChannel(LeaveChannelRequest) returns (LeaveChannelResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 }
