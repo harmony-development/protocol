@@ -6,53 +6,171 @@ package protocol.voice.v1;
 
 option go_package = "github.com/harmony-development/legato/gen/voice/v1";
 
-// A signal object.
-message Signal {
-  // The event kind of this signal.
-  oneof event {
-    // WebRTC ICE candidate event.
-    string ice_candidate = 1;
-    // Event sent when a renegotiation is needed in the WebRTC connection.
-    harmonytypes.v1.Empty renegotiation_needed = 2;
+// Object representing a media kind.
+enum MediaKind {
+  // Kind representing audio media.
+  MEDIA_KIND_AUDIO_UNSPECIFIED = 0;
+  // Kind representing video media.
+  MEDIA_KIND_VIDEO = 1;
+}
+
+// Object containing all the necessary information about transport options required
+// from the server to establish transport connection on the client
+message TransportOptions {
+  // The transport ID.
+  string id = 1;
+  // DTLS paramaters in JSON.
+  string dtls_paramaters = 2;
+  // ICE candidates in JSON.
+  string ice_candidates = 3;
+  // ICE paramaters in JSON.
+  string ice_paramaters = 4;
+}
+
+// Used in `StreamMessage` endpoint.
+message StreamMessageRequest {
+  // Message to create a producer
+  message Produce {
+    // The media kind to be used in the producer.
+    MediaKind kind = 1;
+    // RTP paramaters in JSON.
+    string rtp_paramaters = 2;
+  }
+
+  // Message to consume specified producer
+  message Consume {
+    // ID of the producer to consume.
+    string producer_id = 1;
+  }
+
+  // Message to resume a consumer
+  message ConsumerResume {
+    // ID of the consumer to resume.
+    string consumer_id = 1;
+  }
+
+  // Message to connect producer transport
+  message ConnectProducerTransport {
+    // DTLS paramaters in JSON.
+    string dtls_paramaters = 1;
+  }
+
+  // Message to connect consumer transport
+  message ConnectConsumerTransport {
+    // DTLS parameters in JSON.
+    string dtls_paramaters = 1;
+  }
+
+  // Guild ID of the guild where the channel is.
+  uint64 guild_id = 1;
+  // Channel ID of the voice channel to send this request to.
+  uint64 channel_id = 2;
+
+  // Message for this response
+  oneof message {
+    // Sent to connect producer transport
+    ConnectProducerTransport connect_producer_transport = 3;
+    // Sent to connect consumer transport
+    ConnectConsumerTransport connect_consumer_transport = 4;
+    // Sent to consume a producer
+    Consume consume = 5;
+    // Sent to resume a consumer
+    ConsumerResume consumer_resume = 6;
+    // Sent to create a producer
+    Produce produce = 7;
+  }
+}
+// Used in `StreamMessage` endpoint.
+message StreamMessageResponse {
+  // Data for the user that joined the room and it's producer
+  message UserJoined {
+    uint64 user_id = 1;
+    string producer_id = 2;
+  }
+
+  // Data for the user that left the room and the producer
+  message UserLeft {
+    uint64 user_id = 1;
+    string producer_id = 2;
+  }
+
+  // Notification message that a producer was created on server
+  message Produced {
+    string producer_id = 1;
+  }
+
+  // Notification that consumer was successfully created server-side
+  // A client can resume the consumer after this.
+  message Consumed {
+    string consumer_id = 1;
+    string producer_id = 2;
+    MediaKind kind = 3;
+    string rtp_paramaters = 4;
+  }
+  
+  // Guild ID of the guild where the channel is.
+  uint64 guild_id = 1;
+  // Channel ID of the voice channel this response is for.
+  uint64 channel_id = 2;
+
+  // Message for this response
+  oneof message {
+    // Sent when a user joins the channel
+    UserJoined user_joined = 3;
+    // Sent when a user leaves the channel
+    UserLeft user_left = 4;
+    // Sent when a producer is created on server
+    Produced produced = 5;
+    // Sent when a consumer is created on server
+    Consumed consumed = 6;
+    // Producer transport was connected successfully
+    harmonytypes.v1.Empty connected_producer_transport = 7;
+    // Consumer transport was connected successfully
+    harmonytypes.v1.Empty connected_consumer_transport = 8;
   }
 }
 
-// Used in `Connect` endpoint.
-message ConnectRequest {
+message JoinChannelRequest {
   // Guild ID of the guild where the channel is.
   uint64 guild_id = 1;
-  // Channel ID of the voice channel to connect.
+  // Channel ID of the voice channel to join.
   uint64 channel_id = 2;
-  // WebRTC Connection offer.
-  string offer = 3;
-}
-// Used in `Connect` endpoint.
-message ConnectResponse {
-  // WebRTC Connection answer.
-  string answer = 1;
+  // RTP capabilities in JSON.
+  string rtp_capabilities = 3;
 }
 
-// Used in `StreamState` endpoint.
-message StreamStateRequest {
+message JoinChannelResponse {
+  // Consumer transport options
+  TransportOptions consumer_transport_options = 1;
+  // Producer transport options
+  TransportOptions producer_transport_options = 2;
+  // Router (aka server) RTP capabilities in JSON.
+  string router_rtp_capabilities = 3;
+}
+
+message LeaveChannelRequest {
   // Guild ID of the guild where the channel is.
   uint64 guild_id = 1;
-  // Channel ID of the voice channel to stream states for.
+  // Channel ID of the voice channel to leave.
   uint64 channel_id = 2;
 }
-// Used in `StreamState` endpoint.
-message StreamStateResponse {
-  // The signal event.
-  Signal signal = 1;
-}
+
+message LeaveChannelResponse { }
 
 // Harmony service for facilitating voice operations using WebRTC.
 service VoiceService {
-  // Endpoint to connect to a voice channel.
-  rpc Connect(ConnectRequest) returns (ConnectResponse) {
+  // Endpoint to stream messages between client and server.
+  rpc StreamMessage(stream StreamMessageRequest) returns (stream StreamMessageResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
-  // Endpoint to stream states of a voice connection.
-  rpc StreamState(StreamStateRequest) returns (stream StreamStateResponse) {
+
+  // Endpoint to join a channel.
+  rpc JoinChannel(JoinChannelRequest) returns (JoinChannelResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+
+  // Endpoint to leave a channel.
+  rpc LeaveChannel(LeaveChannelRequest) returns (LeaveChannelResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 }
