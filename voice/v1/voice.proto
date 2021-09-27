@@ -131,7 +131,9 @@ message StreamMessageResponse {
 // # Usage (for client)
 //
 // 1. Call StreamMessage to be able to send RTC commands to server
-// 2. Init device by using the RTP capabilities sent in the first message, which should be Initialize
+// 2. Init device by using the RTP capabilities sent in the first message, which should be Initialize;
+// the guild and channel ID will be 0, since this isn't specific to a voice channel.
+// After this init every request should contain the appropiate guild and channel ID.
 // 3. Send PrepareForJoinChannel over stream with client rtp capabilities
 // 4. Wait for PreparedForJoinChannel, which contains transport options
 // 5. Connect both transports using the transport options on client
@@ -148,7 +150,8 @@ message StreamMessageResponse {
 // ## How this looks for servers
 //
 // 1. Receives StreamMessage, starts the socket
-// 2. Sends Initialize over stream with it's RTP capabilities
+// 2. Sends Initialize over stream with it's RTP capabilities, setting guild and channel ID to 0;
+// After this init every response should contain the appropiate guild and channel ID.
 // 3. Receives PrepareForJoinChannel with client RTP capabilities
 // 4. Sends PreparedForJoinChannel over stream with consumer and producer transport options
 // 5. Receives JoinChannel, checks for DTLS parameters for consumer and producer transports
