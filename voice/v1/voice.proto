@@ -32,8 +32,13 @@ message TransportOptions {
 
 // Used in `StreamMessage` endpoint.
 message StreamMessageRequest {
-  // Empty initialize message
-  message Initialize { }
+  // IDs that will be used to know which channel this WS will operate in
+  message Initialize {
+    // Guild ID of the guild where the channel is.
+    uint64 guild_id = 1;
+    // Channel ID of the voice channel to initialize for.
+    uint64 channel_id = 2;
+  }
 
   // Data needed to prepare for joining a channel
   message PrepareForJoinChannel {
@@ -62,20 +67,16 @@ message StreamMessageRequest {
     string consumer_id = 1;
   }
 
-  // Guild ID of the guild where the channel is.
-  uint64 guild_id = 1;
-  // Channel ID of the voice channel to send this request to.
-  uint64 channel_id = 2;
-
   // Message for this response
   oneof message {
-    Initialize initialize = 3;
+    // Sent to initialize the WS and receive necessary information
+    Initialize initialize = 1;
     // Sent to prepare for joining channel
-    PrepareForJoinChannel prepare_for_join_channel = 4;
+    PrepareForJoinChannel prepare_for_join_channel = 2;
     // Sent to join a channel
-    JoinChannel join_channel = 5;
+    JoinChannel join_channel = 3;
     // Sent to resume a consumer
-    ResumeConsumer resume_consumer = 6;
+    ResumeConsumer resume_consumer = 4;
   }
 }
 // Used in `StreamMessage` endpoint.
@@ -112,23 +113,18 @@ message StreamMessageResponse {
     uint64 user_id = 1;
   }
   
-  // Guild ID of the guild where the channel is.
-  uint64 guild_id = 1;
-  // Channel ID of the voice channel this response is for.
-  uint64 channel_id = 2;
-
   // Message for this response
   oneof message {
     // Sent when connection is started
-    Initialized initialized = 3;
+    Initialized initialized = 1;
     // Sent when preparing to join a channel is successful
-    PreparedForJoinChannel prepared_for_join_channel = 4;
+    PreparedForJoinChannel prepared_for_join_channel = 2;
     // Sent when joining a channel is successful
-    JoinedChannel joined_channel = 5;
+    JoinedChannel joined_channel = 3;
     // Sent when another user joins the channel
-    UserJoined user_joined = 6;
+    UserJoined user_joined = 4;
     // Sent when another user leaves the channel
-    UserLeft user_left = 7;
+    UserLeft user_left = 5;
   }
 }
 
