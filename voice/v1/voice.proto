@@ -32,6 +32,9 @@ message TransportOptions {
 
 // Used in `StreamMessage` endpoint.
 message StreamMessageRequest {
+  // Empty initialize message
+  message Initialize { }
+
   // Data needed to prepare for joining a channel
   message PrepareForJoinChannel {
     // RTP capabilities in JSON.
@@ -66,18 +69,19 @@ message StreamMessageRequest {
 
   // Message for this response
   oneof message {
+    Initialize initialize = 3;
     // Sent to prepare for joining channel
-    PrepareForJoinChannel prepare_for_join_channel = 3;
+    PrepareForJoinChannel prepare_for_join_channel = 4;
     // Sent to join a channel
-    JoinChannel join_channel = 4;
+    JoinChannel join_channel = 5;
     // Sent to resume a consumer
-    ResumeConsumer resume_consumer = 5;
+    ResumeConsumer resume_consumer = 6;
   }
 }
 // Used in `StreamMessage` endpoint.
 message StreamMessageResponse {
-  // Sent when client first connects the socket, clients have to wait for this message
-  message Initialize {
+  // Initialization data for client
+  message Initialized {
     // Server RTP capabilities in JSON.
     string rtp_capabilities = 1;
   }
@@ -116,7 +120,7 @@ message StreamMessageResponse {
   // Message for this response
   oneof message {
     // Sent when connection is started
-    Initialize initialize = 3;
+    Initialized initialized = 3;
     // Sent when preparing to join a channel is successful
     PreparedForJoinChannel prepared_for_join_channel = 4;
     // Sent when joining a channel is successful
@@ -132,10 +136,9 @@ message StreamMessageResponse {
 //
 // # Usage (for client)
 //
-// 1. Call StreamMessage to be able to send RTC commands to server
-// 2. Init device by using the RTP capabilities sent in the first message, which should be Initialize;
-// the guild and channel ID will be 0, since this isn't specific to a voice channel.
-// After this init every request should contain the appropiate guild and channel ID.
+// 0. Call StreamMessage to be able to send RTC commands to server
+// 1. Send Initialize over stream with guild_id and channel_id of the request set to the channel you want to join
+// 2. Init device by using the RTP capabilities sent in the response message, which should be Initialized
 // 3. Send PrepareForJoinChannel over stream with client rtp capabilities
 // 4. Wait for PreparedForJoinChannel, which contains transport options
 // 5. Connect both transports using the transport options on client
@@ -151,9 +154,9 @@ message StreamMessageResponse {
 //
 // ## How this looks for servers
 //
-// 1. Receives StreamMessage, starts the socket
-// 2. Sends Initialize over stream with it's RTP capabilities, setting guild and channel ID to 0;
-// After this init every response should contain the appropiate guild and channel ID.
+// 0. Receives StreamMessage, starts the socket
+// 1. Waits for Initialize
+// 2. Sends Initialized over stream with it's RTP capabilities
 // 3. Receives PrepareForJoinChannel with client RTP capabilities
 // 4. Sends PreparedForJoinChannel over stream with consumer and producer transport options
 // 5. Receives JoinChannel, checks for DTLS parameters for consumer and producer transports
