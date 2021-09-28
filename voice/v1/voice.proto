@@ -11,10 +11,12 @@ option go_package = "github.com/harmony-development/legato/gen/voice/v1";
 message UserData {
   // User ID of the user
   uint64 user_id = 1;
+  // Producer ID of the producer being consumed
+  string producer_id = 2;
   // Consumer ID for the user's producer consumer
-  string consumer_id = 2;
+  string consumer_id = 3;
   // RTP paramaters for the user's audio track
-  string rtp_paramaters = 3;
+  string rtp_paramaters = 4;
 }
 
 // Object containing all the necessary information about transport options required
