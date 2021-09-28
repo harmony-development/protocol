@@ -11,9 +11,9 @@ option go_package = "github.com/harmony-development/legato/gen/voice/v1";
 message UserData {
   // User ID of the user
   uint64 user_id = 1;
-  // Producer ID of the producer being consumed
+  // Producer ID of the producer being consumed in JSON
   string producer_id = 2;
-  // Consumer ID for the user's producer consumer
+  // Consumer ID for the user's producer consumer in JSON
   string consumer_id = 3;
   // RTP paramaters for the user's audio track
   string rtp_paramaters = 4;
@@ -22,7 +22,7 @@ message UserData {
 // Object containing all the necessary information about transport options required
 // from the server to establish transport connection on the client
 message TransportOptions {
-  // The transport ID.
+  // The transport ID in JSON.
   string id = 1;
   // DTLS paramaters in JSON.
   string dtls_paramaters = 2;
@@ -65,7 +65,7 @@ message StreamMessageRequest {
 
   // Message to resume a consumer
   message ResumeConsumer {
-    // ID of the consumer to resume.
+    // ID of the consumer to resume in JSON.
     string consumer_id = 1;
   }
 
@@ -161,7 +161,7 @@ message StreamMessageResponse {
 // and uses the RTP paramaters to create a producer for the client
 // 6. Sends JoinedChannel over stream with the created producer ID and all other users' data (UserData)
 // 7. When another user does 1 to 7, sends UserJoined over stream to all other users;
-// when a user leaves the channel with LeaveChannel, sends UserLeft to all other users
+// when a user leaves the channel (when their stream ends), sends UserLeft to all other users
 // 8. When receiving a ResumeConsumer message, unpauses the consumer corresponding to the consumer ID
 //
 service VoiceService {
