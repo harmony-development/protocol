@@ -13,7 +13,9 @@ service ProfileService {
   }
 
   // Updates the user's profile.
-  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse) {}
+  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
 
   // Gets app data for a user (this can be used to store user preferences which
   // is synchronized across devices).
@@ -22,5 +24,7 @@ service ProfileService {
   }
 
   // Sets the app data for a user.
-  rpc SetAppData(SetAppDataRequest) returns (SetAppDataResponse) {}
+  rpc SetAppData(SetAppDataRequest) returns (SetAppDataResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
 }
