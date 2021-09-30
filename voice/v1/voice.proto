@@ -6,53 +6,183 @@ package protocol.voice.v1;
 
 option go_package = "github.com/harmony-development/legato/gen/voice/v1";
 
-// A signal object.
-message Signal {
-  // The event kind of this signal.
-  oneof event {
-    // WebRTC ICE candidate event.
-    string ice_candidate = 1;
-    // Event sent when a renegotiation is needed in the WebRTC connection.
-    harmonytypes.v1.Empty renegotiation_needed = 2;
+// Data containing all the necessary information to
+// create a consumer for a user in a voice channel
+//
+// This corresponds to https://mediasoup.org/documentation/v3/mediasoup-client/api/#ConsumerOptions on client:
+// - `consumer_id` -> `id`
+// - `producer_id` -> `producerId`
+// - `rtp_parameters` -> `rtpParameters`
+// - and `kind` should be set to "audio".
+message UserConsumerOptions {
+  // User ID of the user.
+  uint64 user_id = 1;
+  // Producer ID of the producer being consumed.
+  string producer_id = 2;
+  // Consumer ID for the user's producer consumer.
+  string consumer_id = 3;
+  // RTP paramaters for the user's audio track. Corresponds to `RtpParameters` in mediasoup's TypeScript API.
+  string rtp_parameters = 4;
+}
+
+// Object containing all the necessary information about transport options required
+// from the server to establish transport connection on the client
+//
+// This corresponds to https://mediasoup.org/documentation/v3/mediasoup-client/api/#TransportOptions on client:
+// - `id` -> `id`
+// - `ice_parameters` -> `iceParameters`
+// - `dtls_parameters` -> `dtlsParameters`
+// - `ice_candidates` -> `iceCandidates`
+message TransportOptions {
+  // The transport ID.
+  string id = 1;
+  // DTLS paramaters in JSON. Corresponds to `DtlsParameters` in mediasoup's TypeScript API.
+  string dtls_parameters = 2;
+  // ICE candidates in JSON. Corresponds to `IceCandidate` in mediasoup's TypeScript API.
+  repeated string ice_candidates = 3;
+  // ICE paramaters in JSON. Corresponds to `IceParameters` in mediasoup's TypeScript API.
+  string ice_parameters = 4;
+}
+
+// Used in `StreamMessage` endpoint.
+message StreamMessageRequest {
+  // IDs that will be used to know which channel this WS will operate in
+  message Initialize {
+    // Guild ID of the guild where the channel is.
+    uint64 guild_id = 1;
+    // Channel ID of the voice channel to initialize for.
+    uint64 channel_id = 2;
+  }
+
+  // Data needed to prepare for joining a channel
+  message PrepareForJoinChannel {
+    // RTP capabilities in JSON.
+    string rtp_capabilities = 1;
+  }
+
+  // Data needed to join a channel
+  //
+  // This takes one RTP paramaters for one track, which will be
+  // assumed to be Audio
+  //
+  // It also takes DTLS paramaters for connecting both producer and consumer
+  message JoinChannel {
+    // RTP paramaters in JSON. Corresponds to `RtpParameters` in mediasoup's TypeScript API.
+    string rtp_paramaters = 1;
+    // DTLS paramaters for producer transport, in JSON. Corresponds to `DtlsParameters` in mediasoup's TypeScript API.
+    string producer_dtls_paramaters = 2;
+    // DTLS paramaters for consumer transport, in JSON. Corresponds to `DtlsParameters` in mediasoup's TypeScript API.
+    string consumer_dtls_paramaters = 3;
+  }
+
+  // Message to resume a consumer
+  message ResumeConsumer {
+    // ID of the consumer to resume.
+    string consumer_id = 1;
+  }
+
+  // Message for this response
+  oneof message {
+    // Sent to initialize the WS and receive necessary information
+    Initialize initialize = 1;
+    // Sent to prepare for joining channel
+    PrepareForJoinChannel prepare_for_join_channel = 2;
+    // Sent to join a channel
+    JoinChannel join_channel = 3;
+    // Sent to resume a consumer
+    ResumeConsumer resume_consumer = 4;
   }
 }
+// Used in `StreamMessage` endpoint.
+message StreamMessageResponse {
+  // Initialization data for client
+  message Initialized {
+    // Server RTP capabilities in JSON. Corresponds to `RtpCapabilities` in mediasoup's TypeScript API.
+    string rtp_capabilities = 1;
+  }
 
-// Used in `Connect` endpoint.
-message ConnectRequest {
-  // Guild ID of the guild where the channel is.
-  uint64 guild_id = 1;
-  // Channel ID of the voice channel to connect.
-  uint64 channel_id = 2;
-  // WebRTC Connection offer.
-  string offer = 3;
-}
-// Used in `Connect` endpoint.
-message ConnectResponse {
-  // WebRTC Connection answer.
-  string answer = 1;
-}
+  // RTP capabilities validated
+  message PreparedForJoinChannel {
+    // Consumer transport options
+    TransportOptions consumer_transport_options = 1;
+    // Producer transport options
+    TransportOptions producer_transport_options = 2;
+  }
 
-// Used in `StreamState` endpoint.
-message StreamStateRequest {
-  // Guild ID of the guild where the channel is.
-  uint64 guild_id = 1;
-  // Channel ID of the voice channel to stream states for.
-  uint64 channel_id = 2;
-}
-// Used in `StreamState` endpoint.
-message StreamStateResponse {
-  // The signal event.
-  Signal signal = 1;
+  // Producer for voice created; consumer and producer transports are connected
+  message JoinedChannel {
+    // Consumer options for users that were already in the room
+    repeated UserConsumerOptions other_users = 1;
+  }
+
+  // Data for the user that joined the room and it's producer
+  message UserJoined {
+    // Consumer options for this user
+    UserConsumerOptions data = 1;
+  }
+
+  // Data for the user that left the room and the producer
+  message UserLeft {
+    // ID of the user that left
+    uint64 user_id = 1;
+  }
+  
+  // Message for this response
+  oneof message {
+    // Sent when connection is started
+    Initialized initialized = 1;
+    // Sent when preparing to join a channel is successful
+    PreparedForJoinChannel prepared_for_join_channel = 2;
+    // Sent when joining a channel is successful
+    JoinedChannel joined_channel = 3;
+    // Sent when another user joins the channel
+    UserJoined user_joined = 4;
+    // Sent when another user leaves the channel
+    UserLeft user_left = 5;
+  }
 }
 
 // Harmony service for facilitating voice operations using WebRTC.
+//
+// # Usage (for client)
+//
+// 0. Call StreamMessage to be able to send RTC commands to server
+// 1. Send Initialize over stream with guild_id and channel_id of the request set to the channel you want to join
+// 2. Init device by using the RTP capabilities sent in the response message, which should be Initialized
+// 3. Send PrepareForJoinChannel over stream with client rtp capabilities
+// 4. Wait for PreparedForJoinChannel, which contains transport options
+// 5. Connect both transports using the transport options on client
+// 6. Send JoinChannel over stream containing RTP paramaters for your Audio track
+// and DTLS paramaters for both consumer and producer
+// 7. Wait for JoinedChannel, which confirms you have successfully joined the voice channel;
+// handle other_users which will be described in 8 (UserJoined handling)
+// 8. Handle UserJoined and UserLeft events appropiately
+//   - For UserJoined; use the received consumer ID, producer ID and RTP parameters on your
+//     consumer transport to consume the producer, afterwards send ResumeConsumer message
+//     with the consumer ID, then if that's successful add the track to a `user ID -> Track` map
+//   - For UserLeft, remove the user track from the `user ID -> Track` map 
+//
+// ## How this looks for servers
+//
+// 0. Receives StreamMessage, starts the socket
+// 1. Waits for Initialize
+// 2. Sends Initialized over stream with it's RTP capabilities
+// 3. Receives PrepareForJoinChannel with client RTP capabilities
+// 4. Sends PreparedForJoinChannel over stream with consumer and producer transport options
+// 5. Receives JoinChannel, checks for DTLS parameters for consumer and producer transports
+// and uses the RTP paramaters to create a producer for the client
+// 6. Sends JoinedChannel over stream with the created producer ID and all other users' data (UserData)
+// 7. When another user does 1 to 7, sends UserJoined over stream to all other users;
+// when a user leaves the channel (when their stream ends), sends UserLeft to all other users
+// 8. When receiving a ResumeConsumer message, unpauses the consumer corresponding to the consumer ID
+//
 service VoiceService {
-  // Endpoint to connect to a voice channel.
-  rpc Connect(ConnectRequest) returns (ConnectResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-  // Endpoint to stream states of a voice connection.
-  rpc StreamState(StreamStateRequest) returns (stream StreamStateResponse) {
+  // Endpoint to stream messages between client and server.
+  //
+  // - One StreamMessage stream corresponds to being in one voice channel.
+  // - It's recommended that users should not be able to be in more than one voice channel,
+  // but this limitation is left up to the server implementation.
+  rpc StreamMessage(stream StreamMessageRequest) returns (stream StreamMessageResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 }
