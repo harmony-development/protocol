@@ -7,29 +7,41 @@ package protocol.voice.v1;
 option go_package = "github.com/harmony-development/legato/gen/voice/v1";
 
 // Data containing all the necessary information to
-// create a consumer and track for a user in a voice channel
-message UserData {
-  // User ID of the user
+// create a consumer for a user in a voice channel
+//
+// This corresponds to https://mediasoup.org/documentation/v3/mediasoup-client/api/#ConsumerOptions on client:
+// - `consumer_id` -> `id`
+// - `producer_id` -> `producerId`
+// - `rtp_parameters` -> `rtpParameters`
+// - and `kind` should be set to "audio".
+message UserConsumerOptions {
+  // User ID of the user.
   uint64 user_id = 1;
-  // Producer ID of the producer being consumed in JSON
+  // Producer ID of the producer being consumed.
   string producer_id = 2;
-  // Consumer ID for the user's producer consumer in JSON
+  // Consumer ID for the user's producer consumer.
   string consumer_id = 3;
-  // RTP paramaters for the user's audio track
-  string rtp_paramaters = 4;
+  // RTP paramaters for the user's audio track. Corresponds to `RtpParameters` in mediasoup's TypeScript API.
+  string rtp_parameters = 4;
 }
 
 // Object containing all the necessary information about transport options required
 // from the server to establish transport connection on the client
+//
+// This corresponds to https://mediasoup.org/documentation/v3/mediasoup-client/api/#TransportOptions on client:
+// - `id` -> `id`
+// - `ice_parameters` -> `iceParameters`
+// - `dtls_parameters` -> `dtlsParameters`
+// - `ice_candidates` -> `iceCandidates`
 message TransportOptions {
-  // The transport ID in JSON.
+  // The transport ID.
   string id = 1;
-  // DTLS paramaters in JSON.
-  string dtls_paramaters = 2;
-  // ICE candidates in JSON.
-  string ice_candidates = 3;
-  // ICE paramaters in JSON.
-  string ice_paramaters = 4;
+  // DTLS paramaters in JSON. Corresponds to `DtlsParameters` in mediasoup's TypeScript API.
+  string dtls_parameters = 2;
+  // ICE candidates in JSON. Corresponds to `IceCandidate` in mediasoup's TypeScript API.
+  repeated string ice_candidates = 3;
+  // ICE paramaters in JSON. Corresponds to `IceParameters` in mediasoup's TypeScript API.
+  string ice_parameters = 4;
 }
 
 // Used in `StreamMessage` endpoint.
@@ -55,17 +67,17 @@ message StreamMessageRequest {
   //
   // It also takes DTLS paramaters for connecting both producer and consumer
   message JoinChannel {
-    // RTP paramaters in JSON.
+    // RTP paramaters in JSON. Corresponds to `RtpParameters` in mediasoup's TypeScript API.
     string rtp_paramaters = 1;
-    // DTLS paramaters for producer transport, in JSON
+    // DTLS paramaters for producer transport, in JSON. Corresponds to `DtlsParameters` in mediasoup's TypeScript API.
     string producer_dtls_paramaters = 2;
-    // DTLS paramaters for consumer transport, in JSON
+    // DTLS paramaters for consumer transport, in JSON. Corresponds to `DtlsParameters` in mediasoup's TypeScript API.
     string consumer_dtls_paramaters = 3;
   }
 
   // Message to resume a consumer
   message ResumeConsumer {
-    // ID of the consumer to resume in JSON.
+    // ID of the consumer to resume.
     string consumer_id = 1;
   }
 
@@ -85,7 +97,7 @@ message StreamMessageRequest {
 message StreamMessageResponse {
   // Initialization data for client
   message Initialized {
-    // Server RTP capabilities in JSON.
+    // Server RTP capabilities in JSON. Corresponds to `RtpCapabilities` in mediasoup's TypeScript API.
     string rtp_capabilities = 1;
   }
 
@@ -99,14 +111,14 @@ message StreamMessageResponse {
 
   // Producer for voice created; consumer and producer transports are connected
   message JoinedChannel {
-    // Data for other users
-    repeated UserData other_users = 1;
+    // Consumer options for users that were already in the room
+    repeated UserConsumerOptions other_users = 1;
   }
 
   // Data for the user that joined the room and it's producer
   message UserJoined {
-    // The user data
-    UserData data = 1;
+    // Consumer options for this user
+    UserConsumerOptions data = 1;
   }
 
   // Data for the user that left the room and the producer
@@ -166,6 +178,10 @@ message StreamMessageResponse {
 //
 service VoiceService {
   // Endpoint to stream messages between client and server.
+  //
+  // - One StreamMessage stream corresponds to being in one voice channel.
+  // - It's recommended that users should not be able to be in more than one voice channel,
+  // but this limitation is left up to the server implementation.
   rpc StreamMessage(stream StreamMessageRequest) returns (stream StreamMessageResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
