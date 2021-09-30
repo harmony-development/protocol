@@ -1,5 +1,5 @@
 version: v1
-name: harmonyapp.io/harmony-development/protocol
+name: buf.build/harmony-dev/protocol
 lint:
   use:
     - DEFAULT

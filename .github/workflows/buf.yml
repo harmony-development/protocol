@@ -17,6 +17,12 @@ on:
       - 'meson.build'
 
 jobs:
+  push-bsr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: bufbuild/buf-push-action@v1
+        with:
+          buf_token: ${{ secrets.BUF_TOKEN }}
   lint-protos:
     runs-on: ubuntu-latest
     steps:
