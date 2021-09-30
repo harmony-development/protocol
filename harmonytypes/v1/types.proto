@@ -67,25 +67,16 @@ message Empty { }
 
 // An object representing an item position between two other items.
 message ItemPosition {
-  // An object that represents the top of an ordered list.
-  message Top { }
-  // An object that represents a place between two items in an ordered list.
-  message Between {
-    // The ID of the previous item.
-    uint64 previous_id = 1;
-    // The ID of the next item.
-    uint64 next_id = 2;
+  // The position
+  enum Position {
+    // The position is before the item
+  	POSITION_BEFORE_UNSPECIFIED = 0;
+  	// The position is after the item
+  	POSITION_AFTER = 1;
   }
-  // An object that represents the bottom of an ordered list.
-  message Bottom { }
 
-  // Position of this item.
-  oneof position {
-    // The item is at the top.
-    Top top = 1;
-    // The item is in between two other items.
-    Between between = 2;
-    // The item is at the bottom.
-    Bottom bottom = 3;
-  }
+  // The ID of the item the position is relative to
+  uint64 item_id = 1;
+  // Whether the position is before or after the given ID
+  Position position = 2;
 }
