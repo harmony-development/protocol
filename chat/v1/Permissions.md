@@ -37,6 +37,8 @@ A role is a collection of rules, which can be assigned to users.
 These are named and coloured for aesthetic reasons.
 
 Each guild MUST have a default role. This role MUST have the ID `0`.
+The default role will not be included in `GetGuildRoles` or `GetUserRoles`.
+Clients are free to show it however they want.
 
 ## Overrides
 
