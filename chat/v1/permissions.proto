@@ -27,6 +27,8 @@ message Role {
 }
 
 // Object representing a role with it's ID.
+//
+// The role ID for the default role in a guild should always be 0.
 message RoleWithId {
   // ID of the role.
   uint64 role_id = 1;
