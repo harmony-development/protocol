@@ -1,4 +1,6 @@
-# RESTful Endpoints
+---
+title: RESTful Endpoints
+---
 
 ## Authentication
 
