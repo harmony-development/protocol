@@ -2,8 +2,6 @@
 title: RESTful Endpoints
 ---
 
-# RESTful Endpoints
-
 ## Authentication
 
 If an endpoint expects authentication, the user should set the `Authorization` header to a valid token from the gRPC API.
