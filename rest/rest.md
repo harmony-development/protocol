@@ -4,40 +4,53 @@ title: RESTful Endpoints
 
 ## Authentication
 
-If an endpoint expects authentication, the user should set the `Authorization` header to a valid token from the gRPC API.
+If an endpoint expects authentication, the user should set the `Authorization`
+header to a valid token from the hRPC API.
 
 ## POST `/_harmony/media/upload`
 
 Expects authentication: yes
 
-The body should be POST-ed as a multipart form (`multipart/form-data`), with a single part named `file` which contains the body of the file being uploaded.
+The body should be POST-ed as a multipart form (`multipart/form-data`), with a
+single part named `file` which contains the body of the file being uploaded.
 
 ### URL Parameters
 
-- `filename`: The name of the file being uploaded.
-- `contentType`: The MIME type of the file.
+| Name          | Description                          |
+| ------------- | ------------------------------------ |
+| `filename`    | The name of the file being uploaded. |
+| `contentType` | The MIME type of the file.           |
 
 ### Responses
 
 #### 200 OK
 
-Returns a JSON object with a single key, `id`.
+The body will contain a JSON object in the following format:
+
+| Field | Description                                |
+| ----- | ------------------------------------------ |
+| `id`  | The file ID of the file that was uploaded. |
 
 #### 400 Bad Request
 
-##### Body: `missing-files`
+The body will contain a JSON object in the following format:
 
-You forgot to upload a file.
+| Field     | Description        |
+| --------- | ------------------ |
+| `message` | The error message. |
 
-##### Body: `too-many-files`
+Possible error messages and their meanings:
 
-You have uploaded more than one `file` form part.
+| Error            | Description                                       |
+| ---------------- | ------------------------------------------------- |
+| `missing-files`  | You forgot to upload a file.                      |
+| `too-many-files` | You have uploaded more than one `file` form part. |
 
 ## GET `/_harmony/media/download/:file_id`
 
 Expects authentication: no
 
-The file ID should be one of the following:
+The `file_id` should be one of the following:
 
 - An attachment ID returned from POST `/_harmony/media/upload`
 - A URI-encoded URL of an image
@@ -66,8 +79,18 @@ Expects authentication: no
 
 ##### Body
 
-The body will contain JSON object in the following format:
-```
+The body will contain a JSON object in the following format:
+
+| Field             | Description                                                       |
+| ----------------- | ----------------------------------------------------------------- |
+| `serverName`      | the name of the Harmony server software being hosted              |
+| `version`         | the version of said Harmony server software                       |
+| `aboutServer`     | A description of why / who this server is hosted for.             |
+| `messageOfTheDay` | "message of the day", can be used to put maintenance information. |
+
+Example response:
+
+```json
 {
     "serverName": "Scherzo",
     "version": "git-0c062f6",
@@ -75,10 +98,3 @@ The body will contain JSON object in the following format:
     "messageOfTheDay": "A maintenance will be done between 18:00 - 20:00."
 }
 ```
-`serverName`: the Harmony server software being hosted
-
-`version`: the version of said Harmony server software
-
-`aboutServer`: A description of why / who this server is hosted for.
-
-`messageOfTheDay`: "message of the day", can be used to put maintenance information.
