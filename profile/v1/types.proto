@@ -23,7 +23,7 @@ message Profile {
   // the name of the user.
   string user_name = 1;
   // the user's avatar.
-  string user_avatar = 2;
+  optional string user_avatar = 2;
   // the status of the user.
   UserStatus user_status = 3;
   // whether the user is a bot or not.
