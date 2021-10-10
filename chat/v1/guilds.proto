@@ -11,7 +11,7 @@ message Guild {
   // The name of the guild.
   string name = 1;
   // The picture HMC of the guild.
-  string picture = 2;
+  optional string picture = 2;
   // User ID of the owner of the guild.
   uint64 owner_id = 3;
   // Metadata of the guild.
@@ -52,7 +52,7 @@ enum LeaveReason {
   LEAVE_REASON_KICKED = 2;
 }
 
-// Request type used in `CreateGuild` RPC. 
+// Request type used in `CreateGuild` RPC.
 message CreateGuildRequest {
   // The name of the guild.
   string name = 1;
