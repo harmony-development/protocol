@@ -345,6 +345,18 @@ message StreamEvent {
     chat.v1.Reaction reaction = 4;
   }
 
+  // Sent when there's a new owner.
+  message OwnerAdded {
+    // User ID of the new owner.
+    uint64 user_id = 1;
+  }
+
+  // Sent when an owner gives up their ownership.
+  message OwnerRemoved {
+    // User ID of the user who is no longer owner.
+    uint64 user_id = 1;
+  }
+
   // Which event to send.
   oneof event {
     // Send the guild added to list event.
@@ -399,5 +411,9 @@ message StreamEvent {
     MessageUnpinned message_unpinned = 25;
     // Send the reaction updated event.
     ReactionUpdated reaction_updated = 26;
+    // Send the owner added event.
+    OwnerAdded owner_added = 27;
+    // Send the owner removed event.
+    OwnerRemoved owner_removed = 28;
   }
 }

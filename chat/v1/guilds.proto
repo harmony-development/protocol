@@ -12,8 +12,8 @@ message Guild {
   string name = 1;
   // The picture HMC of the guild.
   optional string picture = 2;
-  // User ID of the owner of the guild.
-  uint64 owner_id = 3;
+  // User ID of the owners of the guild.
+  repeated uint64 owner_ids = 3;
   // Metadata of the guild.
   optional harmonytypes.v1.Metadata metadata = 4;
 }
@@ -230,4 +230,23 @@ message GetBannedUsersRequest {
 message GetBannedUsersResponse {
   // The user IDs of banned users.
   repeated uint64 banned_users = 1;
+}
+
+// Request for GrantOwnership
+message GrantOwnershipRequest {
+  // The ID of the new owner to add.
+  uint64 new_owner_id = 1;
+}
+
+// Response for GrantOwnership
+message GrantOwnershipResponse {
+}
+
+// Request for GiveUpOwnership
+message GiveUpOwnershipRequest {
+
+}
+
+// Response for GiveUpOwnership
+message GiveUpOwnershipResponse {
 }
