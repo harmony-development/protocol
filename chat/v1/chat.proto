@@ -123,10 +123,10 @@ service ChatService {
   }
 
   // Endpoint to delete a guild.
+  // Can only be invoked if there's one owner.
   rpc DeleteGuild(DeleteGuildRequest) returns (DeleteGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node =
-        "guild.manage.delete";
+    option (harmonytypes.v1.metadata).requires_owner = true;
   }
 
   // Endpoint to delete an invite.
@@ -157,6 +157,7 @@ service ChatService {
   }
 
   // Endpoint to leave a guild.
+  // If you're the only owner, you can't leave a guild.
   rpc LeaveGuild(LeaveGuildRequest) returns (LeaveGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
@@ -326,5 +327,19 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "messages.reactions.remove";
+  }
+
+  /// OWNERS
+
+  // Endpoint to give ownership to someone else.
+  rpc GrantOwnership(GrantOwnershipRequest) returns (GrantOwnershipResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_owner = true;
+  }
+  // Endpoint to give up your own ownership.
+  // Requires that at least one other person will still be owner.
+  rpc GiveUpOwnership(GiveUpOwnershipRequest) returns (GiveUpOwnershipResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_owner = true;
   }
 }
