@@ -229,7 +229,7 @@ message TokenData {
   // The username of the client.
   string username = 3;
   // The avatar of the client.
-  string avatar = 4;
+  optional string avatar = 4;
 }
 
 // Used in `CheckLoggedIn` endpoint.

@@ -46,7 +46,7 @@ message GetProfileResponse {
 message UpdateProfileRequest {
   // new name of the user.
   optional string new_user_name = 1;
-  // new user avatar.
+  // new user avatar. The avatar will be removed if the string is empty.
   optional string new_user_avatar = 2;
   // new status of the user.
   optional UserStatus new_user_status = 3;
