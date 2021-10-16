@@ -57,7 +57,7 @@ message CreateGuildRequest {
   // The name of the guild.
   string name = 1;
   // The picture HMC of the guild.
-  string picture = 2;
+  optional string picture = 2;
   // Metadata of the guild.
   optional harmonytypes.v1.Metadata metadata = 3;
 }
