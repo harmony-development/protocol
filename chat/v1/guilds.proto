@@ -178,7 +178,7 @@ message PreviewGuildResponse {
   // Name of the guild requested.
   string name = 1;
   // Picture of the guild requested.
-  string picture = 2;
+  optional string picture = 2;
   // Member count of the guild requested.
   uint64 member_count = 3;
 }
