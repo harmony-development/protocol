@@ -23,7 +23,9 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
   
-  // Endpoint to create a "direct message".
+  // Endpoint to create a "direct message" guild.
+  //
+  // - The two users that join the created guild will both be owners.
   rpc CreateDirectMessage(CreateDirectMessageRequest) returns (CreateDirectMessageResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
