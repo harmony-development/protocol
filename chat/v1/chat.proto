@@ -26,6 +26,9 @@ service ChatService {
   // Endpoint to create a "direct message" guild.
   //
   // - The two users that join the created guild will both be owners.
+  // - The guild should be created on the server that the request was made to.
+  // - The server should send a guild invite to the user specified in the request.
+  // - The user specified may or may not use the invite.
   rpc CreateDirectMessage(CreateDirectMessageRequest) returns (CreateDirectMessageResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
