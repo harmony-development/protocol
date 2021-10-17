@@ -16,7 +16,22 @@ service ChatService {
   // Endpoint to create a guild.
   rpc CreateGuild(CreateGuildRequest) returns (CreateGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "";
+  }
+  
+  // Endpoint to create a "room" guild.
+  rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+  
+  // Endpoint to create a "direct message".
+  rpc CreateDirectMessage(CreateDirectMessageRequest) returns (CreateDirectMessageResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+  
+  // Endpoint to upgrade a "room" guild to a "normal" guild.
+  rpc UpgradeRoomToGuild(UpgradeRoomToGuildRequest) returns (UpgradeRoomToGuildResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_owner = true;
   }
 
   // Endpoint to create an invite.
@@ -256,6 +271,8 @@ service ChatService {
 
   // Endpoint to "preview" a guild, which returns some information about a
   // guild.
+  //
+  // - Guilds with the "direct message" kind cannot be previewed.
   rpc PreviewGuild(PreviewGuildRequest) returns (PreviewGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = false;
   }

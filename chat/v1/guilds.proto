@@ -6,16 +6,46 @@ import "harmonytypes/v1/types.proto";
 
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
+// The kind of a guild.
+enum GuildKind {
+  // A "normal" guild as in a guild that allows multiple channels.
+  GUILD_KIND_NORMAL_UNSPECIFIED = 0;
+  // A "room" guild as in a guild that only has one channel.
+  //
+  // - Clients should not show a channel list for guilds of this type.
+  // - Servers should not delete the channels of a guild if it's kind is
+  // changed from "normal" to "room".
+  GUILD_KIND_ROOM = 1;
+  // A "direct message" guild as in a guild that has at most two members,
+  // and has only one channel.
+  //
+  // - Clients should not show a channel list for guilds of this type.
+  // - Clients should show this guild in the guild list with the profile picture
+  // and the username of the other user.
+  // - Servers should "upgrade" this guild to a "room" guild if another
+  // user joins the guild. A name should be crafted using the algorithm
+  // described below:
+  //   - Get at most 3 members' usernames, by their 
+  //   - Concat them with ", " as a seperator.
+  GUILD_KIND_DIRECT_MESSAGE = 2;
+}
+
 // Object representing a guild without the ID part.
 message Guild {
   // The name of the guild.
+  //
+  // This will be empty if the guild kind is "direct message". See
+  // the documentation of "direct message" guild kind on how to display
+  // a name for those guilds.
   string name = 1;
   // The picture HMC of the guild.
   optional string picture = 2;
   // User ID of the owners of the guild.
   repeated uint64 owner_ids = 3;
+  // The kind of this guild.
+  GuildKind kind = 4;
   // Metadata of the guild.
-  optional harmonytypes.v1.Metadata metadata = 4;
+  optional harmonytypes.v1.Metadata metadata = 5;
 }
 
 // Object representing an invite without the ID part.
@@ -52,7 +82,7 @@ enum LeaveReason {
   LEAVE_REASON_KICKED = 2;
 }
 
-// Request type used in `CreateGuild` RPC.
+// Request type used in `CreateGuild` endpoint.
 message CreateGuildRequest {
   // The name of the guild.
   string name = 1;
@@ -64,6 +94,36 @@ message CreateGuildRequest {
 // Used in the `CreateGuild` endpoint.
 message CreateGuildResponse {
   // Guild ID of the guild that was created.
+  uint64 guild_id = 1;
+}
+
+// Request type used in `CreateRoom` endpoint.
+message CreateRoomRequest {
+  // The name of the guild.
+  string name = 1;
+  // The picture HMC of the guild.
+  optional string picture = 2;
+  // Metadata of the guild.
+  optional harmonytypes.v1.Metadata metadata = 3;
+}
+// Used in the `CreateRoom` endpoint.
+message CreateRoomResponse {
+  // Guild ID of the guild that was created.
+  uint64 guild_id = 1;
+}
+
+// Used in the `CreateDirectMessage` endpoint.
+message CreateDirectMessageRequest {
+  // The user ID of the user to DM with.
+  uint64 user_id = 1;
+  // The server ID of the server the user is on.
+  //
+  // Should be left unspecified if it's a user on the homeserver.
+  optional string server_id = 2;
+}
+// Used in the `CreateDirectMessage` endpoint.
+message CreateDirectMessageResponse {
+  // Guild ID of the just created "direct message" guild.
   uint64 guild_id = 1;
 }
 
@@ -130,14 +190,22 @@ message UpdateGuildInformationRequest {
   // Guild ID of the guild you want to update the information of.
   uint64 guild_id = 1;
   // New name for the guild.
-  optional string new_guild_name = 2;
+  optional string new_name = 2;
   // New picture for the guild.
-  optional string new_guild_picture = 3;
+  optional string new_picture = 3;
   // New metadata for the guild.
   optional harmonytypes.v1.Metadata new_metadata = 4;
 }
 // Used in the `UpdateGuildInformation` endpoint.
 message UpdateGuildInformationResponse {}
+
+// Used in the `UpgradeRoomToGuild` endpoint.
+message UpgradeRoomToGuildRequest {
+  // Guild ID of the "room" guild to upgrade to a "normal" guild.
+  uint64 guild_id = 1;
+}
+// Used in the `UpgradeRoomToGuild` endpoint.
+message UpgradeRoomToGuildResponse {}
 
 // Used in the `DeleteGuild` endpoint.
 message DeleteGuildRequest {
