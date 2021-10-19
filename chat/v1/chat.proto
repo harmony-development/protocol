@@ -286,7 +286,8 @@ service ChatService {
   // Endpoint to "preview" a guild, which returns some information about a
   // guild.
   //
-  // - Guilds with the "direct message" kind cannot be previewed.
+  // - Guilds with the "direct message" kind can only be previewed
+  // by the user who is invited to the guild.
   rpc PreviewGuild(PreviewGuildRequest) returns (PreviewGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = false;
   }
