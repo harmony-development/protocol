@@ -322,6 +322,6 @@ message GiveUpOwnershipResponse {}
 message GetPendingInvitesRequest {}
 // Used in `GetPendingInvites` endpoint.
 message GetPendingInvitesResponse {
-  // The pending invites.
-  repeated InviteWithId invites = 1;
+  // The pending invite(s).
+  repeated string invite_ids = 1;
 }

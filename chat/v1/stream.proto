@@ -357,6 +357,12 @@ message StreamEvent {
     uint64 user_id = 1;
   }
 
+  // Sent when an invite is received
+  message InviteReceived {
+    // ID of the invite received.
+    string invite_id = 1;
+  }
+
   // Which event to send.
   oneof event {
     // Send the guild added to list event.
@@ -415,5 +421,7 @@ message StreamEvent {
     OwnerAdded owner_added = 27;
     // Send the owner removed event.
     OwnerRemoved owner_removed = 28;
+    // Send the invite recevied event.
+    InviteReceived invite_received = 29;
   }
 }
