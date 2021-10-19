@@ -58,6 +58,11 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  // Endpoint to get your pending invites.
+  rpc GetPendingInvites(GetPendingInvitesRequest) returns (GetPendingInvitesResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+
   // Endpoint to get information about a guild.
   rpc GetGuild(GetGuildRequest) returns (GetGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
@@ -172,6 +177,9 @@ service ChatService {
   }
 
   // Endpoint to join a guild.
+  //
+  // - If the invite used is in a user's "pending invites" list, it should be
+  // removed from there.
   rpc JoinGuild(JoinGuildRequest) returns (JoinGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }

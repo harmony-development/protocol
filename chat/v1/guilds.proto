@@ -317,3 +317,11 @@ message GiveUpOwnershipRequest {
 }
 // Response for GiveUpOwnership
 message GiveUpOwnershipResponse {}
+
+// Used in `GetPendingInvites` endpoint.
+message GetPendingInvitesRequest {}
+// Used in `GetPendingInvites` endpoint.
+message GetPendingInvitesResponse {
+  // The pending invites.
+  repeated InviteWithId invites = 1;
+}
