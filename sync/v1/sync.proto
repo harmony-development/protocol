@@ -33,7 +33,7 @@ message Event {
     // Guild ID of the guild where the user will be.
     uint64 guild_id = 2;
   }
-  // Event sent when a user is invited to a "direct message" guild
+  // Event sent when a user is invited to a "direct message" guild.
   message UserInvitedToDirectMessage {
     // User ID of the user that was invited.
     uint64 user_id = 1;
