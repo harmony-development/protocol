@@ -67,6 +67,11 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  // Endpoint to reject (delete) an invite from your pending invite list.
+  rpc RejectPendingInvite(RejectPendingInviteRequest) returns (RejectPendingInviteResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+
   // Endpoint to get information about a guild.
   rpc GetGuild(GetGuildRequest) returns (GetGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;

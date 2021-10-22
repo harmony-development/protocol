@@ -325,3 +325,11 @@ message GetPendingInvitesResponse {
   // The pending invite(s).
   repeated string invite_ids = 1;
 }
+
+// Used in `RejectPendingInvite` endpoint.
+message RejectPendingInviteRequest {
+  // ID of the pending invite to reject.
+  string invite_id = 1;
+}
+// Used in `RejectPendingInvite` endpoint.
+message RejectPendingInviteResponse {}
