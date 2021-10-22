@@ -189,7 +189,11 @@ service ChatService {
   }
 
   // Endpoint to leave a guild.
-  // If you're the only owner, you can't leave a guild.
+  //
+  // - If you're the only owner, you can't leave a guild. Exception to this
+  // rule are "direct message" guilds.
+  // - When the last member in a "direct message" guild leaves it, that guild
+  // should be deleted.
   rpc LeaveGuild(LeaveGuildRequest) returns (LeaveGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
