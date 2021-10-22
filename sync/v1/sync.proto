@@ -33,12 +33,19 @@ message Event {
     // Guild ID of the guild where the user will be.
     uint64 guild_id = 2;
   }
-  // Event sent when a user is invited to a "direct message" guild.
-  message UserInvitedToDirectMessage {
+  // Event sent when a user is invited to a guild.
+  message UserInvited {
     // User ID of the user that was invited.
     uint64 user_id = 1;
-    // The invite for the "direct message" guild.
+    // The invite for the guild.
     string invite_id = 2;
+  }
+  // Event sent when a user rejects a guild invitation.
+  message UserRejectedInvite {
+    // Guild ID of the guild the user rejected an invite for.
+    uint64 guild_id = 1;
+    // Used ID of the user that rejected the invitation.
+    uint64 user_id = 2;
   }
 
   // The kind and data of this event.
@@ -47,8 +54,10 @@ message Event {
     UserRemovedFromGuild user_removed_from_guild = 1;
     // User added to a guild.
     UserAddedToGuild user_added_to_guild = 2;
-    // Used invited to a "direct message" guild.
+    // User invited to a "direct message" guild.
     UserInvitedToDirectMessage user_invited_to_direct_message = 3;
+    // User rejected a "direct message" guild invitation.
+    UserRejectedDirectMessage user_rejected_direct_message = 4;
   }
 }
 

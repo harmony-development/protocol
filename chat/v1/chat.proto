@@ -25,14 +25,13 @@ service ChatService {
   
   // Endpoint to create a "direct message" guild.
   //
-  // - The two users that join the created guild will both be owners.
-  // - The guild should be created on the server that the request was made to.
-  // - The server should send a guild invite to the user specified in the request,
-  // using the `UserInvitedToDirectMessage` postbox event if the user is on another server,
+  // - The inviter and the invitee that join the created guild will both be owners.
+  // - The guild should be created on the server that inviter is on.
+  // - The server should send a guild invite to the invitee (specified in the request),
+  // using the `UserInvitedToDirectMessage` postbox event if the invitee is on another server,
   // or by adding the invite to their pending invite list and sending an `InviteReceived`
-  // event over their event stream if the user is on this server.
-  // - The user specified may or may not use the invite. Only the user specified
-  // may use the invite.
+  // event over their event stream if the invitee is on this server.
+  // - The invitee may or may not use the invite. Only the invitee may use the invite.
   rpc CreateDirectMessage(CreateDirectMessageRequest) returns (CreateDirectMessageResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
@@ -67,8 +66,22 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
-  // Endpoint to reject (delete) an invite from your pending invite list.
+  // Endpoint to reject (delete with notification to the inviter) an invite
+  // from your pending invite list.
+  //
+  // If the invitee is on a different server than the inviter, the invitee's
+  // server should send a `UserRejectedInvite` postbox event to the inviter's
+  // server.
+  //
+  // The "notification" is sending a message to the "direct message" guild,
+  // that lets the inviter know the invitee declined the invitation.
   rpc RejectPendingInvite(RejectPendingInviteRequest) returns (RejectPendingInviteResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+  
+  // Endpoint to ignore (delete without notification to the inviter) an
+  // invite from your pending invite list.
+  rpc IgnorePendingInvite(IgnorePendingInviteRequest) returns (IgnorePendingInviteResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 

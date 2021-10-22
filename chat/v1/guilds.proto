@@ -333,3 +333,11 @@ message RejectPendingInviteRequest {
 }
 // Used in `RejectPendingInvite` endpoint.
 message RejectPendingInviteResponse {}
+
+// Used in `IgnorePendingInvite` endpoint.
+message IgnorePendingInviteRequest {
+  // ID of the pending invite to ignore.
+  string invite_id = 1;
+}
+// Used in `IgnorePendingInvite` endpoint.
+message IgnorePendingInviteResponse {}
