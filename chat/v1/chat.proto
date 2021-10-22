@@ -28,9 +28,11 @@ service ChatService {
   // - The inviter and the invitee that join the created guild will both be owners.
   // - The guild should be created on the server that inviter is on.
   // - The server should send a guild invite to the invitee (specified in the request),
-  // using the `UserInvitedToDirectMessage` postbox event if the invitee is on another server,
-  // or by adding the invite to their pending invite list and sending an `InviteReceived`
-  // event over their event stream if the invitee is on this server.
+  // using the `UserInvitedToDirectMessage` postbox event if the invitee is on another
+  // server, otherwise see the below item.
+  // - The server should process this as follows: adding the invite to their pending
+  // invite list and sending an `InviteReceived` event over their event stream if
+  // the invitee is on this server.
   // - The invitee may or may not use the invite. Only the invitee may use the invite.
   rpc CreateDirectMessage(CreateDirectMessageRequest) returns (CreateDirectMessageResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
