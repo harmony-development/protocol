@@ -22,6 +22,8 @@ message Overrides {
     // plurality, not system as in computer
     harmonytypes.v1.Empty system_plurality = 5;
     // the override occured because it was made by the server
+    //
+    // Servers should reject messages sent by users with this override.
     harmonytypes.v1.Empty system_message = 6;
     // the override occured because of bridging
     harmonytypes.v1.Empty bridge = 7;
@@ -358,6 +360,12 @@ message Format {
     // The kind of colour modification to apply
     Kind kind = 1;
   }
+  // Replace a part of the text with the text matching the i18n code.
+  // If i18n code was not found, keep the original text.
+  message Localization {
+    // i18n code for the text.
+    string i18n_code = 1;
+  }
 
     // where the format begins to apply to
   uint32 start = 1;
@@ -392,6 +400,8 @@ message Format {
     Emoji emoji = 14;
     // a text format for coloured text
     Color color = 15;
+    // a text format for localization
+    Localization localization = 16;
   }
 }
 

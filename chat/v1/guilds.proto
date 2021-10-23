@@ -13,8 +13,6 @@ enum GuildKind {
   // A "room" guild as in a guild that only has one channel.
   //
   // - Clients should not show a channel list for guilds of this type.
-  // - Servers should not delete the channels of a guild if it's kind is
-  // changed from "normal" to "room".
   GUILD_KIND_ROOM = 1;
   // A "direct message" guild as in a guild that has at most two members,
   // and has only one channel.

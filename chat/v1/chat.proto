@@ -76,7 +76,10 @@ service ChatService {
   // server.
   //
   // The "notification" is sending a message to the "direct message" guild,
-  // that lets the inviter know the invitee declined the invitation.
+  // that lets the inviter know the invitee declined the invitation. The
+  // message content should be a `TextContent`, with the `FormattedText`
+  // containing a `Localization` formatting with the i18n code
+  // "h.rejected-dm-invite" that matches the whole message.
   rpc RejectPendingInvite(RejectPendingInviteRequest) returns (RejectPendingInviteResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
