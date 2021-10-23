@@ -262,6 +262,41 @@ message Content {
     // A list of photos.
     repeated Photo photos = 1;
   }
+  // Object representing system message content.
+  //
+  // This can only be used by servers themselves. Servers should reject
+  // messages with this content if they are sent by a user.
+  message SystemContent {
+    // Represents a user rejecting an invite.
+    message InviteRejected {
+      // User ID of the invitee.
+      uint64 invitee_id = 1;
+      // User ID of the inviter.
+      uint64 inviter_id = 2;
+    }
+    // Represents a user accepting an invite.
+    message InviteAccepted {
+      // User ID of the invitee.
+      uint64 invitee_id = 1;
+      // User ID of the inviter.
+      uint64 inviter_id = 2;
+    }
+    // Represents a guild upgrade from "room" to "normal".
+    message RoomUpgradedToGuild {
+      // User ID of the user that upgraded the guild.
+      uint64 upgraded_by = 1;
+    }
+
+    // The content.
+    oneof content {
+      // A user rejected an invite.
+      InviteRejected invite_rejected = 1;
+      // A user accepted an invite.
+      InviteAccepted invite_accepted = 2;
+      // A user upgraded a guild from "room" to "normal".
+      RoomUpgradedToGuild room_upgraded_to_guild = 3;
+    }
+  }
 
   // Content data.
   oneof content {
@@ -273,6 +308,8 @@ message Content {
     AttachmentContent attachment_message = 3;
     // Photo content.
     PhotoContent photo_message = 4;
+    // System content.
+    SystemContent system_message = 5;
   }
 }
 
