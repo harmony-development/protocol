@@ -7,13 +7,13 @@ import "harmonytypes/v1/types.proto";
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
 // The kind of a guild.
-enum GuildKind {
+message GuildKind {
   // A "normal" guild as in a guild that allows multiple channels.
-  GUILD_KIND_NORMAL_UNSPECIFIED = 0;
+  message Normal { }
   // A "room" guild as in a guild that only has one channel.
   //
   // - Clients should not show a channel list for guilds of this type.
-  GUILD_KIND_ROOM = 1;
+  message Room { }
   // A "direct message" guild as in a guild that has at most two members,
   // and has only one channel.
   //
@@ -25,7 +25,20 @@ enum GuildKind {
   // described below:
   //   - Get at most 3 members' usernames, by their 
   //   - Concat them with ", " as a seperator.
-  GUILD_KIND_DIRECT_MESSAGE = 2;
+  message DirectMessage {
+    // Whether this direct message was rejected by the invitee or not.
+    bool rejected = 1;
+  }
+
+  // The kind. If this is empty, assume it is `Normal`.
+  oneof kind {
+    // A "normal" guild.
+    Normal normal = 1;
+    // A "room" guild.
+    Room room = 2;
+    // A "direct message" guild.
+    DirectMessage direct_message = 3;
+  }
 }
 
 // Object representing a guild without the ID part.
