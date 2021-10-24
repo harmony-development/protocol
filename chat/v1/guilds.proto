@@ -352,7 +352,7 @@ message RejectPendingInviteRequest {
   // Invite ID of the pending invite to reject.
   string invite_id = 1;
   // Server ID of the pending invite to reject.
-  string server_id = 2;
+  optional string server_id = 2;
 }
 // Used in `RejectPendingInvite` endpoint.
 message RejectPendingInviteResponse {}
@@ -362,7 +362,19 @@ message IgnorePendingInviteRequest {
   // ID of the pending invite to ignore.
   string invite_id = 1;
   // Server ID of the pending invite to reject.
-  string server_id = 2;
+  optional string server_id = 2;
 }
 // Used in `IgnorePendingInvite` endpoint.
 message IgnorePendingInviteResponse {}
+
+// Used in `InviteUserToGuild` endpoint.
+message InviteUserToGuildRequest {
+  // User name of the user to invite.
+  string user_name = 1;
+  // Server ID of the user if they are on another server.
+  optional string server_id = 2;
+  // Guild ID of the guild to invite to.
+  uint64 guild_id = 3;
+}
+// Used in `InviteUserToGuild` endpoint.
+message InviteUserToGuildResponse { }

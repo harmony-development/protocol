@@ -62,6 +62,13 @@ service ChatService {
   rpc GetGuildList(GetGuildListRequest) returns (GetGuildListResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
+  
+  // Endpoint to invite a user to a guild.
+  rpc InviteUserToGuild(InviteUserToGuildRequest) returns (InviteUserToGuildResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "invites.manage.create";
+  }
 
   // Endpoint to get your pending invites.
   rpc GetPendingInvites(GetPendingInvitesRequest) returns (GetPendingInvitesResponse) {
