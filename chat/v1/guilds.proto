@@ -75,6 +75,16 @@ message InviteWithId {
   Invite invite = 2;
 }
 
+// A pending invite.
+message PendingInvite {
+  // Invite ID of the invite.
+  string invite_id = 1;
+  // Server ID of the server the inviter is on.
+  optional string server_id = 2;
+  // User ID of the inviter.
+  uint64 inviter_id = 3;
+}
+
 // Object representing a guild list entry.
 message GuildListEntry {
   // Guild ID of this guild entry.
@@ -125,8 +135,8 @@ message CreateRoomResponse {
 
 // Used in the `CreateDirectMessage` endpoint.
 message CreateDirectMessageRequest {
-  // The user ID of the user to DM with.
-  uint64 user_id = 1;
+  // The user name of the user to DM with.
+  string user_name = 1;
   // The server ID of the server the user is on.
   //
   // Should be left unspecified if it's a user on the homeserver.
@@ -334,13 +344,15 @@ message GetPendingInvitesRequest {}
 // Used in `GetPendingInvites` endpoint.
 message GetPendingInvitesResponse {
   // The pending invite(s).
-  repeated string invite_ids = 1;
+  repeated PendingInvite pending_invites = 1;
 }
 
 // Used in `RejectPendingInvite` endpoint.
 message RejectPendingInviteRequest {
-  // ID of the pending invite to reject.
+  // Invite ID of the pending invite to reject.
   string invite_id = 1;
+  // Server ID of the pending invite to reject.
+  string server_id = 2;
 }
 // Used in `RejectPendingInvite` endpoint.
 message RejectPendingInviteResponse {}
@@ -349,6 +361,8 @@ message RejectPendingInviteResponse {}
 message IgnorePendingInviteRequest {
   // ID of the pending invite to ignore.
   string invite_id = 1;
+  // Server ID of the pending invite to reject.
+  string server_id = 2;
 }
 // Used in `IgnorePendingInvite` endpoint.
 message IgnorePendingInviteResponse {}

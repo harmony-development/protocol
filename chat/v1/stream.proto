@@ -357,16 +357,24 @@ message StreamEvent {
     uint64 user_id = 1;
   }
 
-  // Sent when a "direct message" guild invite is received.
-  message DMInviteReceived {
+  // Sent when a guild invite is received.
+  message InviteReceived {
     // ID of the invite received.
     string invite_id = 1;
+    // Server ID of the server the inviter is on.
+    optional string server_id = 2;
+    // User ID of the inviter.
+    uint64 inviter_id = 3;
   }
 
-  // Sent when a "direct message" guild invite is rejected by the invitee.
-  message DMInviteRejected {
-    // Guild ID of the "direct message" guild that this occured in.
+  // Sent when a guild invite is rejected by the invitee.
+  message InviteRejected {
+    // Guild ID of the guild that this occured for.
     uint64 guild_id = 1;
+    // ID of the invite rejected.
+    string invite_id = 2;
+    // User ID of the invitee.
+    uint64 user_id = 3;
   }
 
   // Which event to send.
@@ -427,9 +435,9 @@ message StreamEvent {
     OwnerAdded owner_added = 27;
     // Send the owner removed event.
     OwnerRemoved owner_removed = 28;
-    // Send the "direct message" guild invite received event.
-    DMInviteReceived dm_invite_received = 29;
-    // Send the "direct message" guild invite rejected event.
-    DMInviteRejected dm_invite_rejected = 30;
+    // Send the guild invite received event.
+    InviteReceived invite_received = 29;
+    // Send the guild invite rejected event.
+    InviteRejected invite_rejected = 30;
   }
 }
