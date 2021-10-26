@@ -12,14 +12,8 @@ header to a valid token from the hRPC API.
 Expects authentication: yes
 
 The body should be POST-ed as a multipart form (`multipart/form-data`), with a
-single part named `file` which contains the body of the file being uploaded.
-
-### URL Parameters
-
-| Name          | Description                          |
-| ------------- | ------------------------------------ |
-| `filename`    | The name of the file being uploaded. |
-| `contentType` | The MIME type of the file.           |
+single part named `file` which contains the body of the file being uploaded,
+the name of the file and the MIME type of the file.
 
 ### Responses
 
