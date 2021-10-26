@@ -357,6 +357,26 @@ message StreamEvent {
     uint64 user_id = 1;
   }
 
+  // Sent when a guild invite is received.
+  message InviteReceived {
+    // ID of the invite received.
+    string invite_id = 1;
+    // Server ID of the server the inviter is on.
+    optional string server_id = 2;
+    // User ID of the inviter.
+    uint64 inviter_id = 3;
+  }
+
+  // Sent when a guild invite is rejected by the invitee.
+  message InviteRejected {
+    // Guild ID of the guild that this occured for.
+    uint64 guild_id = 1;
+    // ID of the invite rejected.
+    string invite_id = 2;
+    // User ID of the invitee.
+    uint64 user_id = 3;
+  }
+
   // Which event to send.
   oneof event {
     // Send the guild added to list event.
@@ -415,5 +435,9 @@ message StreamEvent {
     OwnerAdded owner_added = 27;
     // Send the owner removed event.
     OwnerRemoved owner_removed = 28;
+    // Send the guild invite received event.
+    InviteReceived invite_received = 29;
+    // Send the guild invite rejected event.
+    InviteRejected invite_rejected = 30;
   }
 }

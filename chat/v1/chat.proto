@@ -16,7 +16,32 @@ service ChatService {
   // Endpoint to create a guild.
   rpc CreateGuild(CreateGuildRequest) returns (CreateGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_permission_node = "";
+  }
+  
+  // Endpoint to create a "room" guild.
+  rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+  
+  // Endpoint to create a "direct message" guild.
+  //
+  // - The inviter and the invitee that join the created guild will both be owners.
+  // - The guild should be created on the server that inviter is on.
+  // - The server should send a guild invite to the invitee (specified in the request),
+  // using the `UserInvited` postbox event if the invitee is on another server,
+  // otherwise see the below item.
+  // - The server should process this as follows: adding the invite to their pending
+  // invite list and sending an `InviteReceived` event over their event stream if
+  // the invitee is on this server.
+  // - The invitee may or may not use the invite. Only the invitee may use the invite.
+  rpc CreateDirectMessage(CreateDirectMessageRequest) returns (CreateDirectMessageResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+  
+  // Endpoint to upgrade a "room" guild to a "normal" guild.
+  rpc UpgradeRoomToGuild(UpgradeRoomToGuildRequest) returns (UpgradeRoomToGuildResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_owner = true;
   }
 
   // Endpoint to create an invite.
@@ -35,6 +60,38 @@ service ChatService {
 
   // Endpoint to get your guild list.
   rpc GetGuildList(GetGuildListRequest) returns (GetGuildListResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+  
+  // Endpoint to invite a user to a guild.
+  rpc InviteUserToGuild(InviteUserToGuildRequest) returns (InviteUserToGuildResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+    option (harmonytypes.v1.metadata).requires_permission_node =
+        "invites.manage.create";
+  }
+
+  // Endpoint to get your pending invites.
+  rpc GetPendingInvites(GetPendingInvitesRequest) returns (GetPendingInvitesResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+
+  // Endpoint to reject (delete with notification to the inviter) an invite
+  // from your pending invite list.
+  //
+  // If the invitee is on a different server than the inviter, the invitee's
+  // server should send a `UserRejectedInvite` postbox event to the inviter's
+  // server.
+  //
+  // The "notification" is sending a `InviteRejected` stream event to the
+  // inviter. If the guild's kind is `DirectMessage`, the server should also
+  // set the `rejected` field of the guild's kind to `true`.
+  rpc RejectPendingInvite(RejectPendingInviteRequest) returns (RejectPendingInviteResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+  
+  // Endpoint to ignore (delete without notification to the inviter) an
+  // invite from your pending invite list.
+  rpc IgnorePendingInvite(IgnorePendingInviteRequest) returns (IgnorePendingInviteResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
@@ -152,12 +209,19 @@ service ChatService {
   }
 
   // Endpoint to join a guild.
+  //
+  // - If the invite used is in a user's "pending invites" list, it should be
+  // removed from there.
   rpc JoinGuild(JoinGuildRequest) returns (JoinGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
   // Endpoint to leave a guild.
-  // If you're the only owner, you can't leave a guild.
+  //
+  // - If you're the only owner, you can't leave a guild. Exception to this
+  // rule are "direct message" guilds.
+  // - When the last member in a "direct message" guild leaves it, that guild
+  // should be deleted.
   rpc LeaveGuild(LeaveGuildRequest) returns (LeaveGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
@@ -256,6 +320,9 @@ service ChatService {
 
   // Endpoint to "preview" a guild, which returns some information about a
   // guild.
+  //
+  // - Guilds with the "direct message" kind can only be previewed
+  // by the user who is invited to the guild.
   rpc PreviewGuild(PreviewGuildRequest) returns (PreviewGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = false;
   }
