@@ -495,7 +495,7 @@ message GetChannelMessagesRequest {
   // where to get the messages.
   // If not specified, the `direction` will be ignored and the newest messages
   // will be returned.
-  uint64 message_id = 3;
+  optional uint64 message_id = 3;
   // On which direction to get the messages.
   //
   // - By default, it is "before", which means you will get messages before the
