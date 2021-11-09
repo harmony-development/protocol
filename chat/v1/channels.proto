@@ -10,8 +10,6 @@ option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 enum ChannelKind {
   // A text channel. Allows you to simply send messages to a group of people.
   CHANNEL_KIND_TEXT_UNSPECIFIED = 0;
-  // A voice channel. Allows you to talk to other people with voice.
-  CHANNEL_KIND_VOICE_MEDIA = 1;
   // A category channel. All channels under this channel down to another
   // category channel belongs to this category channel.
   CHANNEL_KIND_CATEGORY = 2;
@@ -44,9 +42,8 @@ message ChannelWithId {
 // "h." prefix. Third-party extensions should not use the "h." prefix. If no
 // kind is specified, the channel is a text channel.
 //
-// Kinds indicate additional functionality a channel may have: for example,
-// h.voice can indicate that a channel has voice functionalities alongside
-// the usual text fare.
+// Kinds indicate additional functionality a channel may have, alongside
+// the core text functionality.
 //
 // Used in the `CreateChannel` endpoint.
 message CreateChannelRequest {
