@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package protocol.bots.v1;
+/**
+
+## Bot Invite Codes
+
+Bot invite codes work similarly to HMC URLs.
+They can either be server+code or just code,
+to refer to a bot on the current homeserver.
+
+The format for an invite code is:
+> [url[:port]/]code
+
+where `code` is a purely alphanumeric code.
+
+*/
+
+// A description of a bot account
+message Bot {
+  // The ID of the bot
+  uint64 bot_id = 1;
+  // The bot's display name
+  string display_name = 2;
+  // The bot's avatar URL
+  string avatar_url = 3;
+  // The bot's invite code, if it has one
+  optional string invite = 4;
+}
+
+// Request type for MyBots
+message MyBotsRequest {}
+// Response type for MyBots
+message MyBotsResponse {
+  // The list of owned bots
+  repeated Bot bots = 1;
+}
+
+// Request type for CreateBot
+message CreateBotRequest {
+  // The bot's display name
+  string display_name = 1;
+  // The bot's avatar URL
+  optional string avatar_url = 2;
+  // The bot's invite code, if it has one
+  optional string invite = 3;
+}
+// Response type for CreateBot
+message CreateBotResponse {
+  // The newly minted ID of the bot
+  uint64 bot_id = 1;
+}
+
+// Request type for EditBot
+message EditBotRequest {
+  // The ID of the bot to edit
+  uint64 bot_id = 1;
+  // The bot's new display name
+  optional string new_display_name = 2;
+  // The bot's new avatar URL
+  optional string new_avatar_url = 3;
+  // The bot's new invite code
+  optional string invite = 4;
+}
+// Response type for EditBot
+message EditBotResponse {}
+
+// Request type for DeleteBot
+message DeleteBotRequest {
+  // The bot to delete
+  uint64 bot_id = 1;
+}
+// Response type for DeleteBot
+message DeleteBotResponse {}
+
+// Request type for GetBot
+message GetBotRequest {
+  // The bot to get the information of
+  uint64 bot_id = 1;
+}
+// Response type for GetBot
+message GetBotResponse {
+  // The requested bot
+  Bot bot = 1;
+}
+
+// Request type for Policies
+message PoliciesRequest {}
+// Response type for Policies
+message PoliciesResponse {
+  // How many bots an individual account is allowed to own
+  uint32 max_bots = 1;
+}
+
+// Request type for AddBot
+message AddBotRequest {
+  // The guild to add the bot to
+  uint64 guild_id = 1;
+  // The bot's invite code.
+  string invite_code = 2;
+}
+// Response type for AddBot
+message AddBotResponse {}
+
+// The Bots service allows the management of bot accounts
+service BotsService {
+  // Gets the list of bots that you own
+  rpc MyBots(MyBotsRequest) returns (MyBotsResponse);
+  // Gets information on a given bot
+  rpc GetBot(GetBotRequest) returns (GetBotResponse);
+  // Creates a new bot account
+  rpc CreateBot(CreateBotRequest) returns (CreateBotResponse);
+  // Modifies a bot account that you own
+  rpc EditBot(EditBotRequest) returns (EditBotResponse);
+  // Deletes a bot account that you own
+  rpc DeleteBot(DeleteBotRequest) returns (DeleteBotResponse);
+  // Server policies for bot accounts that the client
+  // may display in its UI or restrict actions to prevent
+  // request errors
+  rpc Policies(PoliciesRequest) returns (PoliciesResponse);
+  // The request to add a bot.
+  rpc AddBot(AddBotRequest) returns (AddBotResponse);
+};
