@@ -18,7 +18,10 @@ message ProfileUpdated {
   // New status for this user.
   optional UserStatus new_status = 4;
   // New is bot or not for this user.
-  optional bool new_is_bot = 5;
+  // Deprecated, prefer new_account_kind if set.
+  optional bool new_is_bot = 5 [ deprecated = true ];
+  // The new account kind for this account
+  optional AccountKind new_account_kind = 6;
 }
 
 // Describes an emote service event.

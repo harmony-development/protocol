@@ -18,6 +18,16 @@ enum UserStatus {
   USER_STATUS_STREAMING = 5;
 }
 
+// The possible kinds of an account
+enum AccountKind {
+  // The account is a full-fledged account controlled by a human
+  ACCOUNT_KIND_FULL_UNSPECIFIED = 0;
+  // The account is an account controlled by a bot
+  ACCOUNT_KIND_BOT = 1;
+  // The account is a guest account controlled by a human
+  ACCOUNT_KIND_GUEST = 2;
+}
+
 // Data for a single profile, without the user's ID.
 message Profile {
   // the name of the user.
@@ -26,8 +36,10 @@ message Profile {
   optional string user_avatar = 2;
   // the status of the user.
   UserStatus user_status = 3;
-  // whether the user is a bot or not.
-  bool is_bot = 4;
+  // whether the user is a bot or not
+  bool is_bot = 4 [ deprecated = true ];
+  // what kind of account the user is, e.g. full, guest, bot
+  AccountKind account_kind = 5;
 }
 
 // Used in `GetProfile` endpoint.
@@ -50,8 +62,11 @@ message UpdateProfileRequest {
   optional string new_user_avatar = 2;
   // new status of the user.
   optional UserStatus new_user_status = 3;
-  // new whether the user is a bot or not.
-  optional bool new_is_bot = 4;
+  // new whether the user is a bot or not
+  //
+  // Deprecated; see bot service and guest handling
+  // in auth.
+  optional bool new_is_bot = 4 [ deprecated = true ];
 }
 
 // Used in `UpdateProfile` endpoint.

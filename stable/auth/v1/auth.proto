@@ -7,7 +7,17 @@ package protocol.auth.v1;
 option go_package = "github.com/harmony-development/legato/gen/auth/v1";
 
 // Used in `BeginAuth` endpoint.
-message BeginAuthRequest {}
+message BeginAuthRequest {
+  // If provided, this is the guest token
+  // for the account being upgraded from
+  // a guest account to a full account
+  // during the auth flow.
+  //
+  // This token is provided by the server
+  // at the end of the auth flow that
+  // created the guest account.
+  optional string for_guest_token = 1;
+}
 
 // BeginAuthResponse
 // The return type of BeginAuth, containing the
@@ -27,6 +37,22 @@ message Session {
   uint64 user_id = 1;
   // session_token: the session token to use in authorization
   string session_token = 2;
+  // A token allowing for this account to be upgraded to a
+  // "full" account by beginning an auth session and providing
+  // this token.
+  //
+  // The guest token only exists to upgrade a guest account to a full
+  // account, and does not permit logging in with a guest account
+  // on more than one session.
+  //
+  // A "guest token" MAY be provided to BeginAuth to begin
+  // an authorization process that will upgrade the guest account
+  // to a full account if completed successfully.
+  // This MUST only affect now being able to log
+  // into the account with more than one session, and MUST not
+  // change other information about the account, such as username
+  // and password.
+  optional string guest_token = 3;
 }
 
 // AuthStep
