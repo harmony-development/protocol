@@ -250,7 +250,7 @@ message Content {
   // Object representing embed content.
   message EmbedContent {
     // Embed content.
-    Embed embed = 1;
+    repeated Embed embeds = 1;
   }
   // Object representing attachment content.
   message AttachmentContent {
