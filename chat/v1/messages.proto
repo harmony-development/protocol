@@ -242,11 +242,6 @@ message Attachment {
 
 // Object representing a message's content.
 message Content {
-  // Object representing text content.
-  message TextContent {
-    // Text content.
-    FormattedText content = 1;
-  }
   // Object representing embed content.
   message EmbedContent {
     // Embed content.
@@ -290,11 +285,11 @@ message Content {
     // User ID of the user that upgraded the guild.
     uint64 upgraded_by = 1;
   }
+ 
+  FormattedText body = 1;
 
   // Content data.
   oneof content {
-    // Text content.
-    TextContent text_message = 1;
     // Embed content.
     EmbedContent embed_message = 2;
     // Attachment content.
