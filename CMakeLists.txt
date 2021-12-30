@@ -4,6 +4,10 @@ project(HarmonyProtocols)
 
 include(GNUInstallDirs)
 
-foreach(dir IN ITEMS auth chat harmonytypes mediaproxy voice emote profile batch sync)
-	install(DIRECTORY ${dir} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/harmony-protocols FILES_MATCHING PATTERN "*.proto")
-endforeach()
+option(USE_STAGING_PROTOCOLS "Whether or not to install staging protocols")
+
+add_subdirectory(stable)
+
+if (USE_STAGING_PROTOCOLS)
+    add_subdirectory(staging)
+endif()
