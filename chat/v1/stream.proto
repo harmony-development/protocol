@@ -13,6 +13,9 @@ import "profile/v1/stream.proto";
 option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
 // Request type for use in the `StreamEvents` endpoint.
+// By default, this endpoint will subscribe to all events.
+// Any guilds joined in the future will be added to the subscription as well.
+// Use the UnsubscribeFromAll event for unsubscribing from all current subscriptions and disable the automatic guild subscriptions
 message StreamEventsRequest {
   // Event source for guilds' events.
   message SubscribeToGuild {
@@ -23,6 +26,8 @@ message StreamEventsRequest {
   message SubscribeToActions {}
   // Event source for homeserver events.
   message SubscribeToHomeserverEvents {}
+  // Event to unsubscribe from all events.
+  message UnsubscribeFromAll {}
 
   // Describes which event source to subscribe to.
   oneof request {
@@ -32,6 +37,8 @@ message StreamEventsRequest {
     SubscribeToActions subscribe_to_actions = 2;
     // Subscribe to the homeserver event source.
     SubscribeToHomeserverEvents subscribe_to_homeserver_events = 3;
+    // Unsubscribe from all events.
+    UnsubscribeFromAll unsubscribe_from_all = 4;
   }
 }
 
@@ -110,7 +117,7 @@ message StreamEvent {
     uint64 guild_id = 1;
     // Channel ID of the channel that was changed.
     uint64 channel_id = 2;
-    // The new name of the channel. 
+    // The new name of the channel.
     optional string new_name = 3;
     // The new metadata of the channel.
     optional harmonytypes.v1.Metadata new_metadata = 4;
