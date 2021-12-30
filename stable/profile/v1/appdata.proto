@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package protocol.profile.v1;
+
+import "harmonytypes/v1/types.proto";
+
+// A tag for an override. This is used as a
+// standard shorthand for sending a message with
+// an override. If a message starts with before and
+// ends with after, clients should send a message
+// with the override the tag belongs to, stripping
+// the tag indicators.
+message OverrideTag {
+    // The portion of the tag before the messge.
+    string before = 1;
+    // The portion of the tag after the messge.
+    string after = 2;
+}
+
+// An individual override
+message ProfileOverride {
+    // The username for this override
+    optional string username = 1;
+    // The avatar for this override
+    optional string avatar = 2;
+    // The tags for this override.
+    repeated OverrideTag tags = 3;
+    // The reason this override is used
+    oneof reason {
+        // a custom reason in case the builtin ones don't fit
+        string user_defined = 4;
+        // plurality, not system as in computer
+        harmonytypes.v1.Empty system_plurality = 5;
+    }
+}
+
+// The message used for the 'h.overrides' key
+// of appdata.
+message AppDataOverrides {
+    // The list of overrides.
+    repeated ProfileOverride overrides = 1;
+}
