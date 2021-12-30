@@ -17,12 +17,12 @@ service ChatService {
   rpc CreateGuild(CreateGuildRequest) returns (CreateGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
-  
+
   // Endpoint to create a "room" guild.
   rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
-  
+
   // Endpoint to create a "direct message" guild.
   //
   // - The inviter and the invitee that join the created guild will both be owners.
@@ -37,7 +37,7 @@ service ChatService {
   rpc CreateDirectMessage(CreateDirectMessageRequest) returns (CreateDirectMessageResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
-  
+
   // Endpoint to upgrade a "room" guild to a "normal" guild.
   rpc UpgradeRoomToGuild(UpgradeRoomToGuildRequest) returns (UpgradeRoomToGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
@@ -62,7 +62,7 @@ service ChatService {
   rpc GetGuildList(GetGuildListRequest) returns (GetGuildListResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
-  
+
   // Endpoint to invite a user to a guild.
   rpc InviteUserToGuild(InviteUserToGuildRequest) returns (InviteUserToGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
@@ -88,7 +88,7 @@ service ChatService {
   rpc RejectPendingInvite(RejectPendingInviteRequest) returns (RejectPendingInviteResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
-  
+
   // Endpoint to ignore (delete without notification to the inviter) an
   // invite from your pending invite list.
   rpc IgnorePendingInvite(IgnorePendingInviteRequest) returns (IgnorePendingInviteResponse) {
@@ -378,6 +378,9 @@ service ChatService {
   }
 
   // Endpoint to stream events from the homeserver.
+  // By default, this endpoint will subscribe to all events.
+  // Any guilds joined in the future will be added to the subscription as well.
+  // Use the UnsubscribeFromAll event for unsubscribing from all current subscriptions and disable the automatic guild subscriptions
   rpc StreamEvents(stream StreamEventsRequest) returns (stream StreamEventsResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
