@@ -17,19 +17,35 @@ on:
       - 'meson.build'
 
 jobs:
-  lint-protos:
+  lint-protos-stable:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: bufbuild/buf-setup-action@v0.3.1
       - uses: bufbuild/buf-lint-action@v0.3.0
         with:
-          input: '.'
-  breaking-protos:
+          input: 'stable'
+  breaking-protos-stable:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: bufbuild/buf-setup-action@v0.3.1
       - uses: bufbuild/buf-breaking-action@v0.4.0
         with:
-          against: "https://github.com/harmony-development/protocol.git#branch=main"
+          against: "https://github.com/harmony-development/protocol.git#branch=main,subdir=stable"
+  lint-protos-staging:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: bufbuild/buf-setup-action@v0.3.1
+      - uses: bufbuild/buf-lint-action@v0.3.0
+        with:
+          input: 'staging'
+  breaking-protos-staging:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: bufbuild/buf-setup-action@v0.3.1
+      - uses: bufbuild/buf-breaking-action@v0.4.0
+        with:
+          against: "https://github.com/harmony-development/protocol.git#branch=main,subdir=staging"
