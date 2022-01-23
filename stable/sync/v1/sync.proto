@@ -39,7 +39,8 @@ message Event {
     uint64 user_id = 1;
     // User ID of the user that invited.
     uint64 inviter_id = 2;
-    // The invite for the guild.
+    // The unique identifier of a user's invite to another
+    // user to join a given guild.
     string invite_id = 3;
   }
   // Event sent when a user rejects a guild invitation.

@@ -118,6 +118,9 @@ service BotsService {
   // may display in its UI or restrict actions to prevent
   // request errors
   rpc Policies(PoliciesRequest) returns (PoliciesResponse);
-  // The request to add a bot.
+  // Requests a bot to add itself to the guild.
+  //
+  // For cross-server bots, this dispatches a UserInvited
+  // request across sync, inviting the bot to the guild.
   rpc AddBot(AddBotRequest) returns (AddBotResponse);
 };
