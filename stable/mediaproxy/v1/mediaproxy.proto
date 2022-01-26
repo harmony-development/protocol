@@ -26,6 +26,12 @@ message MediaMetadata {
   string mimetype = 1;
   // Filename of the media.
   string filename = 2;
+  // Sıze of the media.
+  //
+  // This should (usually) be the size taken from the `Content-Length` header
+  // (for HTTP requests).
+  // If this is not included, then it means the size could not be determined.
+  optional uint32 size = 3;
 }
 
 // Used in the `FetchLinkMetadata` endpoint.
