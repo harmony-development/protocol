@@ -49,7 +49,7 @@ message CreateBotRequest {
 message CreateBotResponse {
   // The newly minted ID of the bot
   uint64 bot_id = 1;
-  // The authentication token of the bot
+  // The authentication token of the bot, used instead of a session token from AuthService
   string token = 2;
 }
 

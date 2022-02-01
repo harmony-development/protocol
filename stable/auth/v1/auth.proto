@@ -289,6 +289,8 @@ message CheckLoggedInResponse {}
 // TODO: finish
 
 // The service containing authorization/entication methods
+//
+// It is important to note that bots are exempt from AuthService - a persistent authorization token is generated on bot creation.
 service AuthService {
   // Federate with a foreignserver, obtaining a token
   // you can use to call LoginFederated on it
