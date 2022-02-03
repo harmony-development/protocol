@@ -384,6 +384,37 @@ message StreamEvent {
     uint64 user_id = 3;
   }
 
+  // Sent when an invite is created in a guild.
+  message InviteCreated {
+    // Guild ID of the guild that this occured for.
+    uint64 guild_id = 1;
+    // ID of the invite that was created.
+    string invite_id = 2;
+    // Possible uses of the created invite.
+    uint32 possible_uses = 3;
+  }
+
+  // Sent when an invite is deleted in a guild.
+  //
+  // This can occur because of the invite being used up (0 remaining uses),
+  // or a user deleting the invite.
+  message InviteDeleted {
+    // Guild ID of the guild that this occured for.
+    uint64 guild_id = 1;
+    // ID of the invite that was deleted.
+    string invite_id = 2;
+  }
+
+  // Sent when an invite is used once by a user.
+  message InviteUsed {
+    // Guild ID of the guild that this occured for.
+    uint64 guild_id = 1;
+    // ID of the invite that was used.
+    string invite_id = 2;
+    // User ID of the user that used this invite.
+    uint64 user_id = 3;
+  }
+
   // Which event to send.
   oneof event {
     // Send the guild added to list event.
@@ -446,5 +477,11 @@ message StreamEvent {
     InviteReceived invite_received = 29;
     // Send the guild invite rejected event.
     InviteRejected invite_rejected = 30;
+    // Send the invite created event.
+    InviteCreated invite_created = 31;
+    // Send the invite deleted event.
+    InviteDeleted invite_deleted = 32;
+    // Send the invite used event.
+    InviteUsed invite_used = 33;
   }
 }
