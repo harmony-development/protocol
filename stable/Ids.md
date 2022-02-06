@@ -1,24 +1,34 @@
 # IDs
 
+## User ID
+
+A `uint64` ID. Represents a user.
+This must be unique in a server.
+
 ## Guild ID
 
-A `uint64` ID. Represents a *Guild*.
-This should be unique in a server.
+A `uint64` ID. Represents a guild.
+This must be unique in a server.
 
 ## Channel ID
 
-A `uint64` ID. Represents a *Channel*.
-This should be unique in a *Guild*.
+A `uint64` ID. Represents a channel.
+This must be unique in a *Guild*.
 
 ## Message ID
 
-A `uint64` ID. Represents a *Message*.
-This should be unique in a *Channel*.
+A `uint64` ID. Represents a message.
+This must be unique in a channel.
+
+## Emote Pack ID
+
+A `uint64` ID. Represents an emote pack.
+This must be unique in a server.
 
 ## File ID
 
 A `string` ID. Represents a file on a server.
-This should be unique in a server.
+This must be unique in a server.
 
 For clients, this means that they should download
 from the server they got the file ID from.
