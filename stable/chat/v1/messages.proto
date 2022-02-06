@@ -9,11 +9,13 @@ option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
 // Overrides provide a way to override the name and avatar of a message.
 message Overrides {
-  // the overridden username.
+  // The overridden username.
   optional string username = 1;
-  // the overridden avatar. This must be a file ID pointing to an image.
+  // The overridden avatar.
+  //
+  // This can be a HMC, a file ID, or an external image URL.
   optional string avatar = 2;
-  // the reason for overriding username and avatar.
+  // The reason for overriding username and avatar.
   oneof reason {
     // A custom reason in case the builtin ones don't fit.
     string user_defined = 3;

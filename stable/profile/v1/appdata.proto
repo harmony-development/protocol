@@ -22,6 +22,8 @@ message ProfileOverride {
   // The username for this override.
   optional string username = 1;
   // The avatar for this override.
+  //
+  // This can be a HMC, a file ID, or an external image URL.
   optional string avatar = 2;
   // The tags for this override.
   repeated OverrideTag tags = 3;
