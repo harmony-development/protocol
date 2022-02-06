@@ -231,7 +231,7 @@ message Photo {
   // The width of the photo, in pixels.
   uint32 width = 5;
   // The photo's caption.
-  optional FormattedText caption = 6;
+  FormattedText caption = 6;
   // A thumbnail representing the photo.
   Minithumbnail minithumbnail = 7;
 }
