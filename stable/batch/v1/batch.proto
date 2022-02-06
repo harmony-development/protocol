@@ -36,14 +36,42 @@ message BatchSameResponse {
 }
 
 // Service to batch requests.
+//
+// Note that:
+//
+// - This does not support batching stream requests.
+// - Responses will be returned in the order the requests were given.
+// - If an error occurs, the endpoint will short-circuit and return
+// an error.
+//
+// Not all endpoints can be batched. A list of endpoints that can be
+// batched is given below:
+//
+// - Endpoints that do not modify data:
+//   - "protocol.profile.v1.ProfileService.GetProfile"
+//   - "protocol.chat.v1.ChatService.QueryHasPermission"
+//   - "protocol.chat.v1.ChatService.GetUserRoles"
+//   - "protocol.chat.v1.ChatService.GetGuildRoles"
+//   - "protocol.chat.v1.ChatService.GetGuild"
+//   - "protocol.chat.v1.ChatService.GetGuildChannels"
+//   - "protocol.chat.v1.ChatService.GetPermissions"
+//   - "protocol.chat.v1.ChatService.GetGuildMembers"
+//   - "protocol.mediaproxy.v1.MediaProxyService.FetchLinkMetadata"
+//   - "protocol.mediaproxy.v1.MediaProxyService.InstantView"
+//   - "protocol.mediaproxy.v1.MediaProxyService.CanInstantView"
 service BatchService {
   // Batch requests.
-  // Does not support batching stream requests.
-  // Batched requests should be verified and an error should be thrown if they
-  // are invalid.
+  //
+  // Servers should limit the amount of requests that can be batched
+  // to 20.
   rpc Batch(BatchRequest) returns (BatchResponse) {}
-  // BatchSame allows batching for requests using the same endpoint.
+  // Allows batching for requests using the same endpoint.
+  //
   // This allows for additional network optimizations since the endpoint doesn't
   // have to be sent for every request.
+  //
+  // Servers should limit the amount of requests that can be batched
+  // to 100 for endpoints that do not modify data, and 20 for endpoints
+  // that modify data.
   rpc BatchSame(BatchSameRequest) returns (BatchSameResponse) {}
 }
