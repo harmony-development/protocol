@@ -391,12 +391,16 @@ message StreamEvent {
 
   // Sent when there's a new owner.
   message OwnerAdded {
+    // Guild ID of the guild where this event occured.
+    uint64 guild_id = 2;
     // User ID of the new owner.
     uint64 user_id = 1;
   }
 
   // Sent when an owner gives up their ownership.
   message OwnerRemoved {
+    // Guild ID of the guild where this event occured.
+    uint64 guild_id = 2;
     // User ID of the user who is no longer owner.
     uint64 user_id = 1;
   }
