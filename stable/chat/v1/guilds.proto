@@ -49,7 +49,7 @@ message Guild {
   // the documentation of "direct message" guild kind on how to display
   // a name for those guilds.
   string name = 1;
-  // The picture HMC of the guild.
+  // The picture of the guild. This must be a file ID that points to an image.
   optional string picture = 2;
   // User ID of the owners of the guild.
   repeated uint64 owner_ids = 3;

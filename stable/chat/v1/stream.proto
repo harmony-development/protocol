@@ -58,6 +58,9 @@ message StreamEventsResponse {
 // Describes an event.
 message StreamEvent {
   // Event sent when a new message is sent.
+  //
+  // This event will only be sent to users that have "messages.view" permission
+  // for the channel the message was sent in.
   message MessageSent {
     // ID that is sent by your client it can use to confirm that the message is sent.
     optional uint64 echo_id = 1;
@@ -72,6 +75,9 @@ message StreamEvent {
   }
 
   // Event sent when a message's text content is updated.
+  //
+  // This event will only be sent to users that have "messages.view" permission
+  // for the channel the message was updated in.
   message MessageUpdated {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -86,6 +92,9 @@ message StreamEvent {
   }
 
   // Event sent when a message is deleted.
+  //
+  // This event will only be sent to users that have "messages.view" permission
+  // for the channel the message was deleted in.
   message MessageDeleted {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -112,6 +121,9 @@ message StreamEvent {
   }
 
   // Event sent when a channel's information is changed.
+  //
+  // This event will only be sent to users that have "messages.view" permission
+  // for the channel that was updated.
   message ChannelUpdated {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -124,6 +136,9 @@ message StreamEvent {
   }
 
   // Event sent when a channel's position in the channel list is changed.
+  //
+  // This event will only be sent to users that have "messages.view" permission
+  // for the channel that was moved.
   message ChannelPositionUpdated {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -133,7 +148,10 @@ message StreamEvent {
     optional harmonytypes.v1.ItemPosition new_position = 3;
   }
 
-  // Event sent when all channels have been reordered
+  // Event sent when all channels have been reordered.
+  //
+  // If a user does not have "messages.view" permission for a channel in here,
+  // it should be omitted from the list.
   message ChannelsReordered {
     // guild_id: the guild whose channels are being reordered
     uint64 guild_id = 2;
@@ -142,6 +160,9 @@ message StreamEvent {
   }
 
   // Event sent when a channel is deleted.
+  //
+  // This event will only be sent to users that have "messages.view" permission
+  // for the channel that was deleted.
   message ChannelDeleted {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -216,6 +237,8 @@ message StreamEvent {
   }
 
   // Event sent when a role's position in the role list is changed.
+  //
+  // This event will only be sent to users with the "roles.get" permission.
   message RoleMoved {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -226,6 +249,8 @@ message StreamEvent {
   }
 
   // Event sent when a role is deleted.
+  //
+  // This event will only be sent to users with the "roles.get" permission.
   message RoleDeleted {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -234,6 +259,8 @@ message StreamEvent {
   }
 
   // Event sent when a role is created.
+  //
+  // This event will only be sent to users with the "roles.get" permission.
   message RoleCreated {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -250,6 +277,8 @@ message StreamEvent {
   }
 
   // Event sent when a role's information is changed.
+  //
+  // This event will only be sent to users with the "roles.get" permission.
   message RoleUpdated {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -267,7 +296,7 @@ message StreamEvent {
 
   // Event sent when a role's permissions are changed.
   //
-  // This event will only be sent to users with the "guild.manage" permission.
+  // This event will only be sent to users with the "roles.manage" permission.
   message RolePermissionsUpdated {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -280,6 +309,8 @@ message StreamEvent {
   }
 
   // Event sent when a user's roles are changed.
+  //
+  // This event will only be sent to users with the "roles.user.get" permission.
   message UserRolesUpdated {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -290,6 +321,9 @@ message StreamEvent {
   }
 
   // Event sent when a user sends a typing notification in a guild channel.
+  //
+  // Should only be sent to users who have the "message.view" permission for
+  // the guild channel where the typing happened.
   message Typing {
     // User ID of the user that sent the typing notification.
     uint64 user_id = 1;
@@ -341,6 +375,9 @@ message StreamEvent {
   }
 
   // Sent when a message's reaction is changed.
+  //
+  // Should only be sent to users who have the "message.view" permission for
+  // the guild channel where the reaction was updated.
   message ReactionUpdated {
     // Guild ID of the guild where this event occured.
     uint64 guild_id = 1;
@@ -385,6 +422,8 @@ message StreamEvent {
   }
 
   // Sent when an invite is created in a guild.
+  //
+  // This will only be sent to members of a guild with "invites.view" permission.
   message InviteCreated {
     // Guild ID of the guild that this occured for.
     uint64 guild_id = 1;
@@ -398,6 +437,8 @@ message StreamEvent {
   //
   // This can occur because of the invite being used up (0 remaining uses),
   // or a user deleting the invite.
+  //
+  // This will only be sent to members of a guild with "invites.view" permission.
   message InviteDeleted {
     // Guild ID of the guild that this occured for.
     uint64 guild_id = 1;
@@ -406,6 +447,8 @@ message StreamEvent {
   }
 
   // Sent when an invite is used once by a user.
+  //
+  // This will only be sent to members of a guild with "invites.view" permission.
   message InviteUsed {
     // Guild ID of the guild that this occured for.
     uint64 guild_id = 1;

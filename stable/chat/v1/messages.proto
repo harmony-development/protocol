@@ -11,51 +11,51 @@ option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 message Overrides {
   // the overridden username.
   optional string username = 1;
-  // the overridden avatar.
+  // the overridden avatar. This must be a file ID pointing to an image.
   optional string avatar = 2;
   // the reason for overriding username and avatar.
   oneof reason {
-    // a custom reason in case the builtin ones don't fit
+    // A custom reason in case the builtin ones don't fit.
     string user_defined = 3;
-    // the override occured because of a webhook
+    // The override occured because of a webhook.
     harmonytypes.v1.Empty webhook = 4;
-    // plurality, not system as in computer
+    // Plurality, not system as in computer.
     harmonytypes.v1.Empty system_plurality = 5;
-    // the override occured because it was made by the server
+    // The override occured because it was made by the server.
     //
     // Servers should reject messages sent by users with this override.
     harmonytypes.v1.Empty system_message = 6;
-    // the override occured because of bridging
+    // The override occured because of bridging.
     harmonytypes.v1.Empty bridge = 7;
   }
 }
 
 // The payload sent to the bot when an action is triggered.
 message ActionPayload {
-  // The payload data for a button action
+  // The payload data for a button action.
   message Button {
-    // The data from the Button action
+    // The data from the Button action.
     bytes data = 1;
   }
-  // The payload for a dropdown action
+  // The payload for a dropdown action.
   message Dropdown {
     // The user choice from the dropdown.
     bytes choice = 1;
   }
-  // The payload for a text input action
+  // The payload for a text input action.
   message Input {
     // The user input.
     string input = 1;
-    // The bot-provided data
+    // The bot-provided data.
     bytes data = 2;
   }
-  // The payload data
+  // The payload data.
   oneof payload {
-    // Payload for a button
+    // Payload for a button.
     Button button = 1;
-    // Payload for a dropdown
+    // Payload for a dropdown.
     Dropdown dropdown = 2;
-    // Payload for a text input
+    // Payload for a text input.
     Input input = 3;
   }
 }
@@ -65,9 +65,9 @@ message Action {
   // The action type. This is primarily used to change the look of the action to
   // the user (example: Destructive actions will have a red background).
   enum Type {
-    // a normal action.
+    // A normal action.
     TYPE_NORMAL_UNSPECIFIED = 0;
-    // a primary action.
+    // A primary action.
     TYPE_PRIMARY = 1;
     // A destructive / dangerous action.
     TYPE_DESTRUCTIVE = 2;
@@ -82,6 +82,7 @@ message Action {
     bytes data = 2;
 
     // An external URL that the button links to.
+    //
     // This makes it so that tapping this button will open said URL instead
     // of triggering the action.
     optional string url = 3;
@@ -92,7 +93,7 @@ message Action {
     // The text describing the dropdown.
     string label = 1;
 
-    // An entry in the dropdown
+    // An entry in the dropdown.
     message Entry {
       // The dropdown's UI label.
       string label = 1;
@@ -110,7 +111,7 @@ message Action {
     string label = 1;
     // Whether this text input should be a multiline one or not.
     bool multiline = 2;
-    // Contextual data allowing the bot to discern what the user input is for
+    // Contextual data allowing the bot to discern what the user input is for.
     bytes data = 3;
   }
 
@@ -137,6 +138,10 @@ message Embed {
     // Subtext of the heading.
     optional string subtext = 2;
     // URL of the heading.
+    //
+    // If this is provided, clients should make it so that
+    // interacting with the heading opens this URL, for example
+    // clicking on it.
     optional string url = 3;
     // Icon of the heading.
     optional string icon = 4;
@@ -160,11 +165,11 @@ message Embed {
     optional string subtitle = 2;
     // Body text of this field (eg. a description).
     optional FormattedText body = 3;
-    // Image URL of this field.
+    // File ID of an image to display on this field.
     optional string image_url = 4;
     // How to present this field.
     Presentation presentation = 5;
-    // Actions of this field.
+    // Actions to show on this field.
     repeated Action actions = 6;
   }
 
@@ -183,24 +188,23 @@ message Embed {
 }
 
 /*
-  Minithumbnail is an extremely low-quality JPEG thumbnail.
+  Minithumbnail is an extremely low-quality WebP thumbnail.
 
   The resolution is usually no larger than 64x64.
 */
 message Minithumbnail {
-  // The width of the minithumbnail
+  // The width of the minithumbnail, in pixels.
   uint32 width = 1;
-  // The height of the minithumbnail
+  // The height of the minithumbnail, in pixels.
   uint32 height = 2;
-  // The JPEG data of the minithumbnail
+  // The data of the minithumbnail.
   bytes data = 3;
 }
 
 /*
   Photo contains data about a photo.
 
-  Photo are always JPEG, and are
-  constrained to the following rules:
+  Photos are constrained to the following rules:
 
   - width+height <= 10_000
   - width <= height*20
@@ -208,25 +212,37 @@ message Minithumbnail {
 
   Photos are preferably no more than 10MB
   in size, and servers may compress as necessary.
+
+  Photos are always WebP images, lossless or lossy
+  depending on if the server wants to compress the image.
+
+  Servers should fill in `file_size`, `height`, `with` and
+  `minithumbnail` fields, regardless of the client providing them.
 */
 message Photo {
-  // The HMC URL of the photo.
+  // File ID of the photo.
   string hmc = 1;
   // The filename of the photo.
   string name = 2;
-  // The size of the photo.
+  // The file size of the photo, in bytes.
   uint32 file_size = 3;
   // The height of the photo, in pixels.
   uint32 height = 4;
   // The width of the photo, in pixels.
   uint32 width = 5;
   // The photo's caption.
-  FormattedText caption = 6;
+  optional FormattedText caption = 6;
   // A thumbnail representing the photo.
   Minithumbnail minithumbnail = 7;
 }
 
 // Object representing a generic message attachment.
+//
+// Servers should fill in `mimetype` and `size` fields if
+// they are not provided by the client.
+//
+// - `mimetype` is considered not provided if it is an empty string.
+// - `size` is considered not provided if it is equal to `0`.
 message Attachment {
   // File ID of this attachment.
   string id = 1;
@@ -234,7 +250,7 @@ message Attachment {
   string name = 2;
   // Mimetype of this attachment.
   string mimetype = 3;
-  // Size of this attachment.
+  // File size of this attachment, in bytes.
   uint32 size = 4;
   // Caption of this attachment.
   optional FormattedText caption = 5;
@@ -314,84 +330,85 @@ message Content {
 message Reaction {
   // Emote data for this reaction.
   //
-  // Emote's image ID is used as an identifier for unique reactions.
-  // Emotes with the same names should be "deduplicated" by a client, by suffixing
-  // their names with `~1`, `~2` and so on.
+  // - Emote's image ID is used as an identifier for unique reactions.
+  // - Emotes with the same names should be "deduplicated" by a client,
+  // by suffixing their names with `~1`, `~2` and so on.
   emote.v1.Emote emote = 1;
-  // How many reactions this reaction has.
+  // How many times this reaction has been used.
   uint32 count = 2;
 }
 
-// A format for text
+// A format for text.
 message Format {
-  // Bold text
+  // Bold text.
   message Bold { }
-  // Italic text
+  // Italic text.
   message Italic { }
-  // Underlined text
+  // Underlined text.
   message Underline { }
-  // Monospace text
+  // Monospace text.
   message Monospace { }
-  // Superscript text
+  // Superscript text.
   message Superscript { }
-  // Subscript text
+  // Subscript text.
   message Subscript { }
-  // A larger codeblock, with a programming language specified
+  // A larger codeblock, with a programming language specified.
+  //
   // Clients should ideally not bound the width of codeblock messages,
   // possibly scrolling the codeblock horizontally separately from the
-  // rest of the message
+  // rest of the message.
   message CodeBlock {
-    // programming language of the code block
+    // Programming language of the code block.
     string language = 1;
   }
-  // Mention of a user (on the current homeserver)
+  // Mention of a user (on the current homeserver).
   message UserMention {
-    // user_id of the user being mentioned
+    // User ID of the user being mentioned.
     uint64 user_id = 1;
   }
-  // Mention of a role (on the current guild)
+  // Mention of a role (on the current guild).
   message RoleMention {
-    // the role being mentioned
+    // The role being mentioned.
     uint64 role_id = 1;
   }
-  // Mention of a channel (on the current guild)
+  // Mention of a channel (on the current guild).
   message ChannelMention {
-    // the channel being mentioned
+    // The channel being mentioned.
     uint64 channel_id = 1;
   }
-  // Mention of a guild
+  // Mention of a guild.
   message GuildMention {
-    // the guild being mentioned
+    // The guild being mentioned.
     uint64 guild_id = 1;
-    // which homeserver it belongs to
+    // Which homeserver it belongs to.
     string homeserver = 2;
   }
-  // An emoji
+  // An emoji.
   message Emoji {
-    // The HMC URL of the emoji
+    // The file ID of the emoji. It must point to an image.
     string image_hmc = 1;
-    // The ID of the emoji pack the emoji is from
+    // The ID of the emoji pack the emoji is from.
     uint64 pack_id = 2;
   }
-  // Colour modification
+  // Colour modification.
   message Color {
-    // The kind of colour modification to apply
+    // The kind of colour modification to apply.
     enum Kind {
-      // Dimmed colour
+      // Dimmed colour.
       KIND_DIM_UNSPECIFIED = 0;
-      // Brightened colour
+      // Brightened colour.
       KIND_BRIGHT = 1;
-      // Negative colour (usually red)
+      // Negative colour (usually red).
       KIND_NEGATIVE = 2;
-      // Positive colour (usually green)
+      // Positive colour (usually green).
       KIND_POSITIVE = 3;
-      // Informational colour (usually blue)
+      // Informational colour (usually blue).
       KIND_INFO = 4;
-      // Warning colour (usually yellow-orange)
+      // Warning colour (usually yellow-orange).
       KIND_WARNING = 5;
     }
 
-    // The kind of colour modification to apply
+    // The kind of colour modification to apply.
     Kind kind = 1;
   }
   // Replace a part of the text with the text matching the i18n code.
@@ -401,49 +418,49 @@ message Format {
     string i18n_code = 1;
   }
 
-    // where the format begins to apply to
+  // Where the format begins to apply to.
   uint32 start = 1;
-    // how many characters the format is
+  // How many characters the format is.
   uint32 length = 2;
 
-   // the style if format to apply to this text
+  // The style if format to apply to this text.
   oneof format {
-    // a text format for bold text
+    // A text format for bold text.
     Bold bold = 3;
-    // a text format for italic text
+    // A text format for italic text.
     Italic italic = 4;
-    // a text format for underline text
+    // A text format for underline text.
     Underline underline = 5;
-    // a text format for monospace text
+    // A text format for monospace text.
     Monospace monospace = 6;
-    // a text format for superscript text
+    // A text format for superscript text.
     Superscript superscript = 7;
-    // a text format for subscript text
+    // A text format for subscript text.
     Subscript subscript = 8;
-    // a text format for a codeblock
+    // A text format for a codeblock.
     CodeBlock code_block = 9;
-    // a text format for a user mention
+    // A text format for a user mention.
     UserMention user_mention = 10;
-    // a text format for a role mention
+    // A text format for a role mention.
     RoleMention role_mention = 11;
-    // a text format for a channel mention
+    // A text format for a channel mention.
     ChannelMention channel_mention = 12;
-    // a text format for a guild mention
+    // A text format for a guild mention.
     GuildMention guild_mention = 13;
-    // a text format for an emoji
+    // A text format for an emoji.
     Emoji emoji = 14;
-    // a text format for coloured text
+    // A text format for coloured text.
     Color color = 15;
-    // a text format for localization
+    // A text format for localization.
     Localization localization = 16;
   }
 }
 
-// Formatted text
+// Formatted text.
 message FormattedText {
-  // The textual content of a message
+  // The textual content of a message.
   string text = 1;
-  // The formats for a message
+  // The formats for a message.
   repeated Format format = 2;
 }
 
@@ -455,9 +472,9 @@ message Message {
   Overrides overrides = 2;
   // User ID of the user who sent this message.
   uint64 author_id = 3;
-  // When this message was created, in miliseconds since unix epoch
+  // When this message was created, in seconds since unix epoch.
   uint64 created_at = 4;
-  // The most recent time this message was edited, in milliseconds since unix epoch
+  // The most recent time this message was edited, in seconds since unix epoch.
   optional uint64 edited_at = 5;
   // The message this message is a reply to.
   optional uint64 in_reply_to = 6;

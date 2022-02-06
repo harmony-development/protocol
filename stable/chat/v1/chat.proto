@@ -212,6 +212,9 @@ service ChatService {
   //
   // - If the invite used is in a user's "pending invites" list, it should be
   // removed from there.
+  // - If the invite used reaches a use count bigger or equal to it's possible
+  // uses, the invite should be deleted by the server. This doesn't apply if
+  // possible uses is 0, which means an infinite amount of uses.
   rpc JoinGuild(JoinGuildRequest) returns (JoinGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
@@ -378,14 +381,19 @@ service ChatService {
   }
 
   // Endpoint to stream events from the homeserver.
-  // By default, this endpoint will subscribe to all events.
-  // Any guilds joined in the future will be added to the subscription as well.
-  // Use the UnsubscribeFromAll event for unsubscribing from all current subscriptions and disable the automatic guild subscriptions
+  //
+  // By default, this endpoint will subscribe to all events. Any guilds joined
+  // in the future will be added to the subscription as well.
+  //
+  // Use `StreamEventsRequest.UnsubscribeFromAll` for unsubscribing from all
+  // current subscriptions and disable automatic guild subscriptions.
   rpc StreamEvents(stream StreamEventsRequest) returns (stream StreamEventsResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
   // Endpoint to add a reaction to a message.
+  //
+  // Servers should prevent a user from adding multiple same reactions.
   rpc AddReaction(AddReactionRequest) returns (AddReactionResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
@@ -393,6 +401,9 @@ service ChatService {
   }
 
   // Endpoint to remove a reaction from a message.
+  //
+  // Servers should only remove a reaction if the user making the request
+  // added the reaction before.
   rpc RemoveReaction(RemoveReactionRequest) returns (RemoveReactionResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
@@ -406,7 +417,9 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_owner = true;
   }
+
   // Endpoint to give up your own ownership.
+  //
   // Requires that at least one other person will still be owner.
   rpc GiveUpOwnership(GiveUpOwnershipRequest) returns (GiveUpOwnershipResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;

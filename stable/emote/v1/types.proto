@@ -14,8 +14,7 @@ message EmotePack {
 
 // Data for a single emote.
 message Emote {
-  // The image ID of the emote. This is the ID of the image in the image store
-  // (same place attachments are stored).
+  // The HMC of the emote. Must point to an image.
   string image_id = 1;
   // The name of the emote.
   string name = 2;
