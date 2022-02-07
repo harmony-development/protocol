@@ -218,8 +218,9 @@ message Minithumbnail {
   Photos are always WebP images, lossless or lossy
   depending on if the server wants to compress the image.
 
-  Servers should fill in `file_size`, `height`, `with` and
-  `minithumbnail` fields, regardless of the client providing them.
+  Servers should fill in `file_size`, `height`, `width` and
+  `minithumbnail` fields, regardless of whether the client
+  has provided them.
 */
 message Photo {
   // File ID of the photo.
