@@ -21,6 +21,9 @@ service EmoteService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
   // Endpoint to add an emote to an emote pack that you own.
+  //
+  // If a file ID is used in this request, the server should convert
+  // it to a HMC before storing the emote.
   rpc AddEmoteToPack(AddEmoteToPackRequest) returns (AddEmoteToPackResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
