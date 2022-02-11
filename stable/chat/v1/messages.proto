@@ -190,7 +190,7 @@ message Embed {
 }
 
 /*
-  Minithumbnail is an extremely low-quality WebP thumbnail.
+  An extremely low-quality WebP thumbnail.
 
   The resolution is usually no larger than 64x64.
 */
@@ -204,7 +204,7 @@ message Minithumbnail {
 }
 
 /*
-  Photo contains data about a photo.
+  Contains data about a photo.
 
   Photos are constrained to the following rules:
 
@@ -217,35 +217,19 @@ message Minithumbnail {
 
   Photos are always WebP images, lossless or lossy
   depending on if the server wants to compress the image.
-
-  Servers should fill in `file_size`, `height`, `width` and
-  `minithumbnail` fields, regardless of whether the client
-  has provided them.
 */
-message Photo {
-  // File ID of the photo.
-  string hmc = 1;
-  // The filename of the photo.
-  string name = 2;
-  // The file size of the photo, in bytes.
-  uint32 file_size = 3;
+message PhotoInfo {
   // The height of the photo, in pixels.
-  uint32 height = 4;
+  uint32 height = 1;
   // The width of the photo, in pixels.
-  uint32 width = 5;
+  uint32 width = 2;
   // The photo's caption.
-  FormattedText caption = 6;
+  FormattedText caption = 3;
   // A thumbnail representing the photo.
-  Minithumbnail minithumbnail = 7;
+  Minithumbnail minithumbnail = 4;
 }
 
 // Object representing a generic message attachment.
-//
-// Servers should fill in `mimetype` and `size` fields if
-// they are not provided by the client.
-//
-// - `mimetype` is considered not provided if it is an empty string.
-// - `size` is considered not provided if it is equal to `0`.
 message Attachment {
   // File ID of this attachment.
   string id = 1;
@@ -255,36 +239,30 @@ message Attachment {
   string mimetype = 3;
   // File size of this attachment, in bytes.
   uint32 size = 4;
-  // Caption of this attachment.
-  optional FormattedText caption = 5;
+  // Extra info.
+  oneof info {
+    // Photo info.
+    PhotoInfo photo = 5;
+  }
 }
 
-// Object representing a message's content.
+// Object representing a message's content other than text.
+//
+// `InviteRejected`, `InviteAccepted` and `RoomUpgradedToGuild`, can only
+// be used by servers themselves. Servers should reject messages with this
+// content if they are sent by a user.
 message Content {
-  // Object representing text content.
-  message TextContent {
-    // Text content.
-    FormattedText content = 1;
+  // Attachment content.
+  message Attachments {
+    // Attachments.
+    repeated Attachment attachments = 1;
   }
-  // Object representing embed content.
-  message EmbedContent {
-    // Embed content.
+  // Embed content.
+  message Embeds {
+    // Embeds.
     repeated Embed embeds = 1;
   }
-  // Object representing attachment content.
-  message AttachmentContent {
-    // A list of attachments.
-    repeated Attachment files = 1;
-  }
-  // Object representing photo content.
-  message PhotoContent {
-    // A list of photos.
-    repeated Photo photos = 1;
-  }
   // Represents a user rejecting an invite.
-  //
-  // This can only be used by servers themselves. Servers should reject
-  // messages with this content if they are sent by a user.
   message InviteRejected {
     // User ID of the invitee.
     uint64 invitee_id = 1;
@@ -292,9 +270,6 @@ message Content {
     uint64 inviter_id = 2;
   }
   // Represents a user accepting an invite.
-  //
-  // This can only be used by servers themselves. Servers should reject
-  // messages with this content if they are sent by a user.
   message InviteAccepted {
     // User ID of the invitee.
     uint64 invitee_id = 1;
@@ -302,24 +277,26 @@ message Content {
     uint64 inviter_id = 2;
   }
   // Represents a guild upgrade from "room" to "normal".
-  //
-  // This can only be used by servers themselves. Servers should reject
-  // messages with this content if they are sent by a user.
   message RoomUpgradedToGuild {
     // User ID of the user that upgraded the guild.
     uint64 upgraded_by = 1;
   }
 
-  // Content data.
-  oneof content {
-    // Text content.
-    TextContent text_message = 1;
+  // Text content of the message.
+  //
+  // If this is empty, then `extra` must be specified.
+  string text = 1;
+  // Text formatting of the text content.
+  repeated Format text_formats = 2;
+
+  // Extra content data, in addition to the text content.
+  //
+  // If this is empty, then `text` must be specified.
+  oneof extra {
     // Embed content.
-    EmbedContent embed_message = 2;
+    Embeds embeds = 3;
     // Attachment content.
-    AttachmentContent attachment_message = 3;
-    // Photo content.
-    PhotoContent photo_message = 4;
+    Attachments attachments = 4;
     // A user rejected an invite.
     InviteRejected invite_rejected = 5;
     // A user accepted an invite.
