@@ -11,7 +11,7 @@ message Overrides {
   optional string username = 1;
   // The overridden avatar.
   //
-  // This can be a HMC, a file ID, or an external image URL.
+  // This can be a file ID or an external image URL.
   optional string avatar = 2;
   // The reason for overriding username and avatar.
   oneof reason {
@@ -159,32 +159,47 @@ message Embed {
       PRESENTATION_ROW = 2;
     }
 
-    // Title of this field.
-    string title = 1;
-    // Subtitle of this field.
-    optional string subtitle = 2;
-    // Body text of this field (eg. a description).
-    optional FormattedText body = 3;
-    // File ID of an image to display on this field.
-    optional string image_url = 4;
+    // Data for displaying an image in embed.
+    //
+    // Servers should fill in the `width` and `height` fields.
+    message Image {
+      // File ID or external image URL of an image.
+      string id = 1;
+      // Width of the image in pixels.
+      uint32 width = 2;
+      // Height of the image in pixels.
+      uint32 height = 3;
+    }
+
     // How to present this field.
-    Presentation presentation = 5;
+    Presentation presentation = 1;
+
+    // Title of this field.
+    string title = 2;
+    // Subtitle of this field.
+    optional string subtitle = 3;
+    // Body text of this field (eg. a description).
+    optional FormattedText body = 4;
+
+    // An image to display on this field.
+    optional Image image = 5;
+
     // Actions to show on this field.
     repeated Action actions = 6;
   }
 
-  // Title of this embed.
-  string title = 1;
-  // Body text of this embed.
-  optional FormattedText body = 2;
-  // Color of this embed.
-  optional int32 color = 3;
   // Embed heading for the header.
-  optional EmbedHeading header = 4;
+  optional EmbedHeading header = 1;
+  // Title of this embed.
+  string title = 2;
+  // Body text of this embed.
+  optional FormattedText body = 3;
+  // Fields of this embed.
+  repeated EmbedField fields = 4;
   // Embed heading for the footer.
   optional EmbedHeading footer = 5;
-  // Fields of this embed.
-  repeated EmbedField fields = 6;
+  // Color of this embed.
+  optional int32 color = 6;
 }
 
 /*

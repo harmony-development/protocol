@@ -25,7 +25,7 @@ This must be unique in a channel.
 A `uint64` ID. Represents an emote pack.
 This must be unique in a server.
 
-## File ID
+## Local File ID
 
 A `string` ID. Represents a file on a server.
 This must be unique in a server.
@@ -41,3 +41,11 @@ Represents a file on a server.
 - The `server` part is the domain of the server and must always be provided.
 - The `id` part is a file ID and must always be provided.
 - The `port` part is the port and must always be provided.
+
+## File ID
+
+This is an ID that represents a file on a server. 
+It can be one of the following:
+
+- A local file ID,
+- A HMC.
