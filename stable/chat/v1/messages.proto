@@ -365,10 +365,8 @@ message Format {
   }
   // An emoji.
   message Emoji {
-    // The file ID of the emoji. It must point to an image.
-    string image_hmc = 1;
-    // The ID of the emoji pack the emoji is from.
-    uint64 pack_id = 2;
+    // The emote data of the emoji.
+    emote.v1.Emote emote = 1;
   }
   // Colour modification.
   message Color {
