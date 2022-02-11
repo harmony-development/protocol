@@ -42,12 +42,18 @@ message GetEmotePacksResponse {
 // Used in the `GetEmotes` endpoint.
 message GetEmotePackEmotesRequest {
   // The ID of the pack.
-  uint64 pack_id = 1;
+  repeated uint64 pack_id = 1;
 }
 // Used in the `GetEmotes` endpoint.
 message GetEmotePackEmotesResponse {
-  // The list of emotes in the pack.
-  repeated Emote emotes = 1;
+  // An emote pack's emotes.
+  message EmotePackEmotes {
+    // The list of emotes in the pack.
+    repeated Emote emotes = 1;
+  }
+
+  // The requested emote packs' emotes.
+  map<uint64, EmotePackEmotes> pack_emotes = 1;
 }
 
 // Used in the `AddEmoteToPack` endpoint.

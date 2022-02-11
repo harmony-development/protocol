@@ -4,8 +4,6 @@ import "harmonytypes/v1/types.proto";
 
 package protocol.chat.v1;
 
-option go_package = "github.com/harmony-development/legato/gen/chat/v1";
-
 // What kind the channel is.
 enum ChannelKind {
   // A text channel. Allows you to simply send messages to a group of people.

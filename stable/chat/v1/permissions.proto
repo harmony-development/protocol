@@ -4,25 +4,23 @@ package protocol.chat.v1;
 
 import "harmonytypes/v1/types.proto";
 
-option go_package = "github.com/harmony-development/legato/gen/chat/v1";
-
 // Object representing a single permission node.
 message Permission {
-  // the permission matcher. (example: roles.manage)
+  // The permission matcher. (example: roles.manage).
   string matches = 1;
-  // whether the permission is allowed or not.
+  // Whether the permission is allowed or not.
   bool ok = 2;
 }
 
 // Object representing a role without the ID.
 message Role {
-  // the role name.
+  // The role name.
   string name = 1;
-  // the role color.
+  // The role color.
   int32 color = 2;
-  // whether the role is hoisted or not.
+  // Whether the role is hoisted or not.
   bool hoist = 3;
-  // whether the role is mentionable or not.
+  // Whether the role is mentionable or not.
   bool pingable = 4;
 }
 
@@ -38,33 +36,33 @@ message RoleWithId {
 
 // Used in the `QueryHasPermission` endpoint.
 message QueryHasPermissionRequest {
-  // the guild ID to query permissions for
+  // The guild ID to query permissions for.
   uint64 guild_id = 1;
-  // the channel ID to query permissions for. If not set, it will query
+  // The channel ID to query permissions for. If not set, it will query
   // permissions for the guild.
   optional uint64 channel_id = 2;
-  // the user ID to query permissions for (if not provided, the current user is
+  // The user ID to query permissions for (if not provided, the current user is
   // assumed).
   optional uint64 as = 4;
-  // the permission node to check for.
-  string check_for = 3;
+  // The permission node(s) to check for.
+  repeated string check_for = 3;
 }
 // Used in the `QueryHasPermission` endpoint.
 message QueryHasPermissionResponse {
-  // the permissions for the given node.
-  bool ok = 1;
+  // The permissions for the given node(s).
+  map<string, bool> ok = 1;
 }
 
 // Used in the `SetPermissions` endpoint.
 message SetPermissionsRequest {
-  // the guild ID to set permissions for.
+  // The guild ID to set permissions for.
   uint64 guild_id = 1;
-  // the channel ID to set permissions for. Only set if the role is for a
+  // The channel ID to set permissions for. Only set if the role is for a
   // channel.
   optional uint64 channel_id = 2;
-  // the role ID to set permissions for.
+  // The role ID to set permissions for.
   uint64 role_id = 3;
-  // the permission list to give.
+  // The permission list to give.
   //
   // There is no "perms_to_take" because not given permissions are by
   // default not allowed.
@@ -75,27 +73,33 @@ message SetPermissionsResponse {}
 
 // Used in the `GetPermissions` endpoint.
 message GetPermissionsRequest {
-  // the guild ID to get permissions for.
+  // The guild ID to get permissions for.
   uint64 guild_id = 1;
-  // the channel ID to get permissions for. Only applicable for roles in a
+  // The channel ID(s) to get permissions for. Only applicable for roles in a
   // channel.
-  optional uint64 channel_id = 2;
-  // the role ID to get permissions for.
+  repeated uint64 channel_ids = 2;
+  // The role ID to get permissions for.
   uint64 role_id = 3;
 }
 // Used in the `GetPermissions` endpoint.
 message GetPermissionsResponse {
-  // the permissions list for the given role.
-  repeated Permission perms = 1;
+  // Permissions of a role for a channel or guild.
+  message Permissions {
+    // The permissions.
+    repeated Permission perms = 1;
+  }
+  
+  // The guild / channel id -> permissions list map for the given role.
+  map<uint64, Permissions> perms = 1;
 }
 
 // Used in the `MoveRole` endpoint.
 message MoveRoleRequest {
-  // the guild ID to move the role in.
+  // The guild ID to move the role in.
   uint64 guild_id = 1;
-  // the role ID to move.
+  // The role ID to move.
   uint64 role_id = 2;
-  // the new position of the role.
+  // The new position of the role.
   harmonytypes.v1.ItemPosition new_position = 3;
 }
 // Used in the `MoveRole` endpoint.
@@ -103,39 +107,39 @@ message MoveRoleResponse {}
 
 // Used in the `GetGuildRoles` endpoint.
 message GetGuildRolesRequest {
-  // the guild ID to get roles for.
+  // The guild ID to get roles for.
   uint64 guild_id = 1;
 }
 // Used in the `GetGuildRoles` endpoint.
 message GetGuildRolesResponse {
-  // the list of roles in the guild.
+  // The list of roles in the guild.
   repeated RoleWithId roles = 1;
 }
 
 // Used in the `AddGuildRole` endpoint.
 message AddGuildRoleRequest {
-  // the guild ID to add the role to.
+  // The guild ID to add the role to.
   uint64 guild_id = 1;
-  // the role name.
+  // The role name.
   string name = 2;
-  // the role color.
+  // The role color.
   int32 color = 3;
-  // whether the role is hoisted or not.
+  // Whether the role is hoisted or not.
   bool hoist = 4;
-  // whether the role is mentionable or not.
+  // Whether the role is mentionable or not.
   bool pingable = 5;
 }
 // Used in the `AddGuildRole` endpoint.
 message AddGuildRoleResponse {
-  // the ID of the newly created role.
+  // The ID of the newly created role.
   uint64 role_id = 1;
 }
 
 // Used in the `DeleteGuildRole` endpoint.
 message DeleteGuildRoleRequest {
-  // the guild ID to delete the role from.
+  // The guild ID to delete the role from.
   uint64 guild_id = 1;
-  // the role ID to delete.
+  // The role ID to delete.
   uint64 role_id = 2;
 }
 // Used in the `DeleteGuildRole` endpoint.
@@ -143,17 +147,17 @@ message DeleteGuildRoleResponse {}
 
 // Used in the `ModifyGuildRole` endpoint.
 message ModifyGuildRoleRequest {
-  // the ID of the guild where the role is located
+  // The ID of the guild where the role is located.
   uint64 guild_id = 1;
-  // the ID of the role to modify
+  // The ID of the role to modify.
   uint64 role_id = 2;
-  // the new name of the role
+  // The new name of the role.
   optional string new_name = 3;
-  // the new color of the role
+  // The new color of the role.
   optional int32 new_color = 4;
-  // the new hoist status of the role
+  // The new hoist status of the role.
   optional bool new_hoist = 5;
-  // the new pingable status of the role
+  // The new pingable status of the role.
   optional bool new_pingable = 6;
 }
 // Used in the `ModifyGuildRole` endpoint.
@@ -161,13 +165,13 @@ message ModifyGuildRoleResponse {}
 
 // Used in the `ManageUserRoles` endpoint.
 message ManageUserRolesRequest {
-  // the ID of the guild where the user is being managed
+  // The ID of the guild where the user is being managed.
   uint64 guild_id = 1;
-  // the ID of the user to modify
+  // The ID of the user to modify.
   uint64 user_id = 2;
-  // the IDs of the roles to add
+  // The IDs of the roles to add.
   repeated uint64 give_role_ids = 3;
-  // the IDs of the roles to remove
+  // The IDs of the roles to remove.
   repeated uint64 take_role_ids = 4;
 }
 // Used in the `ManageUserRoles` endpoint.
@@ -175,13 +179,19 @@ message ManageUserRolesResponse {}
 
 // Used in the `GetUserRoles` endpoint.
 message GetUserRolesRequest {
-  // the ID of the guild where the user is located
+  // The ID of the guild where the user(s) are located.
   uint64 guild_id = 1;
-  // the ID of the user to get roles for
-  uint64 user_id = 2;
+  // The ID(s) of the user to get roles for.
+  repeated uint64 user_ids = 2;
 }
 // Used in the `GetUserRoles` endpoint.
 message GetUserRolesResponse {
-  // a list of IDs of the roles the user has
-  repeated uint64 roles = 1;
+  // Contains role IDs for a user in a guild.
+  message UserRoles {
+    // A list of IDs of the roles the user has.
+    repeated uint64 roles = 1; 
+  }
+
+  // User ID -> user role IDs map for the requested user(s).
+  map<uint64, UserRoles> user_roles = 1;
 }

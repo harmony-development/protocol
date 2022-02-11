@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package protocol.sync.v1;
 
-option go_package = "github.com/harmony-development/legato/gen/sync/v1";
-
 // Authentication data that will be sent in a `harmonytypes.v1.Token`.
 message AuthData {
   // The server ID of the server initiating the transaction. For Pull,

@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package protocol.harmonytypes.v1;
 
-option go_package = "github.com/harmony-development/legato/gen/harmonytypes/v1";
-
 import "google/protobuf/descriptor.proto";
 
 // Metadata for methods. These are set in individual RPC endpoints and are
@@ -38,16 +36,6 @@ message Metadata {
   string kind = 1;
   // A map containing information.
   map<string, Anything> extension = 2;
-}
-
-// Error type that will be returned by servers. 
-message Error {
-  // The identifier of this error, can be used as an i18n key.
-  string identifier = 1;
-  // A (usually english) human message for this error.
-  string human_message = 2;
-  // More details about this message. Is dependent on the endpoint.
-  bytes more_details = 3;
 }
 
 // Token that will be used for authentication.

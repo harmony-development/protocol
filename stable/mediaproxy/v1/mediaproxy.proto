@@ -3,8 +3,6 @@ syntax = "proto3";
 package protocol.mediaproxy.v1;
 import "harmonytypes/v1/types.proto";
 
-option go_package = "github.com/harmony-development/legato/gen/mediaproxy/v1";
-
 // Object representing the metadata of a website.
 message SiteMetadata {
   // Title of the website.
@@ -37,17 +35,33 @@ message MediaMetadata {
 // Used in the `FetchLinkMetadata` endpoint.
 message FetchLinkMetadataRequest {
   // URL to fetch metadata from.
-  string url = 1;
+  repeated string url = 1;
 }
 // Used in the `FetchLinkMetadata` endpoint.
 message FetchLinkMetadataResponse {
-  // Data of the metadata.
-  oneof data {
-    // Site metadata for the URL.
-    SiteMetadata is_site = 1;
-    // Media metadata for the URL.
-    MediaMetadata is_media = 2;
+  // Fetched metadata for a link.
+  message Metadata {
+    // Data of the metadata.
+    oneof data {
+      // Site metadata for the URL.
+      SiteMetadata is_site = 1;
+      // Media metadata for the URL.
+      MediaMetadata is_media = 2;
+    }
   }
+
+  // Error data for a link.
+  message Error {
+    // Error status (usually HTTP, eg. `500 Internal Server Error`).
+    string status = 1;
+    // Error message, if the requested URL's server has provided one.
+    string message = 2;
+  }
+
+  // Fetched metadata for the requested URL(s).
+  map<string, Metadata> metadata = 1;
+  // URL(s) that errored out while trying to fetch metadata for them.
+  map<string, Error> errors = 2;
 }
 
 // Used in the `InstantView` endpoint.
@@ -66,13 +80,13 @@ message InstantViewResponse {
 }
 // Used in the `CanInstantView` endpoint.
 message CanInstantViewRequest {
-  // URL to query if server can instant view the website. 
-  string url = 1;
+  // URL(s) to query if server can instant view the website. 
+  repeated string url = 1;
 }
 // Used in the `CanInstantView` endpoint.
 message CanInstantViewResponse {
-  // Whether the server generate an instant view for the URL queried.
-  bool can_instant_view = 1;
+  // Whether the server generate an instant view for the URL(s) queried.
+  map<string, bool> can_instant_view = 1;
 }
 
 // Harmony service for fetching metadata and generating instant view for URLs.

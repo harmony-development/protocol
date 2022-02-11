@@ -9,8 +9,6 @@ import "chat/v1/stream.proto";
 
 package protocol.chat.v1;
 
-option go_package = "github.com/harmony-development/legato/gen/chat/v1";
-
 // The core of Harmony's chat operations.
 service ChatService {
   // Endpoint to create a guild.

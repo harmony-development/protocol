@@ -44,14 +44,14 @@ message Profile {
 
 // Used in `GetProfile` endpoint.
 message GetProfileRequest {
-  // The id of the user to get.
-  uint64 user_id = 1;
+  // The ID(s) of the user(s) to get.
+  repeated uint64 user_id = 1;
 }
 
 // Used in `GetProfile` endpoint.
 message GetProfileResponse {
-  // The user's profile
-  Profile profile = 1;
+  // The users' profile(s).
+  map<uint64, Profile> profile = 1;
 }
 
 // Used in `UpdateProfile` endpoint.

@@ -5,8 +5,6 @@ package protocol.chat.v1;
 import "harmonytypes/v1/types.proto";
 import "emote/v1/types.proto";
 
-option go_package = "github.com/harmony-development/legato/gen/chat/v1";
-
 // Overrides provide a way to override the name and avatar of a message.
 message Overrides {
   // The overridden username.

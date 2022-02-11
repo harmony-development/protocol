@@ -10,8 +10,6 @@ import "chat/v1/permissions.proto";
 import "emote/v1/stream.proto";
 import "profile/v1/stream.proto";
 
-option go_package = "github.com/harmony-development/legato/gen/chat/v1";
-
 // Request type for use in the `StreamEvents` endpoint.
 // By default, this endpoint will subscribe to all events.
 // Any guilds joined in the future will be added to the subscription as well.
