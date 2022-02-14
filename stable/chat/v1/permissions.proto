@@ -34,8 +34,8 @@ message RoleWithId {
   Role role = 2;
 }
 
-// Used in the `QueryHasPermission` endpoint.
-message QueryHasPermissionRequest {
+// Used in the `HasPermission` endpoint.
+message HasPermissionRequest {
   // The guild ID to query permissions for.
   uint64 guild_id = 1;
   // The channel ID to query permissions for. If not set, it will query
@@ -47,8 +47,8 @@ message QueryHasPermissionRequest {
   // The permission node(s) to check for.
   repeated string check_for = 3;
 }
-// Used in the `QueryHasPermission` endpoint.
-message QueryHasPermissionResponse {
+// Used in the `HasPermission` endpoint.
+message HasPermissionResponse {
   // The permissions for the given node(s).
   map<string, bool> ok = 1;
 }
