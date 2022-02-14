@@ -49,8 +49,8 @@ message HasPermissionRequest {
 }
 // Used in the `HasPermission` endpoint.
 message HasPermissionResponse {
-  // The permissions for the given node(s).
-  map<string, bool> ok = 1;
+  // The permissions for the requested node(s).
+  repeated Permission perms = 1;
 }
 
 // Used in the `SetPermissions` endpoint.
@@ -90,6 +90,10 @@ message GetPermissionsResponse {
   }
   
   // The guild / channel id -> permissions list map for the given role.
+  //
+  // This will always contain the guild's permissions. On top of that,
+  // if any channels were specified in the request, those channels'
+  // permissions will also be added here.
   map<uint64, Permissions> perms = 1;
 }
 
