@@ -60,8 +60,10 @@ message GetEmotePackEmotesResponse {
 message AddEmoteToPackRequest {
   // The ID of the pack.
   uint64 pack_id = 1;
-  // The emote to add.
-  Emote emote = 2;
+  // The file ID of the image to use for the emote.
+  string image_id = 2;
+  // The name of the emote.
+  string name = 3;
 }
 // Used in the `AddEmoteToPack` endpoint.
 message AddEmoteToPackResponse {}

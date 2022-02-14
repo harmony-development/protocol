@@ -242,7 +242,7 @@ service ChatService {
   }
 
   // Endpoint to query if a user has a permission.
-  rpc HasPermission(QueryHasPermissionRequest) returns (QueryHasPermissionResponse) {
+  rpc HasPermission(HasPermissionRequest) returns (HasPermissionResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     // This permissions node is only required if you're trying
     // to see if someone besides yourself has a permission.
