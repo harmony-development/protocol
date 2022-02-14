@@ -9,10 +9,8 @@ message SiteMetadata {
   message ThumbnailImage {
     // URL of the thumbnail.
     string url = 1;
-    // Width of the image, in pixels.
-    optional uint32 width = 2;
-    // Height of the image, in pixels.
-    optional uint32 height = 3;
+    // Image information.
+    harmonytypes.v1.ImageInfo info = 2;
   }
 
   // Title of the website.
@@ -31,14 +29,6 @@ message SiteMetadata {
 
 // Object represeting the metadata of a media.
 message MediaMetadata {
-  // Extra information for an image media.
-  message ImageInfo {
-    // Width of the image, in pixels.
-    uint32 width = 1;
-    // Height of the image, in pixels.
-    uint32 height = 2;
-  }
-
   // Mimetype of the media. 
   string mimetype = 1;
   // Filename of the media.
@@ -52,7 +42,7 @@ message MediaMetadata {
   // Extra information specific to types of media.
   oneof info {
     // Information for an image media.
-    ImageInfo image = 4;
+    harmonytypes.v1.ImageInfo image = 4;
   }
 }
 

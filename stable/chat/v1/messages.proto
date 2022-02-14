@@ -165,10 +165,8 @@ message Embed {
     message Image {
       // File ID or external image URL of an image.
       string id = 1;
-      // Width of the image in pixels.
-      uint32 width = 2;
-      // Height of the image in pixels.
-      uint32 height = 3;
+      // Image information.
+      harmonytypes.v1.ImageInfo info = 2;
     }
 
     // How to present this field.
@@ -202,46 +200,6 @@ message Embed {
   optional int32 color = 6;
 }
 
-/*
-  An extremely low-quality WebP thumbnail.
-
-  The resolution is usually no larger than 64x64.
-*/
-message Minithumbnail {
-  // The width of the minithumbnail, in pixels.
-  uint32 width = 1;
-  // The height of the minithumbnail, in pixels.
-  uint32 height = 2;
-  // The data of the minithumbnail.
-  bytes data = 3;
-}
-
-/*
-  Contains data about a photo.
-
-  Photos are constrained to the following rules:
-
-  - width+height <= 10_000
-  - width <= height*20
-  - height <= width*20
-
-  Photos are preferably no more than 10MB
-  in size, and servers may compress as necessary.
-
-  Photos are always WebP images, lossless or lossy
-  depending on if the server wants to compress the image.
-*/
-message PhotoInfo {
-  // The height of the photo, in pixels.
-  uint32 height = 1;
-  // The width of the photo, in pixels.
-  uint32 width = 2;
-  // The photo's caption.
-  FormattedText caption = 3;
-  // A thumbnail representing the photo.
-  Minithumbnail minithumbnail = 4;
-}
-
 // Object representing a generic message attachment.
 message Attachment {
   // File ID of this attachment.
@@ -255,7 +213,7 @@ message Attachment {
   // Extra info.
   oneof info {
     // Photo info.
-    PhotoInfo photo = 5;
+    harmonytypes.v1.ImageInfo photo = 5;
   }
 }
 
@@ -577,7 +535,7 @@ message SendMessageRequest {
   // Information a user can add to a photo attachment.
   message PhotoInfo {
     // The photo's caption.
-    FormattedText caption = 1;
+    optional string caption = 1;
     // Whether to use the original image, instead of compressing the image.
     //
     // Compression can be forced by servers, so this option may not work on
