@@ -29,20 +29,22 @@ message SiteMetadata {
 
 // Object represeting the metadata of a media.
 message MediaMetadata {
-  // Mimetype of the media. 
+  // Mimetype of the media.
   string mimetype = 1;
   // Filename of the media.
-  string filename = 2;
+  string name = 2;
+  // File ID of the media.
+  string id = 3;
   // Sıze of the media.
   //
   // This should (usually) be the size taken from the `Content-Length` header
   // (for HTTP requests).
   // If this is not included, then it means the size could not be determined.
-  optional uint32 size = 3;
+  optional uint32 size = 4;
   // Extra information specific to types of media.
   oneof info {
     // Information for an image media.
-    harmonytypes.v1.ImageInfo image = 4;
+    harmonytypes.v1.ImageInfo image = 5;
   }
 }
 
@@ -80,7 +82,7 @@ message FetchLinkMetadataResponse {
 
 // Used in the `InstantView` endpoint.
 message InstantViewRequest {
-  // URL to get instant view for. 
+  // URL to get instant view for.
   string url = 1;
 }
 // Used in the `InstantView` endpoint.
@@ -94,7 +96,7 @@ message InstantViewResponse {
 }
 // Used in the `CanInstantView` endpoint.
 message CanInstantViewRequest {
-  // URL(s) to query if server can instant view the website. 
+  // URL(s) to query if server can instant view the website.
   repeated string url = 1;
 }
 // Used in the `CanInstantView` endpoint.

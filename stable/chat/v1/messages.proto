@@ -212,8 +212,8 @@ message Attachment {
   uint32 size = 4;
   // Extra info.
   oneof info {
-    // Photo info.
-    harmonytypes.v1.ImageInfo photo = 5;
+    // Image info.
+    harmonytypes.v1.ImageInfo image = 5;
   }
 }
 
@@ -524,9 +524,9 @@ message TriggerActionResponse {}
 
 // Used in the `SendMessage` endpoint.
 message SendMessageRequest {
-  // Information a user can add to a photo attachment.
-  message PhotoInfo {
-    // The photo's caption.
+  // Information a user can add to a image attachment.
+  message ImageInfo {
+    // The image's caption.
     optional string caption = 1;
     // Whether to use the original image, instead of compressing the image.
     //
@@ -543,8 +543,8 @@ message SendMessageRequest {
     string name = 2;
     // Extra information.
     oneof info {
-      // Photo info.
-      PhotoInfo photo = 3;
+      // Image info.
+      ImageInfo image = 3;
     }
   }
 
