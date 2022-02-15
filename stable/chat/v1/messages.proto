@@ -222,17 +222,9 @@ message Attachment {
 // `InviteRejected`, `InviteAccepted` and `RoomUpgradedToGuild`, can only
 // be used by servers themselves. Servers should reject messages with this
 // content if they are sent by a user.
+//
+// Text should be displayed before embeds, and embeds should be displayed before attachments.
 message Content {
-  // Attachment content.
-  message Attachments {
-    // Attachments.
-    repeated Attachment attachments = 1;
-  }
-  // Embed content.
-  message Embeds {
-    // Embeds.
-    repeated Embed embeds = 1;
-  }
   // Represents a user rejecting an invite.
   message InviteRejected {
     // User ID of the invitee.
@@ -257,13 +249,13 @@ message Content {
   string text = 1;
   // Text formatting of the text content.
   repeated Format text_formats = 2;
+  // Embed content.
+  repeated Embed embeds = 3;
+  // Attachment content.
+  repeated Attachment attachments = 4;
 
   // Extra content data, in addition to the text content.
   oneof extra {
-    // Embed content.
-    Embeds embeds = 3;
-    // Attachment content.
-    Attachments attachments = 4;
     // A user rejected an invite.
     InviteRejected invite_rejected = 5;
     // A user accepted an invite.
@@ -288,17 +280,17 @@ message Reaction {
 // A format for text.
 message Format {
   // Bold text.
-  message Bold { }
+  message Bold {}
   // Italic text.
-  message Italic { }
+  message Italic {}
   // Underlined text.
-  message Underline { }
+  message Underline {}
   // Monospace text.
-  message Monospace { }
+  message Monospace {}
   // Superscript text.
-  message Superscript { }
+  message Superscript {}
   // Subscript text.
-  message Subscript { }
+  message Subscript {}
   // A larger codeblock, with a programming language specified.
   //
   // Clients should ideally not bound the width of codeblock messages,
@@ -603,7 +595,6 @@ message SendMessageRequest {
   optional Overrides overrides = 6;
   // The message this new message is a reply to.
   optional uint64 in_reply_to = 7;
-
   // The metadata of this new message.
   optional harmonytypes.v1.Metadata metadata = 5;
 }
