@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package protocol.mediaproxy.v1;
+import "harmonytypes/v1/types.proto";
 
 // Object representing the metadata of a website.
 message SiteMetadata {
