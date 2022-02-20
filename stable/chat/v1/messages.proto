@@ -550,34 +550,23 @@ message SendMessageRequest {
 
   // Content that can be sent by a user.
   message Content {
-    // Attachment content.
-    message Attachments {
-      // Attachments.
-      repeated Attachment attachments = 1;
-    }
-
-    // Embed content.
-    message Embeds {
-      // Embeds.
-      repeated Embed embeds = 1;
-    }
-
     // Text content of the message to be sent.
     //
-    // If this is empty, then `extra` must be specified.
+    // If this is empty, then either `attachments`
+    // or `embeds` must be specified.
     string text = 1;
     // Text formats for the text content.
     repeated Format text_formats = 2;
-
-    // Extra content of the message to be sent.
+    // Attachments to be sent.
     //
-    // If this is empty, then `text` must be specified.
-    oneof extra {
-      // Attachment content.
-      Attachments attachments = 3;
-      // Embed content.
-      Embeds embeds = 4;
-    }
+    // If this is empty, then either `embeds` or `text`
+    // must be specified.
+    repeated Attachment attachments = 3;
+    // Embeds to be sent.
+    //
+    // If this is empty, then either `attachemnts`
+    // or `text` must be specified.
+    repeated Embed embeds = 4;
   }
 
   // Guild ID of the guild where the channel is.
