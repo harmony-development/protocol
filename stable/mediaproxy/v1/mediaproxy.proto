@@ -1,16 +1,17 @@
 syntax = "proto3";
 
 package protocol.mediaproxy.v1;
-import "harmonytypes/v1/types.proto";
 
 // Object representing the metadata of a website.
 message SiteMetadata {
-  // Information for a thumbnail image.
+  // Information pertaining to a thumbnail image.
   message ThumbnailImage {
     // URL of the thumbnail.
     string url = 1;
-    // Image information.
-    harmonytypes.v1.ImageInfo info = 2;
+    // Width of the image, in pixels.
+    uint32 width = 2;
+    // Height of the image, in pixels.
+    uint32 height = 3;
   }
 
   // Title of the website.
@@ -29,6 +30,14 @@ message SiteMetadata {
 
 // Object represeting the metadata of a media.
 message MediaMetadata {
+  // Information pertaining to an image.
+  message ImageInfo {
+    // Width of the image, in pixels.
+    uint32 width = 1;
+    // Height of the image, in pixels.
+    uint32 height = 2;
+  }
+
   // Mimetype of the media.
   string mimetype = 1;
   // Filename of the media.
@@ -44,7 +53,7 @@ message MediaMetadata {
   // Extra information specific to types of media.
   oneof info {
     // Information for an image media.
-    harmonytypes.v1.ImageInfo image = 5;
+    ImageInfo image = 5;
   }
 }
 

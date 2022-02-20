@@ -165,8 +165,10 @@ message Embed {
     message Image {
       // File ID or external image URL of an image.
       string id = 1;
-      // Image information.
-      harmonytypes.v1.ImageInfo info = 2;
+      // The width of the image, in pixels.
+      uint32 width = 2;
+      // The height of the image, in pixels.
+      uint32 height = 3;
     }
 
     // How to present this field.
@@ -200,6 +202,31 @@ message Embed {
   optional int32 color = 6;
 }
 
+
+// An extremely low-quality WebP thumbnail.
+//
+// The resolution is usually no larger than 64x64.
+message Minithumbnail {
+  // The width of the minithumbnail, in pixels.
+  uint32 width = 1;
+  // The height of the minithumbnail, in pixels.
+  uint32 height = 2;
+  // The data of the minithumbnail.
+  bytes data = 3;
+}
+
+// Contains data about an image.
+message ImageInfo {
+  // The width of the image, in pixels.
+  uint32 width = 1;
+  // The height of the image, in pixels.
+  uint32 height = 2;
+  // A thumbnail for the image.
+  Minithumbnail minithumbnail = 3;
+  // The image's caption.
+  optional string caption = 4;
+}
+
 // Object representing a generic message attachment.
 message Attachment {
   // File ID of this attachment.
@@ -213,7 +240,7 @@ message Attachment {
   // Extra info.
   oneof info {
     // Image info.
-    harmonytypes.v1.ImageInfo image = 5;
+    ImageInfo image = 5;
   }
 }
 

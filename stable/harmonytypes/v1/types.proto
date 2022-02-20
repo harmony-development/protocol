@@ -70,27 +70,3 @@ message ItemPosition {
   // Whether the position is before or after the given ID
   Position position = 2;
 }
-
-// An extremely low-quality WebP thumbnail.
-//
-// The resolution is usually no larger than 64x64.
-message Minithumbnail {
-  // The width of the minithumbnail, in pixels.
-  uint32 width = 1;
-  // The height of the minithumbnail, in pixels.
-  uint32 height = 2;
-  // The data of the minithumbnail.
-  bytes data = 3;
-}
-
-// Contains data about an image.
-message ImageInfo {
-  // The height of the image, in pixels.
-  uint32 height = 1;
-  // The width of the image, in pixels.
-  uint32 width = 2;
-  // The image's caption.
-  optional string caption = 3;
-  // A thumbnail for the image.
-  optional Minithumbnail minithumbnail = 4;
-}
