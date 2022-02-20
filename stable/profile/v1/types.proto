@@ -60,11 +60,6 @@ message UpdateProfileRequest {
   optional string new_user_avatar = 2;
   // New status of the user.
   optional UserStatus new_user_status = 3;
-  // New whether the user is a bot or not.
-  //
-  // Deprecated; see bot service and guest handling
-  // in auth.
-  optional bool new_is_bot = 4 [deprecated = true];
 }
 
 // Used in `UpdateProfile` endpoint.
