@@ -88,13 +88,14 @@ message GetPermissionsResponse {
     // The permissions.
     repeated Permission perms = 1;
   }
+
+  // The permissions for the guild.
+  Permissions guild_perms = 1;
   
-  // The guild / channel id -> permissions list map for the given role.
+  // The channel id -> permissions list map for the given role.
   //
-  // This will always contain the guild's permissions. On top of that,
-  // if any channels were specified in the request, those channels'
-  // permissions will also be added here.
-  map<uint64, Permissions> perms = 1;
+  // This will contain permissions for any requested channels.
+  map<uint64, Permissions> channel_perms = 2;
 }
 
 // Used in the `MoveRole` endpoint.
