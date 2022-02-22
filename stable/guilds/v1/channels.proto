@@ -4,12 +4,45 @@ import "harmonytypes/v1/types.proto";
 
 package protocol.guilds.v1;
 
+// The enumeration of hints for a channel's kind.
+enum ChannelKindHint {
+    // The channel doesn't have a kind hint
+    CHANNEL_KIND_HINT_NONE_UNSPECIFIED = 0;
+    // The channel is generally used for voice calls
+    CHANNEL_KIND_HINT_VOICE = 1;
+    // The channel is generally used for video calls
+    CHANNEL_KIND_HINT_VIDEO = 2;
+}
+
+// Request for Channels
+message ChannelsRequest {
+    // The guild ID to get channels of
+    uint64 guild_id = 1;
+}
+// Response to Channels
+message ChannelsResponse {
+    // The data describing a channel
+    message Channel {
+        // The channel's ID
+        uint64 channel_id = 1;
+        // The channel's name
+        string name = 2;
+        // The channel's kind hint
+        ChannelKindHint hint = 3;
+    }
+
+    // The channels in the guild, that the user is allowed to see.
+    repeated Channel channels = 1;
+}
+
 // The request for CreateChannel
 message CreateChannelRequest {
     // The guild to create the channel in
     uint64 guild_id = 1;
     // The channel's name
     string name = 2;
+    // The channel's kind hint
+    ChannelKindHint hint = 3;
 }
 
 // The response for CreateChannel
@@ -39,6 +72,8 @@ message EditChannelRequest {
     uint64 channel_id = 2;
     // new_name
     optional string new_name = 3;
+    // The new hint for the channel's purpose
+    optional ChannelKindHint new_hint = 4;
 }
 
 // The response for EditChannel

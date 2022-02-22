@@ -30,6 +30,8 @@ service GuildsService {
     // Gives up your own owner status
     rpc GiveUpOwnership(GiveUpOwnershipRequest) returns (GiveUpOwnershipResponse) {}
 
+    // Gets the channels in a guild
+    rpc Channels(ChannelsRequest) returns (ChannelsResponse) {}
     // Creates a channel
     rpc CreateChannel(CreateChannelRequest) returns (CreateChannelResponse) {}
     // Deletes a channel
