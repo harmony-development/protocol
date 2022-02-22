@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "channels/v1/messages.proto";
+import "google/protobuf/timestamp.proto";
 
 package protocol.channels.v1;
 
@@ -24,8 +25,8 @@ message StreamEvent {
     uint64 channel_id = 1;
     // Message ID of the message that was updated.
     uint64 message_id = 2;
-    // When this message was edited, in milliseconds since unix epoch
-    uint64 edited_at = 3;
+    // When this message was edited
+    google.protobuf.Timestamp edited_at = 3;
     // New message content.
     Content new_content = 4;
   }

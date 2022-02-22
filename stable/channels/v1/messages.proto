@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "harmonytypes/v1/types.proto";
+import "google/protobuf/timestamp.proto";
 
 package protocol.channels.v1;
 
@@ -42,10 +43,10 @@ message Message {
   uint64 channel_id = 2;
   // User ID of the user who sent this message.
   uint64 author_id = 3;
-  // When this message was created, in miliseconds since unix epoch
-  uint64 created_at = 4;
-  // The most recent time this message was edited, in milliseconds since unix epoch
-  optional uint64 edited_at = 5;
+  // When this message was created
+  google.protobuf.Timestamp created_at = 4;
+  // The most recent time this message was edited
+  optional google.protobuf.Timestamp edited_at = 5;
   // The message this message is a reply to.
   optional uint64 in_reply_to = 6;
   // The content of the message.
