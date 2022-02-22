@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package protocol.webrtc.v1;
+
+// A TURN server
+message TurnServer {
+    // The hostname of the server
+    string uri = 1;
+    // The username to provide for the server
+    string username = 2;
+    // The password for the server
+    string password = 3;
+    // The port for the server
+    uint32 port = 4;
+}
+
+// An ICE candidate
+message IceCandidate {
+    // The MID, or Media Stream ID.
+    string sdp_mid = 1;
+    // The index of the m-line describing the media associated with this candidate.
+    string sdp_mline_index = 2;
+    // The candidate, in textual form, for passing to a WebRTC library.
+    // A blank candidate indicates no further candidates are coming.
+    string candidate = 3;
+}
+
+// An incoming message from the WebRTC service
+message WebRTCResponse {
+    // An event from the current session
+    oneof event {
+        // There is a new TURN server you should use for initiating calls
+        TurnServer turn_server = 1;
+        // There is a new remote ICE candidate
+        IceCandidate ice_candidate = 2;
+        // The remote has an SDP offer for you
+        SDP sdp_offer = 3;
+        // The remote has an SDP answer for you
+        SDP sdp_answer = 4;
+    }
+}
+
+// The initialisation message for the WebRTC rpc. This should be sent first.
+message Init {
+    // The "session" you want to connect to.
+    //
+    // Various APIs in Harmony will give you session IDs,
+    // which should be used in this API.
+    uint64 session_id = 1;
+}
+
+// A session description for WebRTC
+message SDP {
+    // The SDP
+    string sdp = 1;
+}
+
+// The request for WebRTC.
+message WebRTCRequest {
+    // The request
+    oneof request {
+        // Initialise the stream
+        Init init = 1;
+        // Send an SDP as an offer
+        SDP sdp_offer = 2;
+        // Send an SDP as an answer
+        SDP sdp_answer = 3;
+    }
+}
+
+// The WebRTC Service manages WebRTC sessions between two or more parties.
+service WebRTCService {
+    // WebRTC opens a stream
+    rpc WebRTC(stream WebRTCRequest) returns (stream WebRTCResponse) {}
+}
