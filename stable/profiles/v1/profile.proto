@@ -1,12 +1,12 @@
 syntax = "proto3";
 
 import "harmonytypes/v1/types.proto";
-import "profile/v1/types.proto";
+import "profiles/v1/types.proto";
 
-package protocol.profile.v1;
+package protocol.profiles.v1;
 
 // Harmony's Profile service manages the profiles of the users.
-service ProfileService {
+service ProfileManager {
   // Gets a user's profile.
   rpc GetProfile(GetProfileRequest) returns (GetProfileResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;

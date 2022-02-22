@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package protocol.guilds.v1;
+
+message InvitesRequest {
+    uint64 guild_id = 1;
+}
+message InvitesResponse {
+    message Invite {
+        string invite_id = 1;
+        uint32 possible_uses = 2;
+        uint32 use_count = 3;
+    }
+    repeated Invite invite = 1;
+}
+message CreateInviteRequest {
+    uint64 guild_id = 1;
+    uint32 possible_uses = 2;
+    string invite_id = 3;
+}
+message CreateInviteResponse {
+
+}
+message DeleteInviteRequest {
+    uint64 guild_id = 1;
+    string invite_id = 2;
+}
+message DeleteInviteResponse {
+
+}

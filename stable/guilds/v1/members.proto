@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package protocol.guilds.v1;
+
+message MembersRequest {
+    uint64 guild_id = 1;
+
+    uint64 offset = 2;
+    uint64 limit = 3;
+}
+message MembersResponse {
+    repeated uint64 user_ids = 2;
+}

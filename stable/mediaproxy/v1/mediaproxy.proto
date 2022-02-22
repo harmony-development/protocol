@@ -76,7 +76,7 @@ message CanInstantViewResponse {
 }
 
 // Harmony service for fetching metadata and generating instant view for URLs.
-service MediaProxyService {
+service MediaProxyManager {
   // Endpoint to fetch metadata for a URL.
   rpc FetchLinkMetadata(FetchLinkMetadataRequest) returns (FetchLinkMetadataResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;

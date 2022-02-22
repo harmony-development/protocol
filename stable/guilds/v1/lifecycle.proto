@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package protocol.guilds.v1;
+
+message CreateGuildRequest {
+    string name = 1;
+    optional string picture = 2;
+}
+message CreateGuildResponse {
+    uint64 guild_id = 1;
+}
+message DeleteGuildRequest {
+    uint64 guild_id = 1;
+}
+message DeleteGuildResponse {
+
+}
+message LeaveGuildRequest {
+    uint64 guild_id = 1;
+}
+message LeaveGuildResponse {
+
+}
+message JoinGuildByInviteRequest {
+    string invite_id = 1;
+}
+message JoinGuildByInviteResponse {
+    uint64 guild_id = 1;
+}

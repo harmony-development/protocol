@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+import "guilds/v1/channels.proto";
+import "guilds/v1/invites.proto";
+import "guilds/v1/lifecycle.proto";
+import "guilds/v1/members.proto";
+import "guilds/v1/moderation.proto";
+import "guilds/v1/owners.proto";
+import "guilds/v1/permissions.proto";
+import "guilds/v1/roles.proto";
+import "guilds/v1/user_roles.proto";
+
+package protocol.guilds.v1;
+
+// The Guilds Manager manages guilds.
+service GuildsManager {
+    // CreateGuild creates a guild
+    rpc CreateGuild(CreateGuildRequest) returns (CreateGuildResponse) {}
+    // DeleteGuild deletes a guild
+    rpc DeleteGuild(DeleteGuildRequest) returns (DeleteGuildResponse) {}
+    // LeaveGuild leaves a guild
+    rpc LeaveGuild(LeaveGuildRequest) returns (LeaveGuildResponse) {}
+    // JoinGuildByInvite joins a guild by an invite ID
+    rpc JoinGuildByInvite(JoinGuildByInviteRequest) returns (JoinGuildByInviteResponse) {}
+
+    // Gets the owners of the guild
+    rpc Owners(OwnersRequest) returns (OwnersResponse) {}
+    // Elevates another user to owner status
+    rpc GrantOwnership(GrantOwnershipRequest) returns (GrantOwnershipResponse) {}
+    // Gives up your own owner status
+    rpc GiveUpOwnership(GiveUpOwnershipRequest) returns (GiveUpOwnershipResponse) {}
+
+    // Creates a channel
+    rpc CreateChannel(CreateChannelRequest) returns (CreateChannelResponse) {}
+    // Deletes a channel
+    rpc DeleteChannel(DeleteChannelRequest) returns (DeleteChannelResponse) {}
+    // Edits a channel
+    rpc EditChannel(EditChannelRequest) returns (EditChannelResponse) {}
+    // Moves a channel
+    rpc MoveChannel(MoveChannelRequest) returns (MoveChannelResponse) {}
+
+    // Gets invites
+    rpc Invites(InvitesRequest) returns (InvitesResponse) {}
+    // Creates an invite
+    rpc CreateInvite(CreateInviteRequest) returns (CreateInviteResponse) {}
+    // Deletes an invite
+    rpc DeleteInvite(DeleteInviteRequest) returns (DeleteInviteResponse) {}
+
+    // Creates a role
+    rpc CreateRole(CreateRoleRequest) returns (CreateRoleResponse) {}
+    // Deletes a role
+    rpc DeleteRole(DeleteRoleRequest) returns (DeleteRoleResponse) {}
+    // Gets roles
+    rpc GetRoles(GetRolesRequest) returns (GetRolesResponse) {}
+
+    rpc SetPermissions(SetPermissionsRequest) returns (SetPermissionsResponse) {}
+    rpc GetPermissions(GetPermissionsRequest) returns (GetPermissionsResponse) {}
+    rpc QueryPermission(QueryPermissionRequest) returns (QueryPermissionResponse) {}
+
+    rpc Members(MembersRequest) returns (MembersResponse) {}
+
+    rpc SetUserRoles(SetUserRolesRequest) returns (SetUserRolesResponse) {}
+    rpc GetUserRoles(GetUserRolesRequest) returns (GetUserRolesResponse) {}
+
+    rpc BanUser(BanUserRequest) returns (BanUserResponse) {}
+    rpc BannedUsers(BannedUsersRequest) returns (BannedUsersResponse) {}
+    rpc UnbanUser(UnbanUserRequest) returns (UnbanUserResponse) {}
+    rpc KickUser(KickUserRequest) returns (KickUserResponse) {}
+}

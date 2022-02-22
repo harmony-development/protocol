@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+import "channels/v1/messages.proto";
+import "channels/v1/send_messages.proto";
+
+package protocol.channels.v1;
+
+// The Channels Manager handles streams of messages, without
+// assuming what context the message stream is. The Guilds
+// Manager, for instance, produces channels viewed with this.
+service ChannelsManager {
+    // Message returns the content of a message
+    rpc Message(MessageRequest) returns (MessageResponse) {}
+    // Messages returns the content of a range of messages
+    rpc Messages(MessagesRequest) returns (MessagesResponse) {}
+    // SendMessage sends a message into the stream
+    rpc SendMessage(SendMessageRequest) returns (SendMessageResponse) {}
+    // DeleteMessage deletes a message from the stream
+    rpc DeleteMessage(DeleteMessageRequest) returns (DeleteMessageResponse) {}
+    // EditMessage edits a message in the stream
+    rpc EditMessage(EditMessageRequest) returns (EditMessageResponse) {}
+
+    // Typing indicates to other participants in the stream that you are typing
+    rpc Typing(TypingRequest) returns (TypingResponse) {}
+}
+
+// The request for Typing.
+message TypingRequest {
+    // Which channel you're typing in.
+    uint64 channel_id = 1;
+}
+// The response for Typing.
+message TypingResponse {
+
+}

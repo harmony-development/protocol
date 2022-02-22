@@ -6,6 +6,159 @@ option go_package = "github.com/harmony-development/legato/gen/harmonytypes/v1";
 
 import "google/protobuf/descriptor.proto";
 
+// A remote file the server has
+message File {
+  uint64 id = 1;
+  uint64 size = 2;
+  string mime_type = 3;
+  string file_name = 4;
+}
+
+/*
+  Minithumbnail is an extremely low-quality JPEG thumbnail.
+
+  The resolution is usually no larger than 64x64.
+*/
+message Minithumbnail {
+  // The width of the minithumbnail
+  uint32 width = 1;
+  // The height of the minithumbnail
+  uint32 height = 2;
+  // The JPEG data of the minithumbnail
+  bytes data = 3;
+}
+
+// A thumbnail the server has
+message Thumbnail {
+  uint32 width = 1;
+  uint32 height = 2;
+  string mime_type = 3;
+  File file = 4;
+}
+
+// A document the server has
+message Document {
+  File file = 1;
+  Minithumbnail minithumbnail = 2;
+  Thumbnail thumbnail = 3;
+}
+
+// A format for text
+message Format {
+  // Bold text
+  message Bold {}
+  // Italic text
+  message Italic {}
+  // Underlined text
+  message Underline {}
+  // Monospace text
+  message Monospace {}
+  // Superscript text
+  message Superscript {}
+  // Subscript text
+  message Subscript {}
+  // A larger codeblock, with a programming language specified
+  // Clients should ideally not bound the width of codeblock messages,
+  // possibly scrolling the codeblock horizontally separately from the
+  // rest of the message
+  message CodeBlock {
+    // programming language of the code block
+    string language = 1;
+  }
+  // Mention of a user (on the current homeserver)
+  message UserMention {
+    // user_id of the user being mentioned
+    uint64 user_id = 1;
+  }
+  // Mention of a role (on the current guild)
+  message RoleMention {
+    // the role being mentioned
+    uint64 role_id = 1;
+  }
+  // Mention of a channel (on the current guild)
+  message ChannelMention {
+    // the channel being mentioned
+    uint64 channel_id = 1;
+  }
+  // Mention of a guild
+  message GuildMention {
+    // the guild being mentioned
+    uint64 guild_id = 1;
+    // which homeserver it belongs to
+    string homeserver = 2;
+  }
+  // Colour modification
+  message Color {
+    // The kind of colour modification to apply
+    enum Kind {
+      // Dimmed colour
+      KIND_DIM_UNSPECIFIED = 0;
+      // Brightened colour
+      KIND_BRIGHT = 1;
+      // Negative colour (usually red)
+      KIND_NEGATIVE = 2;
+      // Positive colour (usually green)
+      KIND_POSITIVE = 3;
+      // Informational colour (usually blue)
+      KIND_INFO = 4;
+      // Warning colour (usually yellow-orange)
+      KIND_WARNING = 5;
+    }
+
+    // The kind of colour modification to apply
+    Kind kind = 1;
+  }
+  // Replace a part of the text with the text matching the i18n code.
+  // If i18n code was not found, keep the original text.
+  message Localization {
+    // i18n code for the text.
+    string i18n_code = 1;
+  }
+
+  // where the format begins to apply to
+  uint32 start = 1;
+  // how many characters the format is
+  uint32 length = 2;
+
+  // the style if format to apply to this text
+  oneof format {
+    // a text format for bold text
+    Bold bold = 3;
+    // a text format for italic text
+    Italic italic = 4;
+    // a text format for underline text
+    Underline underline = 5;
+    // a text format for monospace text
+    Monospace monospace = 6;
+    // a text format for superscript text
+    Superscript superscript = 7;
+    // a text format for subscript text
+    Subscript subscript = 8;
+    // a text format for a codeblock
+    CodeBlock code_block = 9;
+    // a text format for a user mention
+    UserMention user_mention = 10;
+    // a text format for a role mention
+    RoleMention role_mention = 11;
+    // a text format for a channel mention
+    ChannelMention channel_mention = 12;
+    // a text format for a guild mention
+    GuildMention guild_mention = 13;
+    // a text format for coloured text
+    Color color = 14;
+    // a text format for localization
+    Localization localization = 15;
+  }
+}
+
+// Formatted text
+message FormattedText {
+  // The textual content of a message
+  string text = 1;
+  // The formats for a message
+  repeated Format format = 2;
+}
+
 // Metadata for methods. These are set in individual RPC endpoints and are
 // typically used by servers.
 message HarmonyMethodMetadata {
@@ -40,7 +193,7 @@ message Metadata {
   map<string, Anything> extension = 2;
 }
 
-// Error type that will be returned by servers. 
+// Error type that will be returned by servers.
 message Error {
   // The identifier of this error, can be used as an i18n key.
   string identifier = 1;
@@ -65,16 +218,16 @@ message Token {
 }
 
 // An empty message
-message Empty { }
+message Empty {}
 
 // An object representing an item position between two other items.
 message ItemPosition {
   // The position
   enum Position {
     // The position is before the item
-  	POSITION_BEFORE_UNSPECIFIED = 0;
-  	// The position is after the item
-  	POSITION_AFTER = 1;
+    POSITION_BEFORE_UNSPECIFIED = 0;
+    // The position is after the item
+    POSITION_AFTER = 1;
   }
 
   // The ID of the item the position is relative to

@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+import "harmonytypes/v1/types.proto";
+
+package protocol.guilds.v1;
+
+// The request for CreateChannel
+message CreateChannelRequest {
+    // The guild to create the channel in
+    uint64 guild_id = 1;
+    // The channel's name
+    string name = 2;
+}
+
+// The response for CreateChannel
+message CreateChannelResponse {
+    // The new ID of the channel
+    uint64 channel_id = 1;
+}
+
+// The request for DeleteChannel
+message DeleteChannelRequest {
+    // The guild to delete the channel from
+    uint64 guild_id = 1;
+    // The channel to delete
+    uint64 channel_id = 2;
+}
+
+// The response for DeleteChannel
+message DeleteChannelResponse {
+
+}
+
+// The request for EditChannel
+message EditChannelRequest {
+    // guild_id
+    uint64 guild_id = 1;
+    // channel_id
+    uint64 channel_id = 2;
+    // new_name
+    optional string new_name = 3;
+}
+
+// The response for EditChannel
+message EditChannelResponse {
+
+}
+
+// The request for MoveChannel
+message MoveChannelRequest {
+    // guild_id
+    uint64 guild_id = 1;
+    // channel_id
+    uint64 channel_id = 2;
+    // position
+    optional harmonytypes.v1.ItemPosition position = 3;
+}
+
+// The response for MoveChannel
+message MoveChannelResponse {
+
+}

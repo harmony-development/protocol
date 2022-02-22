@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+import "harmonytypes/v1/types.proto";
+
+package protocol.channels.v1;
+
+// Object representing a generic message attachment.
+message Attachment {
+  // The document attached to this message.
+  harmonytypes.v1.Document document = 1;
+  // Caption of this attachment.
+  optional harmonytypes.v1.FormattedText caption = 2;
+}
+
+// Object representing a message's content.
+message Content {
+  // Object representing text content.
+  message Text {
+    // Text content.
+    harmonytypes.v1.FormattedText content = 1;
+  }
+  // Object representing attachment content.
+  message Attachment {
+    // A list of attachments.
+    repeated Attachment files = 1;
+  }
+
+  // Content data.
+  oneof content {
+    // Text content.
+    Text text = 1;
+    // Attachment content.
+    Attachment attachment = 2;
+  }
+}
+
+// A message in a channel stream.
+message Message {
+  // The ID of this message
+  uint64 message_id = 1;
+  // Channel ID
+  uint64 channel_id = 2;
+  // User ID of the user who sent this message.
+  uint64 author_id = 3;
+  // When this message was created, in miliseconds since unix epoch
+  uint64 created_at = 4;
+  // The most recent time this message was edited, in milliseconds since unix epoch
+  optional uint64 edited_at = 5;
+  // The message this message is a reply to.
+  optional uint64 in_reply_to = 6;
+  // The content of the message.
+  Content content = 7;
+}
+
+// The request to Message.
+message MessageRequest {
+  // What message you want to get.
+  uint64 message_id = 1;
+}
+// The response to Message
+message MessageResponse {
+  // The content of the message you got.
+  Message message = 1;
+}
+// The request for Messages.
+message MessagesRequest {
+  // The direction relative to the `message_id` message to get messages from.
+  enum Direction {
+    // Get messages before the anchor.
+    DIRECTION_BEFORE_UNSPECIFIED = 0;
+    // Get messages around the anchor, including the anchor.
+    DIRECTION_AROUND = 1;
+    // Get messages after the anchor.
+    DIRECTION_AFTER = 2;
+  }
+
+  // Channel ID of the channel to get messages from.
+  uint64 channel_id = 1;
+  // The ID of the message that will be used as an "anchor" point to figure out
+  // where to get the messages.
+  // If not specified, the `direction` will be ignored and the newest messages
+  // will be returned.
+  optional uint64 message_id = 2;
+  // On which direction to get the messages.
+  //
+  // - By default, it is "before", which means you will get messages before the
+  // `message_id` message.
+  // - If it is "around", you will get the messages around the `message_id`
+  // message. This will include the `message_id` message itself, as the middle
+  // item of the list returned.
+  // - If it is "after", you will get the messages after the `message_id`
+  // message.
+  optional Direction direction = 3;
+  // How many messages to get.
+  //
+  // - If `0`, a recommended message count to return is 25. If the direction is
+  // "around", the recommended value is 12.
+  // - If the direction to get the messages is "around", this count will not be
+  // the *total* count of messages to return, but instead the count of messages
+  // to return *for each direction*, before and after.
+  // - Servers should enforce their own maximum limit, and clamp this value to
+  // the limit.
+  optional uint32 count = 4;
+}
+// The response to Messages.
+message MessagesResponse {
+  // The messages requested.
+  repeated Message messages = 1;
+  // Has reached the top (first message) of the message history.
+  bool reached_top = 2;
+  // Has reached the bottom (last message) of the message history.
+  bool reached_bottom = 3;
+}
+
+// The request to DeleteMessage
+message DeleteMessageRequest {
+  // Which channel to delete the message from
+  uint64 channel_id = 1;
+  // The message to delete
+  uint64 message_id = 2;
+}
+// The response for DeleteMessage
+message DeleteMessageResponse {
+}
+

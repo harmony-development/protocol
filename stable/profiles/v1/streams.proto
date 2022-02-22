@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-import "profile/v1/types.proto";
+import "profiles/v1/types.proto";
 
-package protocol.profile.v1;
+package protocol.profiles.v1;
 
 // Event sent when a user's profile is updated.
 //

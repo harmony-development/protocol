@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+import "channels/v1/messages.proto";
+
+package protocol.channels.v1;
+
+// Describes an event.
+message StreamEvent {
+  // Event sent when a new message is sent.
+  message MessageSent {
+    // Channel ID of the channel where this event happened.
+    uint64 channel_id = 1;
+    // Message ID of the message that was updated.
+    uint64 message_id = 2;
+    // The actual message.
+    Message message = 3;
+    // ID that is sent by your client it can use to confirm that the message is sent.
+    optional uint64 echo_id = 4;
+  }
+
+  // Event sent when a message's text content is updated.
+  message MessageUpdated {
+    // Channel ID of the channel where this event happened.
+    uint64 channel_id = 1;
+    // Message ID of the message that was updated.
+    uint64 message_id = 2;
+    // When this message was edited, in milliseconds since unix epoch
+    uint64 edited_at = 3;
+    // New message content.
+    Content new_content = 4;
+  }
+
+  // Event sent when a message is deleted.
+  message MessageDeleted {
+    // Channel ID of the channel where this event happened.
+    uint64 channel_id = 1;
+    // Message ID of the message that was deleted.
+    uint64 message_id = 2;
+  }
+
+  // Event sent when a user sends a typing notification in a guild channel.
+  message Typing {
+    // User ID of the user that sent the typing notification.
+    uint64 user_id = 1;
+    // Channel ID of the channel where this event happened.
+    uint64 channel_id = 2;
+  }
+
+  // The carried event
+  oneof event {
+    // A message was sent
+    MessageSent sent_message = 1;
+    // A message was edited
+    MessageUpdated edited_message = 2;
+    // A message was deleted
+    MessageDeleted deleted_message = 3;
+    // Someone is typing
+    Typing typing = 4;
+  }
+}
+

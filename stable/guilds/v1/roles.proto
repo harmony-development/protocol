@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package protocol.guilds.v1;
+
+message CreateRoleRequest {
+    uint64 guild_id = 1;
+    string name = 2;
+    int32 color = 3;
+    bool pingable = 4;
+}
+
+message CreateRoleResponse {
+    uint64 role_id = 1;
+}
+
+message DeleteRoleRequest {
+    uint64 guild_id = 1;
+    uint64 role_id = 2;
+}
+
+message DeleteRoleResponse {
+
+}
+
+message GetRolesRequest {
+    uint64 guild_id = 1;
+}
+
+message GetRolesResponse {
+    message Role {
+        uint64 role_id = 1;
+        string name = 2;
+        int32 color = 3;
+        bool pingable = 4;
+    }
+
+    repeated Role roles = 1;
+}
+

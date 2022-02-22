@@ -1,0 +1,195 @@
+syntax = "proto3";
+
+import "harmonytypes/v1/types.proto";
+import "guilds/v1/permissions.proto";
+
+package protocol.guilds.v1;
+
+// Describes an event.
+message StreamEvent {
+  // Event sent when a new channel is created.
+  message ChannelCreated {
+    // Guild ID of the guild where this event happened.
+    uint64 guild_id = 1;
+    // Channel ID of the channel where this event happened.
+    uint64 channel_id = 2;
+    // Name of this channel.
+    string name = 3;
+    // The position in the channel list.
+    harmonytypes.v1.ItemPosition position = 4;
+  }
+
+  // Event sent when a channel's information is changed.
+  message ChannelUpdated {
+    // Guild ID of the guild where this event happened.
+    uint64 guild_id = 1;
+    // Channel ID of the channel that was changed.
+    uint64 channel_id = 2;
+    // The new name of the channel.
+    optional string new_name = 3;
+  }
+
+  // Event sent when a channel's position in the channel list is changed.
+  message ChannelPositionUpdated {
+    // Guild ID of the guild where this event happened.
+    uint64 guild_id = 1;
+    // Channel ID of the channel that was changed.
+    uint64 channel_id = 2;
+    // The new position of the channel.
+    optional harmonytypes.v1.ItemPosition new_position = 3;
+  }
+
+  // Event sent when a channel is deleted.
+  message ChannelDeleted {
+    // Guild ID of the guild where this event happened.
+    uint64 guild_id = 1;
+    // Channel ID of the channel that was deleted.
+    uint64 channel_id = 2;
+  }
+
+  // Event sent when a guild's information is changed.
+  message GuildUpdated {
+    // Guild ID of the guild that was changed.
+    uint64 guild_id = 1;
+    // The new name of the guild.
+    optional string new_name = 2;
+    // The new picture of the guild.
+    optional string new_picture = 3;
+  }
+
+  // Event sent a user joins to a guild.
+  message MemberJoined {
+    // Member ID of the member that joined the guild.
+    uint64 member_id = 1;
+    // Guild ID of the guild where this event happened.
+    uint64 guild_id = 2;
+  }
+
+  // Event sent when a member of a guild leaves said guild for whatever reason.
+  message MemberLeft {
+    // User ID of the member that left the guild.
+    uint64 member_id = 1;
+    // Guild ID of the guild where this event happened.
+    uint64 guild_id = 2;
+  }
+
+  // Event sent when a role's position in the role list is changed.
+  message RoleMoved {
+    // Guild ID of the guild where this event happened.
+    uint64 guild_id = 1;
+    // Role ID of the role that was moved.
+    uint64 role_id = 2;
+    // New position of the role.
+    harmonytypes.v1.ItemPosition new_position = 3;
+  }
+
+  // Event sent when a role is deleted.
+  message RoleDeleted {
+    // Guild ID of the guild where this event happened.
+    uint64 guild_id = 1;
+    // Role ID of the role that was deleted.
+    uint64 role_id = 2;
+  }
+
+  // Event sent when a role is created.
+  message RoleCreated {
+    // Guild ID of the guild where this event happened.
+    uint64 guild_id = 1;
+    // Role ID of the role that was created.
+    uint64 role_id = 2;
+    // The name of the role.
+    string name = 3;
+    // The color of the role.
+    int32 color = 4;
+    // The hoist status of the role.
+    bool hoist = 5;
+    // The pingable status of the role.
+    bool pingable = 6;
+  }
+
+  // Event sent when a role's information is changed.
+  message RoleUpdated {
+    // Guild ID of the guild where this event happened.
+    uint64 guild_id = 1;
+    // Role ID of the role that was changed.
+    uint64 role_id = 2;
+    // The new name of the role.
+    optional string new_name = 3;
+    // The new color of the role.
+    optional int32 new_color = 4;
+    // The new hoist status of the role.
+    optional bool new_hoist = 5;
+    // The new pingable status of the role.
+    optional bool new_pingable = 6;
+  }
+
+  // Event sent when a role's permissions are changed.
+  //
+  // This event will only be sent to users with the "guild.manage" permission.
+  message RolePermissionsUpdated {
+    // Guild ID of the guild where this event happened.
+    uint64 guild_id = 1;
+    // Channel ID of the channel where this event happened.
+    optional uint64 channel_id = 2;
+    // Role ID of the role that had it's permissions changed.
+    uint64 role_id = 3;
+    // The new permissions.
+    map<string, PermissionsMode> new_perms = 4;
+  }
+
+  // Event sent when a user's roles are changed.
+  message UserRolesUpdated {
+    // Guild ID of the guild where this event happened.
+    uint64 guild_id = 1;
+    // User ID of the user that had it's roles changed.
+    uint64 user_id = 2;
+    // The new role IDs.
+    repeated uint64 new_role_ids = 3;
+  }
+
+  // Sent when there's a new owner.
+  message OwnerAdded {
+    // User ID of the new owner.
+    uint64 user_id = 1;
+  }
+
+  // Sent when an owner gives up their ownership.
+  message OwnerRemoved {
+    // User ID of the user who is no longer owner.
+    uint64 user_id = 1;
+  }
+
+  // Which event to send.
+  oneof event {
+    // Send the channel created event.
+    ChannelCreated created_channel = 1;
+    // Send the channel updated event.
+    ChannelUpdated edited_channel = 2;
+    // Send the channel deleted event.
+    ChannelDeleted deleted_channel = 3;
+    // Send the guild updated event.
+    GuildUpdated edited_guild = 4;
+    // Send the member joined event.
+    MemberJoined joined_member = 5;
+    // Send the member left event.
+    MemberLeft left_member = 6;
+    // Send the role created event.
+    RoleCreated role_created = 7;
+    // Send the role deleted event.
+    RoleDeleted role_deleted = 8;
+    // Send the role moved event.
+    RoleMoved role_moved = 9;
+    // Send the role updated event.
+    RoleUpdated role_updated = 10;
+    // Send the role perms updated event.
+    RolePermissionsUpdated role_perms_updated = 11;
+    // Send the user roles updated event.
+    UserRolesUpdated user_roles_updated = 12;
+    // Send the channel position updated event.
+    ChannelPositionUpdated edited_channel_position = 13;
+    // Send the owner added event.
+    OwnerAdded owner_added = 14;
+    // Send the owner removed event.
+    OwnerRemoved owner_removed = 15;
+  }
+}

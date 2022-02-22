@@ -35,8 +35,8 @@ message BatchSameResponse {
   repeated bytes responses = 1;
 }
 
-// Service to batch requests.
-service BatchService {
+// Manager to batch requests.
+service BatchManager {
   // Batch requests.
   // Does not support batching stream requests.
   // Batched requests should be verified and an error should be thrown if they

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package protocol.profile.v1;
+package protocol.profiles.v1;
 
 // The possible statuses a user can have.
 enum UserStatus {
@@ -36,10 +36,8 @@ message Profile {
   optional string user_avatar = 2;
   // the status of the user.
   UserStatus user_status = 3;
-  // whether the user is a bot or not
-  bool is_bot = 4 [ deprecated = true ];
   // what kind of account the user is, e.g. full, guest, bot
-  AccountKind account_kind = 5;
+  AccountKind account_kind = 4;
 }
 
 // Used in `GetProfile` endpoint.
@@ -62,11 +60,6 @@ message UpdateProfileRequest {
   optional string new_user_avatar = 2;
   // new status of the user.
   optional UserStatus new_user_status = 3;
-  // new whether the user is a bot or not
-  //
-  // Deprecated; see bot service and guest handling
-  // in auth.
-  optional bool new_is_bot = 4 [ deprecated = true ];
 }
 
 // Used in `UpdateProfile` endpoint.

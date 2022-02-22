@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+import "harmonytypes/v1/types.proto";
+
+package protocol.channels.v1;
+
+// Object representing the content given to the server
+message InputContent {
+  // Text content
+  message Text {
+    // Textual content
+    harmonytypes.v1.FormattedText content = 1;
+  }
+  // Attached file
+  message Attachment {
+    // Files content
+    repeated uint64 files = 1;
+  }
+
+  // Content data.
+  oneof content {
+    // Text content.
+    Text text = 1;
+    // Attachment content.
+    Attachment attachment = 2;
+  }
+}
+
+// The request for SendMessage
+message SendMessageRequest {
+    // Which channel to send into
+    uint64 channel_id = 1;
+    // The input content
+    InputContent content = 2;
+    // The echo ID of the message, which will
+    // return with the message in a stream
+    optional uint64 echo_id = 3;
+}
+// The response for SendMessage
+message SendMessageResponse {
+}
+
+// The request for EditMessage
+message EditMessageRequest {
+    // Which channel the message is located in
+    uint64 channel_id = 1;
+    // Which message to edit
+    uint64 message_id = 2;
+    // The new input content
+    InputContent content = 3;
+}
+// The response for EditMessage
+message EditMessageResponse {
+}

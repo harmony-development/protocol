@@ -30,7 +30,7 @@ Revolt is an interesting project, and we actually hadn't known about it while Ha
 
 ## Where is E2EE?
 
-E2EE is currently under development as part of our "Secret Service"
+E2EE is currently under development as part of our "Secret Manager"
 It is currently being worked on in a branch of our [Protocol](https://github.com/harmony-development/protocol/tree/work/e2ee) repository and a library called [Lockdown](https://github.com/harmony-development/lockdown), which allows clients to implement E2EE trivially.
 
 E2EE rooms adopt a different style from the rest of Harmony, allowing us to have all three by having a design specifically tailored to E2EE conversation: good performance, good security, good user experience.

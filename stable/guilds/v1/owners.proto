@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package protocol.guilds.v1;
+
+message OwnersRequest {
+    uint64 guild_id = 1;
+}
+message OwnersResponse {
+    repeated uint64 owner_ids = 1;
+}
+message GrantOwnershipRequest {
+    uint64 guild_id = 1;
+    uint64 to_user = 2;
+}
+message GrantOwnershipResponse {
+
+}
+message GiveUpOwnershipRequest {
+    uint64 guild_id = 1;
+}
+message GiveUpOwnershipResponse {
+
+}

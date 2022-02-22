@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+import "channels/v1/streams.proto";
+import "guilds/v1/streams.proto";
+import "profiles/v1/streams.proto";
+
+package protocol.streams.v1;
+
+message StreamEventsRequest {
+    bool remove = 1;
+
+    message SubscribeToGuild {
+        uint64 guild_id = 1;
+    }
+
+    oneof request {
+        SubscribeToGuild subscribe_to_guild = 2;
+    }
+}
+
+message StreamEventsResponse {
+    oneof event {
+        channels.v1.StreamEvent channels = 1;
+        guilds.v1.StreamEvent guilds = 2;
+        profiles.v1.StreamEvent profiles = 3;
+    }
+}
+
+service StreamsManager {
+    rpc StreamEvents(stream StreamEventsRequest) returns(stream StreamEventsResponse);
+}
