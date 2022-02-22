@@ -8,9 +8,13 @@ import "google/protobuf/descriptor.proto";
 
 // A remote file the server has
 message File {
+  // The ID of the file
   uint64 id = 1;
+  // The size of the file
   uint64 size = 2;
+  // The file's mime type
   string mime_type = 3;
+  // The file's name
   string file_name = 4;
 }
 
@@ -30,17 +34,22 @@ message Minithumbnail {
 
 // A thumbnail the server has
 message Thumbnail {
+  // Width of the thumbnail, in pixels
   uint32 width = 1;
+  // Height of the thumbnail, in pixels
   uint32 height = 2;
-  string mime_type = 3;
-  File file = 4;
+  // The file containing the thumbnail
+  File file = 3;
 }
 
 // A document the server has
 message Document {
+  // The file containing the document
   File file = 1;
-  Minithumbnail minithumbnail = 2;
-  Thumbnail thumbnail = 3;
+  // The minithumbnail for the document
+  optional Minithumbnail minithumbnail = 2;
+  // The thumbnail for the document
+  optional Thumbnail thumbnail = 3;
 }
 
 // A format for text

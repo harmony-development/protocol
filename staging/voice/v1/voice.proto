@@ -176,7 +176,7 @@ message StreamMessageResponse {
 // when a user leaves the channel (when their stream ends), sends UserLeft to all other users
 // 8. When receiving a ResumeConsumer message, unpauses the consumer corresponding to the consumer ID
 //
-service VoiceManager {
+service VoiceService {
   // Endpoint to stream messages between client and server.
   //
   // - One StreamMessage stream corresponds to being in one voice channel.

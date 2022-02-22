@@ -2,33 +2,51 @@ syntax = "proto3";
 
 package protocol.guilds.v1;
 
+// Request for BanUser
 message BanUserRequest {
+    // The guild ID
     uint64 guild_id = 1;
+    // The user ID
     uint64 user_id = 2;
 }
+// Response to BanUser
 message BanUserResponse {
 
 }
+// Request for UnbanUser
 message UnbanUserRequest {
+    // The guild ID to ban in
     uint64 guild_id = 1;
+    // The user ID to ban
     uint64 user_id = 2;
 }
+// Response to UnbanUser
 message UnbanUserResponse {
 
 }
+// Request for KickUser
 message KickUserRequest {
+    // The guild ID to kick from
     uint64 guild_id = 1;
+    // The user to kick
     uint64 user_id = 2;
 }
+// Response to KickUser
 message KickUserResponse {
 
 }
+// Request for BannedUsers
 message BannedUsersRequest {
+    // The guild ID to get the banned users of
     uint64 guild_id = 1;
 
+    // The offset in the list of banned users
     uint64 offset = 2;
+    // The maximum count of banned users to get
     uint64 limit = 3;
 }
+// Response to BannedUsers
 message BannedUsersResponse {
+    // The user IDs of banned users
     repeated uint64 user_ids = 1;
 }

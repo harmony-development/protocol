@@ -5,10 +5,10 @@ import "channels/v1/send_messages.proto";
 
 package protocol.channels.v1;
 
-// The Channels Manager handles streams of messages, without
+// The Channels Service handles streams of messages, without
 // assuming what context the message stream is. The Guilds
-// Manager, for instance, produces channels viewed with this.
-service ChannelsManager {
+// Service, for instance, produces channels viewed with this.
+service ChannelsService {
     // Message returns the content of a message
     rpc Message(MessageRequest) returns (MessageResponse) {}
     // Messages returns the content of a range of messages

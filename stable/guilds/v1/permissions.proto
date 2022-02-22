@@ -2,35 +2,58 @@ syntax = "proto3";
 
 package protocol.guilds.v1;
 
+// The modes of a permission set
 enum PermissionsMode {
+    // This doesn't affect permissions
     PERMISSIONS_MODE_PASSTHROUGH_UNSPECIFIED = 0;
+    // This denies the permission
     PERMISSIONS_MODE_DENY = 1;
+    // This permits the permission
     PERMISSIONS_MODE_ALLOW = 2;
 }
 
+// Request for SetPermissions
 message SetPermissionsRequest {
+    // The guild ID to set permissions of
     uint64 guild_id = 1;
+    // The channel to override permissions in
     optional uint64 channel_id = 2;
+    // The role ID to set permissions of
     uint64 role_id = 3;
+    // The map of permissions to modes
     map<string, PermissionsMode> permissions = 4;
 }
+// Response to SetPermissions
 message SetPermissionsResponse {
 
 }
+// Request for GetPermissions
 message GetPermissionsRequest {
+    // The guild ID to get permissions in
     uint64 guild_id = 1;
+    // The channel to get permission overrides for
     optional uint64 channel_id = 2;
+    // The role ID to get permissions of
     uint64 role_id = 3;
 }
+// Response to GetPermissions
 message GetPermissionsResponse {
+    // The map of permissions to modes
     map<string, PermissionsMode> permissions = 1;
 }
+// Request for QueryPermission
 message QueryPermissionRequest {
+    // The guild ID to query in
     uint64 guild_id = 1;
+    // The channel ID to query in
     optional uint64 channel_id = 2;
+    // The node to check
     string node = 3;
+    // Which user it should be checked as. If unspecified, it checks the calling user.
     optional uint64 as_user = 4;
 }
+// Response to QueryPermission
 message QueryPermissionResponse {
+    // Whether or not the user has permission
     bool has_permission = 1;
 }

@@ -289,7 +289,7 @@ message CheckLoggedInResponse {}
 // TODO: finish
 
 // The service containing authorization/entication methods
-service AuthManager {
+service AuthService {
   // Federate with a foreignserver, obtaining a token
   // you can use to call LoginFederated on it
   rpc Federate(FederateRequest) returns (FederateResponse);

@@ -2,29 +2,46 @@ syntax = "proto3";
 
 package protocol.guilds.v1;
 
+// Request for Invites
 message InvitesRequest {
+    // The guild ID to get invites of
     uint64 guild_id = 1;
 }
+// Response to Invites
 message InvitesResponse {
+    // An invite
     message Invite {
+        // The invite's ID
         string invite_id = 1;
+        // Its possible uses
         uint32 possible_uses = 2;
+        // How many uses it's had
         uint32 use_count = 3;
     }
+    // The invites
     repeated Invite invite = 1;
 }
+// Request for CreateInvite
 message CreateInviteRequest {
+    // The guild to create an invite in
     uint64 guild_id = 1;
+    // Possible uses for the invite
     uint32 possible_uses = 2;
+    // The invite's ID
     string invite_id = 3;
 }
+// Response to CreateInvite
 message CreateInviteResponse {
 
 }
+// Request for DeleteInvite
 message DeleteInviteRequest {
+    // The guild to delete an invite in
     uint64 guild_id = 1;
+    // The invite to delete
     string invite_id = 2;
 }
+// Response to DeleteInvite
 message DeleteInviteResponse {
 
 }

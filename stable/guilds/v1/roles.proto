@@ -2,38 +2,58 @@ syntax = "proto3";
 
 package protocol.guilds.v1;
 
+// Request for CreateRole
 message CreateRoleRequest {
+    // The guild ID to create a role in
     uint64 guild_id = 1;
+    // The role's name
     string name = 2;
+    // The role colour
     int32 color = 3;
+    // Whether the role is pingable or not
     bool pingable = 4;
 }
 
+// Response to CreateRole
 message CreateRoleResponse {
+    // The newly created role ID
     uint64 role_id = 1;
 }
 
+// Request for DeleteRole
 message DeleteRoleRequest {
+    // The guild ID to delete a role in
     uint64 guild_id = 1;
+    // The role ID to delete
     uint64 role_id = 2;
 }
 
+// Response to DeleteRole
 message DeleteRoleResponse {
 
 }
 
+// Request for GetRoles
 message GetRolesRequest {
+    // The guild ID to get roles for
     uint64 guild_id = 1;
 }
 
+// Response to GetRoles
 message GetRolesResponse {
+    // A role returned
     message Role {
+        // The role's ID
         uint64 role_id = 1;
+        // The role's name
         string name = 2;
+        // The role's color
         int32 color = 3;
+        // The role's pingability status
         bool pingable = 4;
     }
 
+    // The list of roles
     repeated Role roles = 1;
 }
 

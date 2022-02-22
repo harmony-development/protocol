@@ -6,7 +6,7 @@ import "profiles/v1/types.proto";
 package protocol.profiles.v1;
 
 // Harmony's Profile service manages the profiles of the users.
-service ProfileManager {
+service ProfileService {
   // Gets a user's profile.
   rpc GetProfile(GetProfileRequest) returns (GetProfileResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;

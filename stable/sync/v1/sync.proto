@@ -118,7 +118,7 @@ message NotifyNewIdResponse {}
 // In this section, we will use sender and recipient to refer to the servers
 // sending the events and the server receiving the events respectively.
 //
-// At PostboxManager startup, a sender should first Pull all receivers it had
+// At PostboxService startup, a sender should first Pull all receivers it had
 // federated from before. If a receiver makes a Push to the sender while a Pull
 // is going on, the Push should be processed after the Pull is completed.
 //
@@ -131,7 +131,7 @@ message NotifyNewIdResponse {}
 //
 // It is recommended that receivers try pulling periodically, for example, every
 // 1 minute after the last Push RPC by the sender. This ensures that events are recieved.
-service PostboxManager {
+service PostboxService {
   // Endpoint to pull events.
   rpc Pull(PullRequest) returns (PullResponse) {}
   // Endpoint to push events.

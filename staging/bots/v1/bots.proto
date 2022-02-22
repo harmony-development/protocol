@@ -103,7 +103,7 @@ message AddBotRequest {
 message AddBotResponse {}
 
 // The Bots service allows the management of bot accounts
-service BotsManager {
+service BotsService {
   // Gets the list of bots that you own
   rpc MyBots(MyBotsRequest) returns (MyBotsResponse);
   // Gets information on a given bot

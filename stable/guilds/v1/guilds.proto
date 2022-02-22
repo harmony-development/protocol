@@ -12,8 +12,8 @@ import "guilds/v1/user_roles.proto";
 
 package protocol.guilds.v1;
 
-// The Guilds Manager manages guilds.
-service GuildsManager {
+// The Guilds Service manages guilds.
+service GuildsService {
     // CreateGuild creates a guild
     rpc CreateGuild(CreateGuildRequest) returns (CreateGuildResponse) {}
     // DeleteGuild deletes a guild
@@ -53,17 +53,27 @@ service GuildsManager {
     // Gets roles
     rpc GetRoles(GetRolesRequest) returns (GetRolesResponse) {}
 
+    // Sets permissions
     rpc SetPermissions(SetPermissionsRequest) returns (SetPermissionsResponse) {}
+    // Gets permssions
     rpc GetPermissions(GetPermissionsRequest) returns (GetPermissionsResponse) {}
+    // Queries permissions
     rpc QueryPermission(QueryPermissionRequest) returns (QueryPermissionResponse) {}
 
+    // Gets members
     rpc Members(MembersRequest) returns (MembersResponse) {}
 
+    // Sets a user's roles
     rpc SetUserRoles(SetUserRolesRequest) returns (SetUserRolesResponse) {}
+    // Gets a user's roles
     rpc GetUserRoles(GetUserRolesRequest) returns (GetUserRolesResponse) {}
 
+    // Bans a user
     rpc BanUser(BanUserRequest) returns (BanUserResponse) {}
+    // Gets banned users
     rpc BannedUsers(BannedUsersRequest) returns (BannedUsersResponse) {}
+    // Unbans a user
     rpc UnbanUser(UnbanUserRequest) returns (UnbanUserResponse) {}
+    // Kicks a user
     rpc KickUser(KickUserRequest) returns (KickUserResponse) {}
 }

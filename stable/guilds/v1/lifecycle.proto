@@ -2,28 +2,43 @@ syntax = "proto3";
 
 package protocol.guilds.v1;
 
+// Request for CreateGuild
 message CreateGuildRequest {
+    // The new guild's name
     string name = 1;
+    // The new guild's picture
     optional string picture = 2;
 }
+// Response to CreateGuild
 message CreateGuildResponse {
+    // The new guild's ID
     uint64 guild_id = 1;
 }
+// Request to DeleteGuild
 message DeleteGuildRequest {
+    // The guild's ID to delete
     uint64 guild_id = 1;
 }
+// Response to DeleteGuild
 message DeleteGuildResponse {
 
 }
+// Request for LeaveGuild
 message LeaveGuildRequest {
+    // The guild to leave
     uint64 guild_id = 1;
 }
+// Response to LeaveGuild
 message LeaveGuildResponse {
 
 }
+// Request for JoinGuildByInvite
 message JoinGuildByInviteRequest {
+    // The invite ID to use
     string invite_id = 1;
 }
+// Response to JoinGuildByInvite
 message JoinGuildByInviteResponse {
+    // The ID of the newly joined guild
     uint64 guild_id = 1;
 }

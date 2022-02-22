@@ -6,26 +6,39 @@ import "profiles/v1/streams.proto";
 
 package protocol.streams.v1;
 
+// Request for StreamEvents
 message StreamEventsRequest {
+    // Whether to remove the given request
     bool remove = 1;
 
+    // Subscribe to a guild
     message SubscribeToGuild {
+        // The guild to subscribe to
         uint64 guild_id = 1;
     }
 
+    // The subject to sub/unsubscribe to
     oneof request {
+        // Subscribe to the given guild
         SubscribeToGuild subscribe_to_guild = 2;
     }
 }
 
+// Response to StreamEvents
 message StreamEventsResponse {
+    // An event indicating something that happened
     oneof event {
+        // An event relating to channels or messages in them
         channels.v1.StreamEvent channels = 1;
+        // An event relating to guilds
         guilds.v1.StreamEvent guilds = 2;
+        // An event relating to profiles
         profiles.v1.StreamEvent profiles = 3;
     }
 }
 
-service StreamsManager {
+// The Streams service manages streaming notifications of events in Harmony.
+service StreamsService {
+    // The main RPC, for streaming events from a Harmony server.
     rpc StreamEvents(stream StreamEventsRequest) returns(stream StreamEventsResponse);
 }

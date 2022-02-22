@@ -2,18 +2,28 @@ syntax = "proto3";
 
 package protocol.guilds.v1;
 
+// Request for SetUserRoles
 message SetUserRolesRequest {
+    // The guild ID to set roles in
     uint64 guild_id = 1;
+    // The user ID whose roles to set
     uint64 user_id = 2;
+    // The roles the user will have
     uint64 roles = 3;
 }
+// Response to SetUserRoles
 message SetUserRolesResponse {
 
 }
+// Request for GetUserRoles
 message GetUserRolesRequest {
+    // The guild ID to get user roles in
     uint64 guild_id = 1;
+    // The user ID to get the roles of
     uint64 user_id = 2;
 }
+// Response to GetUserRoles
 message GetUserRolesResponse {
+    // The roles the user has
     repeated uint64 role_ids = 1;
 }

@@ -2,22 +2,33 @@ syntax = "proto3";
 
 package protocol.guilds.v1;
 
+// Request for Owners
 message OwnersRequest {
+    // The guild ID to get the owners of
     uint64 guild_id = 1;
 }
+// Response to Owners
 message OwnersResponse {
+    // The list of IDs of owners
     repeated uint64 owner_ids = 1;
 }
+// Request for GrantOwnership
 message GrantOwnershipRequest {
+    // The guild ID to elevate someone else to owner in
     uint64 guild_id = 1;
+    // The user to elevate
     uint64 to_user = 2;
 }
+// Response to GrantOwnership
 message GrantOwnershipResponse {
 
 }
+// Request for GiveUpOwnership
 message GiveUpOwnershipRequest {
+    // The guild to give up your ownership in
     uint64 guild_id = 1;
 }
+// Response to GiveUpOwnership
 message GiveUpOwnershipResponse {
 
 }

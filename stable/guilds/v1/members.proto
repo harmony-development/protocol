@@ -2,12 +2,18 @@ syntax = "proto3";
 
 package protocol.guilds.v1;
 
+// Request for Members
 message MembersRequest {
+    // The guild ID to get members of
     uint64 guild_id = 1;
 
+    // The offset in the members list
     uint64 offset = 2;
+    // The maximum number of members to get
     uint64 limit = 3;
 }
+// Response to Members
 message MembersResponse {
+    // The user IDs
     repeated uint64 user_ids = 2;
 }
