@@ -95,11 +95,18 @@ message PoliciesResponse {
 
 // Request type for AddBot.
 message AddBotRequest {
-  // The guild to add the bot to.
-  uint64 guild_id = 1;
   // The bot's invite code.
-  string invite_code = 2;
+  string invite_code = 1;
+
+  // The location where the bot is being added to.
+  oneof location {
+    // The guild to add the bot to.
+    uint64 guild_id = 2;
+    // The private channel to add the bot to.
+    uint64 channel_id = 3;
+  }
 }
+
 // Response type for AddBot.
 message AddBotResponse {}
 
