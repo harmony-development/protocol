@@ -4,43 +4,30 @@ package protocol.chat.v1;
 
 import "harmonytypes/v1/types.proto";
 
-// The kind of a guild.
-message GuildKind {
-  // A "normal" guild as in a guild that allows multiple channels.
-  message Normal {}
-  // A "room" guild as in a guild that only has one channel.
-  //
-  // - Clients should not show a channel list for guilds of this type.
-  message Room {}
-  // A "direct message" guild as in a guild that has at most two members,
-  // and has only one channel.
-  //
-  // - Clients should not show a channel list for guilds of this type.
-  // - Clients should show this guild in the guild list with the profile picture
-  // and the username of the other user.
-  // - Servers should "upgrade" this guild to a "room" guild if another
-  // user joins the guild. A name should be crafted using the algorithm
-  // described below:
-  //   - Get at most 3 members' usernames, by their
-  //   - Concat them with ", " as a seperator.
-  message DirectMessage {
-    // Whether this direct message was rejected by the invitee or not.
-    bool rejected = 1;
-  }
-
-  // The kind. If this is empty, assume it is `Normal`.
-  oneof kind {
-    // A "normal" guild.
-    Normal normal = 1;
-    // A "room" guild.
-    Room room = 2;
-    // A "direct message" guild.
-    DirectMessage direct_message = 3;
-  }
-}
-
 // Object representing a guild without the ID part.
 message Guild {
+  // The kind of a guild.
+  enum Kind {
+    // A "normal" guild as in a guild that allows multiple channels.
+    KIND_NORMAL_UNSPECIFIED = 0;
+    // A "room" guild as in a guild that only has one channel.
+    //
+    // - Clients should not show a channel list for guilds of this type.
+    KIND_ROOM = 1;
+    // A "direct message" guild as in a guild that has at most two members,
+    // and has only one channel.
+    //
+    // - Clients should not show a channel list for guilds of this type.
+    // - Clients should show this guild in the guild list with the profile picture
+    // and the username of the other user.
+    // - Servers should "upgrade" this guild to a "room" guild if another
+    // user joins the guild. A name should be crafted using the algorithm
+    // described below:
+    //   - Get at most 3 members' usernames, by their
+    //   - Concat them with ", " as a seperator.
+    KIND_DIRECT_MESSAGE = 2;
+  }
+
   // The name of the guild.
   //
   // This will be empty if the guild kind is "direct message". See
@@ -52,7 +39,7 @@ message Guild {
   // User ID of the owners of the guild.
   repeated uint64 owner_ids = 3;
   // The kind of this guild.
-  GuildKind kind = 4;
+  Kind kind = 4;
   // Metadata of the guild.
   optional harmonytypes.v1.Metadata metadata = 5;
 }

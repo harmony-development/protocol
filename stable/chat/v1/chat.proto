@@ -24,11 +24,10 @@ service ChatService {
   // Endpoint to create a "direct message" guild.
   //
   // - The inviter and the invitee that join the created guild will both be owners.
-  // - The guild should be created on the server that inviter is on.
+  // - The guild should be created on the server that the inviter is on.
   // - The server should send a guild invite to the invitee (specified in the request),
-  // using the `UserInvited` postbox event if the invitee is on another server,
-  // otherwise see the below item.
-  // - The server should process this as follows: adding the invite to their pending
+  // using the `UserInvited` postbox event if the invitee is on another server.
+  // - The receiving server should process this as follows: adding the invite to their pending
   // invite list and sending an `InviteReceived` event over their event stream if
   // the invitee is on this server.
   // - The invitee may or may not use the invite. Only the invitee may use the invite.
@@ -81,8 +80,10 @@ service ChatService {
   // server.
   //
   // The "notification" is sending a `InviteRejected` stream event to the
-  // inviter. If the guild's kind is `DirectMessage`, the server should also
-  // set the `rejected` field of the guild's kind to `true`.
+  // inviter.
+  //
+  // The server should increase the invite's used count by one to let the
+  // inviter know that their invite was rejected.
   rpc RejectPendingInvite(RejectPendingInviteRequest) returns (RejectPendingInviteResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
