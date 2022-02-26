@@ -401,8 +401,11 @@ service ChatService {
 
   // Endpoint to remove a reaction from a message.
   //
-  // Servers should only remove a reaction if the user making the request
-  // added the reaction before.
+  // Servers should only remove a reaction if the user making the
+  // request added the reaction before.
+  //
+  // Servers should delete the reaction from the message if it's
+  // reaction count reaches zero.
   rpc RemoveReaction(RemoveReactionRequest) returns (RemoveReactionResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =

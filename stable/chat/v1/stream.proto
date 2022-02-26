@@ -372,19 +372,51 @@ message StreamEvent {
     uint64 message_id = 3;
   }
 
-  // Sent when a message's reaction is changed.
+  // Sent when a new reaction is added to a message. This is only sent if
+  // such a reaction wasn't on the message, otherwise see `ReactionAdded`.
   //
   // Should only be sent to users who have the "message.view" permission for
-  // the guild channel where the reaction was updated.
-  message ReactionUpdated {
+  // the guild channel where the reaction was added.
+  message NewReactionAdded {
     // Guild ID of the guild where this event occured.
     uint64 guild_id = 1;
     // Channel ID of the channel where this event occured.
     uint64 channel_id = 2;
-    // Message ID of the message that had a reaction updated.
+    // Message ID of the message that had a reaction added.
     uint64 message_id = 3;
-    // The reaction.
+    // The reaction that was added.
     chat.v1.Reaction reaction = 4;
+  }
+
+  // Sent when an existing reaction is added to a message. This is only sent
+  // such a reaction was on the message, otherwise see `NewReactionAdded`.
+  //
+  // Should only be sent to users who have the "message.view" permission for
+  // the guild channel where the reaction was added.
+  message ReactionAdded {
+    // Guild ID of the guild where this event occured.
+    uint64 guild_id = 1;
+    // Channel ID of the channel where this event occured.
+    uint64 channel_id = 2;
+    // Message ID of the message that had a reaction added.
+    uint64 message_id = 3;
+    // The data of the reaction that was added.
+    string reaction_data = 4;
+  }
+
+  // Sent when an existing reaction is removed from a message.
+  //
+  // Should only be sent to users who have the "message.view" permission for
+  // the guild channel where the reaction was removed.
+  message ReactionRemoved {
+    // Guild ID of the guild where this event occured.
+    uint64 guild_id = 1;
+    // Channel ID of the channel where this event occured.
+    uint64 channel_id = 2;
+    // Message ID of the message that had a reaction removed.
+    uint64 message_id = 3;
+    // The data of the reaction that was removed.
+    string reaction_data = 4;
   }
 
   // Sent when there's a new owner.
@@ -512,21 +544,25 @@ message StreamEvent {
     MessagePinned message_pinned = 24;
     // Send the message unpinned event.
     MessageUnpinned message_unpinned = 25;
-    // Send the reaction updated event.
-    ReactionUpdated reaction_updated = 26;
     // Send the owner added event.
-    OwnerAdded owner_added = 27;
+    OwnerAdded owner_added = 26;
     // Send the owner removed event.
-    OwnerRemoved owner_removed = 28;
+    OwnerRemoved owner_removed = 27;
     // Send the guild invite received event.
-    InviteReceived invite_received = 29;
+    InviteReceived invite_received = 28;
     // Send the guild invite rejected event.
-    InviteRejected invite_rejected = 30;
+    InviteRejected invite_rejected = 29;
     // Send the invite created event.
-    InviteCreated invite_created = 31;
+    InviteCreated invite_created = 30;
     // Send the invite deleted event.
-    InviteDeleted invite_deleted = 32;
+    InviteDeleted invite_deleted = 31;
     // Send the invite used event.
-    InviteUsed invite_used = 33;
+    InviteUsed invite_used = 32;
+    // Send the new reaction added event.
+    NewReactionAdded new_reaction_added = 33;
+    // Send the reaction added event.
+    ReactionAdded reaction_added = 34;
+    // Send the reaction removed event.
+    ReactionRemoved reaction_removed = 35;
   }
 }

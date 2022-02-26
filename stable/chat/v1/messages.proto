@@ -277,16 +277,33 @@ message Content {
   }
 }
 
+// The kind of this reaction.
+enum ReactionKind {
+  // A reaction that uses an image.
+  //
+  // The `data` field of the reaction should be interpreted
+  // as a file ID that points to an image.
+  REACTION_KIND_IMAGE_UNSPECIFIED = 0;
+  // A reaction that uses text. For example, this
+  // can be used to send unicode emojis.
+  //
+  // The `data` field of the reaction should be interpreted
+  // as text to display.
+  REACTION_KIND_TEXT = 1;
+}
+
 // Object representing a reaction.
 message Reaction {
-  // Emote data for this reaction.
+  // The kind of the reaction.
+  ReactionKind kind = 1;
+  // The reaction's data. This is interpreted using the `kind`.
   //
-  // - Emote's image ID is used as an identifier for unique reactions.
-  // - Emotes with the same names should be "deduplicated" by a client,
-  // by suffixing their names with `~1`, `~2` and so on.
-  emote.v1.Emote emote = 1;
+  // This is used as a unique identifier for reactions.
+  string data = 2;
+  // The name of the reaction.
+  string name = 3;
   // How many times this reaction has been used.
-  uint32 count = 2;
+  uint32 count = 4;
 }
 
 // A format for text.
@@ -656,8 +673,12 @@ message AddReactionRequest {
   uint64 channel_id = 2;
   // Message ID of the message we want to add a reaction to.
   uint64 message_id = 3;
-  // The emote we want to react with.
-  emote.v1.Emote emote = 4;
+  // The kind of the reaction we want to react with.
+  ReactionKind reaction_kind = 4;
+  // The data of the reaction we want to react with.
+  string reaction_data = 5;
+  // The name of the reaction we want to react with.
+  string reaction_name = 6;
 }
 // Used in `AddReaction` endpoint.
 message AddReactionResponse {}
@@ -670,8 +691,8 @@ message RemoveReactionRequest {
   uint64 channel_id = 2;
   // Message ID of the message we want to remove a reaction.
   uint64 message_id = 3;
-  // The emote we want to remove the react of.
-  emote.v1.Emote emote = 4;
+  // The data of the reaction we want to remove.
+  string reaction_data = 4;
 }
 // Used in `RemoveReaction` endpoint.
 message RemoveReactionResponse {}
