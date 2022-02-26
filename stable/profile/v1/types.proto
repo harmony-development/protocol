@@ -2,20 +2,72 @@ syntax = "proto3";
 
 package protocol.profile.v1;
 
-// The possible statuses a user can have.
-enum UserStatus {
-  // The user is offline (not connected to the server).
-  USER_STATUS_OFFLINE_UNSPECIFIED = 0;
-  // The user is online (this is the default value if omitted).
-  USER_STATUS_ONLINE = 1;
-  // The user is away.
-  USER_STATUS_IDLE = 2;
-  // The user does not want to be disturbed.
-  USER_STATUS_DO_NOT_DISTURB = 3;
-  // The user is on mobile.
-  USER_STATUS_MOBILE = 4;
-  // The user is streaming.
-  USER_STATUS_STREAMING = 5;
+// The status information for a user.
+message UserStatus {
+  // Information about an action the user can use
+  // in the context of an activity.
+  message Action {
+    // URL to open when this action is clicked.
+    string url = 1;
+    // Name of this action. This must be provided if
+    // an icon isn't provided.
+    optional string name = 2;
+    // Icon for this action.
+    // This must be a file ID that points to an image.
+    //
+    // This must be provided if a name isn't provided.
+    optional string icon = 3;
+  }
+
+  // Information about an activity the user is performing.
+  message Activity {
+    // When the user started performing this
+    // activity, in seconds since UNIX epoch.
+    uint64 started = 1;
+    // Title of this activity.
+    string title = 2;
+    // Details about this activity.
+    optional string details = 3;
+    // An image that relates to the activity.
+    // This must be a file ID that points to an image.
+    optional string image = 4;
+    // A color that relates to the activity.
+    optional uint32 color = 5;
+    // Actions for this activity.
+    repeated Action actions = 6;
+  }
+
+  // The possible status kinds a user can have.
+  enum Kind {
+    // The user is offline (not connected to the server).
+    KIND_OFFLINE_UNSPECIFIED = 0;
+    // The user is online.
+    KIND_ONLINE = 1;
+    // The user is away.
+    KIND_IDLE = 2;
+    // The user does not want to be disturbed.
+    KIND_DO_NOT_DISTURB = 3;
+  }
+
+  // The possible platforms a user can be on.
+  enum Platform {
+    // The user is on a desktop platform.
+    PLATFORM_DESKTOP_UNSPECIFIED = 0;
+    // The user is on a mobile platform.
+    PLATFORM_MOBILE = 1;
+  }
+
+  // The kind of the status.
+  Kind kind = 1;
+  // The message for the status. This is independent of the
+  // activities being performed by the user.
+  string message = 2;
+  // The activities this user is performing, if any.
+  //
+  // The first activity in this list has the most priority.
+  repeated Activity activities = 3;
+  // The platform the user is on.
+  Platform platform = 4;
 }
 
 // The possible kinds of an account.
@@ -59,12 +111,18 @@ message UpdateProfileRequest {
   // New user avatar. The avatar will be removed if the string is empty.
   // This must be a local file ID.
   optional string new_user_avatar = 2;
-  // New status of the user.
-  optional UserStatus new_user_status = 3;
 }
 
 // Used in `UpdateProfile` endpoint.
 message UpdateProfileResponse {}
+
+// Used in `UpdateStatus` endpoint.
+message UpdateStatusRequest {
+  // The new user status to use.
+  UserStatus new_status = 1;
+}
+// Used in `UpdateStatus` endpoint.
+message UpdateStatusResponse {}
 
 // Used in `GetAppData` endpoint.
 message GetAppDataRequest {

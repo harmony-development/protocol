@@ -15,10 +15,17 @@ message ProfileUpdated {
   optional string new_username = 2;
   // New avatar for this user.
   optional string new_avatar = 3;
+}
+
+// Event sent when a user's status is updated.
+//
+// Servers should sent this event only to users that can "see" (eg. they are
+// in the same guild) the user this event was triggered by.
+message StatusUpdated {
+  // User ID of the user that had it's status updated.
+  uint64 user_id = 1;
   // New status for this user.
-  optional UserStatus new_status = 4;
-  // The new account kind for this account.
-  optional AccountKind new_account_kind = 5;
+  UserStatus new_status = 2;
 }
 
 // Describes an emote service event.
@@ -27,5 +34,7 @@ message StreamEvent {
   oneof event {
     // Send the profile updated event.
     ProfileUpdated profile_updated = 1;
+    // Send the status updated event.
+    StatusUpdated status_updated = 2;
   }
 }
