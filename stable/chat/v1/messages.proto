@@ -200,20 +200,20 @@ message Minithumbnail {
   bytes data = 3;
 }
 
-// Contains data about an image.
-message ImageInfo {
-  // The width of the image, in pixels.
-  uint32 width = 1;
-  // The height of the image, in pixels.
-  uint32 height = 2;
-  // A thumbnail for the image.
-  Minithumbnail minithumbnail = 3;
-  // The image's caption.
-  optional string caption = 4;
-}
-
 // Object representing a generic message attachment.
 message Attachment {
+  // Contains data about an image.
+  message ImageInfo {
+    // The width of the image, in pixels.
+    uint32 width = 1;
+    // The height of the image, in pixels.
+    uint32 height = 2;
+    // A thumbnail for the image.
+    Minithumbnail minithumbnail = 3;
+    // The image's caption.
+    optional string caption = 4;
+  }
+
   // File ID of this attachment.
   string id = 1;
   // Filename of this attachment.
@@ -536,19 +536,19 @@ message TriggerActionResponse {}
 
 // Used in the `SendMessage` endpoint.
 message SendMessageRequest {
-  // Information a user can add to a image attachment.
-  message ImageInfo {
-    // The image's caption.
-    optional string caption = 1;
-    // Whether to use the original image, instead of compressing the image.
-    //
-    // Compression can be forced by servers, so this option may not work on
-    // every homeserver.
-    bool use_original = 2;
-  }
-
   // Attachment info that can be sent by a user.
   message Attachment {
+    // Information a user can add to a image attachment.
+    message ImageInfo {
+      // The image's caption.
+      optional string caption = 1;
+      // Whether to use the original image, instead of compressing the image.
+      //
+      // Compression can be forced by servers, so this option may not work on
+      // every homeserver.
+      bool use_original = 2;
+    }
+
     // The local file ID of the attachment.
     string id = 1;
     // Name of the attachment.
@@ -588,9 +588,8 @@ message SendMessageRequest {
   // Content of the new message.
   Content content = 3;
   // Echo ID of the new message. This can be used by clients to
-  // determine whether a message has been broadcasted properly
-  // to other clients. Note that this does not mean the broadcast
-  // reached other clients.
+  // determine whether a message has been broadcasted to other clients.
+  // Note that this does not mean the broadcast reached other clients.
   optional uint64 echo_id = 4;
   // The overrides of this new message.
   optional Overrides overrides = 6;

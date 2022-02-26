@@ -62,10 +62,7 @@ message SetPermissionsRequest {
   optional uint64 channel_id = 2;
   // The role ID to set permissions for.
   uint64 role_id = 3;
-  // The permission list to give.
-  //
-  // There is no "perms_to_take" because not given permissions are by
-  // default not allowed.
+  // The list of permissions to set.
   repeated Permission perms_to_give = 4;
 }
 // Used in the `SetPermissions` endpoint.
@@ -75,8 +72,8 @@ message SetPermissionsResponse {}
 message GetPermissionsRequest {
   // The guild ID to get permissions for.
   uint64 guild_id = 1;
-  // The channel ID(s) to get permissions for. Only applicable for roles in a
-  // channel.
+  // The channel ID(s) to get permissions for.
+  // Only applicable for roles in a channel.
   repeated uint64 channel_ids = 2;
   // The role ID to get permissions for.
   uint64 role_id = 3;
