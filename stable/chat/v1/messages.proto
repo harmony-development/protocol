@@ -613,19 +613,19 @@ message SendMessageResponse {
   uint64 message_id = 1;
 }
 
-// Used in the `UpdateMessageText` endpoint.
-message UpdateMessageTextRequest {
+// Used in the `UpdateMessageContent` endpoint.
+message UpdateMessageContentRequest {
   // Guild ID of the guild where the channel is.
   uint64 guild_id = 1;
   // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
-  // Message ID of the message you want to edit the text of.
+  // Message ID of the message you want to change the content of.
   uint64 message_id = 3;
   // New content for this message.
-  FormattedText new_content = 4;
+  SendMessageRequest.Content new_content = 4;
 }
-// Used in the `UpdateMessageText` endpoint.
-message UpdateMessageTextResponse {}
+// Used in the `UpdateMessageContent` endpoint.
+message UpdateMessageContentResponse {}
 
 // Used in the `PinMessage` endpoint.
 message PinMessageRequest {

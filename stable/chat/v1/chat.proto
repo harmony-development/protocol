@@ -171,8 +171,8 @@ service ChatService {
         "channels.manage.move";
   }
 
-  // Endpoint to change the text of a message.
-  rpc UpdateMessageText(UpdateMessageTextRequest) returns (UpdateMessageTextResponse) {
+  // Endpoint to change the content of a message.
+  rpc UpdateMessageContent(UpdateMessageContentRequest) returns (UpdateMessageContentResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "messages.send";
