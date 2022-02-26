@@ -132,75 +132,59 @@ message Action {
 // Object representing a message embed.
 message Embed {
   // Object representing an embed heading.
-  message EmbedHeading {
+  message Heading {
     // Text of the heading.
     string text = 1;
-    // Subtext of the heading.
-    optional string subtext = 2;
     // URL of the heading.
     //
     // If this is provided, clients should make it so that
     // interacting with the heading opens this URL, for example
     // clicking on it.
-    optional string url = 3;
-    // Icon of the heading.
-    optional string icon = 4;
+    optional string url = 2;
+    // Icon of the heading. This must be a file ID that points
+    // to an image.
+    optional string icon = 3;
   }
 
-  // Object representing an embed field.
-  message EmbedField {
-    // Type representing how to present an embed field.
-    enum Presentation {
-      // Show the field as data.
-      PRESENTATION_DATA_UNSPECIFIED = 0;
-      // Show the field as a captioned image.
-      PRESENTATION_CAPTIONED_IMAGE = 1;
-      // Show the field as a row.
-      PRESENTATION_ROW = 2;
-    }
+  // A field for the embed. Fields usually contain
+  // small information and are not meant to be used
+  // for huge chunks of text.
+  message Field {
+    // Title of this field (what is it?).
+    string title = 1;
+    // Body of this field.
+    string body = 2;
+  }
 
-    // Data for displaying an image in embed.
-    //
-    // Servers should fill in the `width` and `height` fields, if
-    // the provided `id` is not external.
-    message Image {
-      // File ID or external image URL of an image.
-      string id = 1;
-      // The width of the image, in pixels.
-      uint32 width = 2;
-      // The height of the image, in pixels.
-      uint32 height = 3;
-    }
-
-    // How to present this field.
-    Presentation presentation = 1;
-
-    // Title of this field.
-    string title = 2;
-    // Subtitle of this field.
-    optional string subtitle = 3;
-    // Body text of this field (eg. a description).
-    optional FormattedText body = 4;
-
-    // An image to display on this field.
-    optional Image image = 5;
-
-    // Actions to show on this field.
-    repeated Action actions = 6;
+  // Data for displaying an image in embed.
+  //
+  // Servers should fill in the `width` and `height` fields, if
+  // the provided `id` is not external.
+  message Image {
+    // File ID or external image URL of an image.
+    string id = 1;
+    // The width of the image, in pixels.
+    uint32 width = 2;
+    // The height of the image, in pixels.
+    uint32 height = 3;
   }
 
   // Embed heading for the header.
-  optional EmbedHeading header = 1;
+  optional Heading header = 1;
   // Title of this embed.
   string title = 2;
   // Body text of this embed.
   optional FormattedText body = 3;
   // Fields of this embed.
-  repeated EmbedField fields = 4;
+  repeated Field fields = 4;
+  // An image to display on this embed.
+  optional Image image = 5;
+  // Actions to show on this field.
+  repeated Action actions = 6;
   // Embed heading for the footer.
-  optional EmbedHeading footer = 5;
+  optional Heading footer = 7;
   // Color of this embed.
-  optional int32 color = 6;
+  optional int32 color = 8;
 }
 
 
