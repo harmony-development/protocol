@@ -4,39 +4,39 @@ package protocol.profile.v1;
 
 // The possible statuses a user can have.
 enum UserStatus {
-  // User is offline (not connected to the server).
+  // The user is offline (not connected to the server).
   USER_STATUS_OFFLINE_UNSPECIFIED = 0;
-  // User is online (this is the default value if ommitted).
+  // The user is online (this is the default value if omitted).
   USER_STATUS_ONLINE = 1;
-  // User is away.
+  // The user is away.
   USER_STATUS_IDLE = 2;
-  // User does not want to be disturbed.
+  // The user does not want to be disturbed.
   USER_STATUS_DO_NOT_DISTURB = 3;
-  // User is on mobile.
+  // The user is on mobile.
   USER_STATUS_MOBILE = 4;
-  // User is streaming
+  // The user is streaming.
   USER_STATUS_STREAMING = 5;
 }
 
-// The possible kinds of an account
+// The possible kinds of an account.
 enum AccountKind {
-  // The account is a full-fledged account controlled by a human
+  // The account is a full-fledged account controlled by a human.
   ACCOUNT_KIND_FULL_UNSPECIFIED = 0;
-  // The account is an account controlled by a bot
+  // The account is an account controlled by a bot.
   ACCOUNT_KIND_BOT = 1;
-  // The account is a guest account controlled by a human
+  // The account is a guest account controlled by a human.
   ACCOUNT_KIND_GUEST = 2;
 }
 
 // Data for a single profile, without the user's ID.
 message Profile {
-  // the name of the user.
+  // The name of the user.
   string user_name = 1;
-  // the user's avatar. This must be a file ID that points to an image.
+  // The user's avatar. This must be a file ID.
   optional string user_avatar = 2;
-  // the status of the user.
+  // The status of the user.
   UserStatus user_status = 3;
-  // what kind of account the user is, e.g. full, guest, bot.
+  // What kind of account the user is, e.g. full, guest, bot.
   AccountKind account_kind = 4;
 }
 
@@ -57,6 +57,7 @@ message UpdateProfileRequest {
   // New name of the user.
   optional string new_user_name = 1;
   // New user avatar. The avatar will be removed if the string is empty.
+  // This must be a local file ID.
   optional string new_user_avatar = 2;
   // New status of the user.
   optional UserStatus new_user_status = 3;

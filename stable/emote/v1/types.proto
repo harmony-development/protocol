@@ -14,7 +14,7 @@ message EmotePack {
 
 // Data for a single emote.
 message Emote {
-  // The HMC of the emote. Must point to an image.
+  // The HMC or external URL of the emote. Must point to an image.
   string image_id = 1;
   // The name of the emote.
   string name = 2;
@@ -60,7 +60,7 @@ message GetEmotePackEmotesResponse {
 message AddEmoteToPackRequest {
   // The ID of the pack.
   uint64 pack_id = 1;
-  // The file ID of the image to use for the emote.
+  // The file ID or external URL of the image to use for the emote.
   string image_id = 2;
   // The name of the emote.
   string name = 3;

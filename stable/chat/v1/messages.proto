@@ -161,7 +161,8 @@ message Embed {
 
     // Data for displaying an image in embed.
     //
-    // Servers should fill in the `width` and `height` fields.
+    // Servers should fill in the `width` and `height` fields, if
+    // the provided `id` is not external.
     message Image {
       // File ID or external image URL of an image.
       string id = 1;
@@ -564,7 +565,7 @@ message SendMessageRequest {
 
   // Attachment info that can be sent by a user.
   message Attachment {
-    // The file ID of the attachment.
+    // The local file ID of the attachment.
     string id = 1;
     // Name of the attachment.
     string name = 2;
