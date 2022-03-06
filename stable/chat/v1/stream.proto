@@ -230,8 +230,10 @@ message StreamEvent {
     uint64 message_id = 3;
     // User ID of the user that triggered the action
     uint64 user_id = 4;
+    // The custom info set by the bot 
+    optional bytes info = 5;
     // The action data payload
-    ActionPayload payload = 5;
+    optional bytes payload = 6;
   }
 
   // Event sent when a role's position in the role list is changed.
