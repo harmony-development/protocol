@@ -89,7 +89,7 @@ message Action {
   // Type of the action.
   Type action_type = 1;
   // Contextual info allowing the bot to discern what the action is for.
-  // This MUST be unique per-message (but can be re-used in different messages).
+  // The info of an action cannot be the same with the info of another action in the same message.
   bytes info = 2;
 
   // The kind of the action.
@@ -414,7 +414,7 @@ message Message {
   Content content = 7;
   // The reactions of the message.
   repeated Reaction reactions = 8;
-  // Bot actions to show on this message. Ignored if this is a button action.
+  // Bot actions to show on this message.
   repeated Action actions = 9;
 }
 
@@ -516,7 +516,7 @@ message TriggerActionRequest {
   // Data that alllows the bot to discern which action the user is trying to trigger.
   // A server MUST verify that this info refers to a valid action for the target message.
   bytes info = 4;
-  // Payload of action data.
+  // Payload of action data. Ignored if this is a button action.
   optional bytes payload = 5;
 }
 // Used in the `TriggerAction` endpoint.
