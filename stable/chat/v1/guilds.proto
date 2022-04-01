@@ -4,43 +4,6 @@ package protocol.chat.v1;
 
 import "harmonytypes/v1/types.proto";
 
-option go_package = "github.com/harmony-development/legato/gen/chat/v1";
-
-// The kind of a guild.
-message GuildKind {
-  // A "normal" guild as in a guild that allows multiple channels.
-  message Normal {}
-  // A "room" guild as in a guild that only has one channel.
-  //
-  // - Clients should not show a channel list for guilds of this type.
-  message Room {}
-  // A "direct message" guild as in a guild that has at most two members,
-  // and has only one channel.
-  //
-  // - Clients should not show a channel list for guilds of this type.
-  // - Clients should show this guild in the guild list with the profile picture
-  // and the username of the other user.
-  // - Servers should "upgrade" this guild to a "room" guild if another
-  // user joins the guild. A name should be crafted using the algorithm
-  // described below:
-  //   - Get at most 3 members' usernames, by their
-  //   - Concat them with ", " as a seperator.
-  message DirectMessage {
-    // Whether this direct message was rejected by the invitee or not.
-    bool rejected = 1;
-  }
-
-  // The kind. If this is empty, assume it is `Normal`.
-  oneof kind {
-    // A "normal" guild.
-    Normal normal = 1;
-    // A "room" guild.
-    Room room = 2;
-    // A "direct message" guild.
-    DirectMessage direct_message = 3;
-  }
-}
-
 // Object representing a guild without the ID part.
 message Guild {
   // The name of the guild.
@@ -49,14 +12,12 @@ message Guild {
   // the documentation of "direct message" guild kind on how to display
   // a name for those guilds.
   string name = 1;
-  // The picture HMC of the guild.
+  // The picture of the guild. This must be a file ID that points to an image.
   optional string picture = 2;
   // User ID of the owners of the guild.
   repeated uint64 owner_ids = 3;
-  // The kind of this guild.
-  GuildKind kind = 4;
   // Metadata of the guild.
-  optional harmonytypes.v1.Metadata metadata = 5;
+  optional harmonytypes.v1.Metadata metadata = 4;
 }
 
 // Object representing a guild with the ID part.
@@ -115,7 +76,7 @@ enum LeaveReason {
 message CreateGuildRequest {
   // The name of the guild.
   string name = 1;
-  // The picture HMC of the guild.
+  // The picture file ID of the guild.
   optional string picture = 2;
   // Metadata of the guild.
   optional harmonytypes.v1.Metadata metadata = 3;
@@ -123,36 +84,6 @@ message CreateGuildRequest {
 // Used in the `CreateGuild` endpoint.
 message CreateGuildResponse {
   // Guild ID of the guild that was created.
-  uint64 guild_id = 1;
-}
-
-// Request type used in `CreateRoom` endpoint.
-message CreateRoomRequest {
-  // The name of the guild.
-  string name = 1;
-  // The picture HMC of the guild.
-  optional string picture = 2;
-  // Metadata of the guild.
-  optional harmonytypes.v1.Metadata metadata = 3;
-}
-// Used in the `CreateRoom` endpoint.
-message CreateRoomResponse {
-  // Guild ID of the guild that was created.
-  uint64 guild_id = 1;
-}
-
-// Used in the `CreateDirectMessage` endpoint.
-message CreateDirectMessageRequest {
-  // The user name of the user to DM with.
-  string user_name = 1;
-  // The server ID of the server the user is on.
-  //
-  // Should be left unspecified if it's a user on the homeserver.
-  optional string server_id = 2;
-}
-// Used in the `CreateDirectMessage` endpoint.
-message CreateDirectMessageResponse {
-  // Guild ID of the just created "direct message" guild.
   uint64 guild_id = 1;
 }
 
@@ -183,13 +114,13 @@ message GetGuildListResponse {
 
 // Used in the `GetGuild` endpoint.
 message GetGuildRequest {
-  // Guild ID of the guild to get information about.
-  uint64 guild_id = 1;
+  // Guild ID(s) to get information about.
+  repeated uint64 guild_ids = 1;
 }
 // Used in the `GetGuild` endpoint.
 message GetGuildResponse {
-  // The information of the guild requested.
-  Guild guild = 1;
+  // The information(s) of the guild(s) requested.
+  map<uint64, Guild> guild = 1;
 }
 
 // Used in the `GetGuildInvites` endpoint.
@@ -227,14 +158,6 @@ message UpdateGuildInformationRequest {
 }
 // Used in the `UpdateGuildInformation` endpoint.
 message UpdateGuildInformationResponse {}
-
-// Used in the `UpgradeRoomToGuild` endpoint.
-message UpgradeRoomToGuildRequest {
-  // Guild ID of the "room" guild to upgrade to a "normal" guild.
-  uint64 guild_id = 1;
-}
-// Used in the `UpgradeRoomToGuild` endpoint.
-message UpgradeRoomToGuildResponse {}
 
 // Used in the `DeleteGuild` endpoint.
 message DeleteGuildRequest {

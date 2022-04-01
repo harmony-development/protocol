@@ -16,55 +16,56 @@ where `code` is a purely alphanumeric code.
 
 */
 
-// A description of a bot account
+// A description of a bot account.
 message Bot {
-  // The ID of the bot
+  // The ID of the bot.
   uint64 bot_id = 1;
-  // The bot's display name
+  // The bot's display name.
   string display_name = 2;
-  // The bot's avatar URL
+  // The bot's avatar. This must be a HMC that points to an image.
   string avatar_url = 3;
-  // The bot's invite code, if it has one
+  // The bot's invite code, if it has one.
   optional string invite = 4;
 }
 
-// Request type for MyBots
+// Request type for MyBots.
 message MyBotsRequest {}
-// Response type for MyBots
+// Response type for MyBots.
 message MyBotsResponse {
-  // The list of owned bots
+  // The list of owned bots.
   repeated Bot bots = 1;
 }
 
-// Request type for CreateBot
+// Request type for CreateBot.
 message CreateBotRequest {
-  // The bot's display name
+  // The bot's display name.
   string display_name = 1;
-  // The bot's avatar URL
+  // The bot's avatar. This must be a HMC that points to an image.
   optional string avatar_url = 2;
-  // The bot's invite code, if it has one
+  // The bot's invite code, if it has one.
   optional string invite = 3;
 }
-// Response type for CreateBot
+// Response type for CreateBot.
 message CreateBotResponse {
-  // The newly minted ID of the bot
+  // The newly generated ID of the bot.
   uint64 bot_id = 1;
   // The authentication token of the bot, used instead of a session token from AuthService
   string token = 2;
 }
 
-// Request type for EditBot
+// Request type for EditBot.
 message EditBotRequest {
-  // The ID of the bot to edit
+  // The ID of the bot to edit.
   uint64 bot_id = 1;
-  // The bot's new display name
+  // The bot's new display name.
   optional string new_display_name = 2;
-  // The bot's new avatar URL
+  // The bot's new avatar. If provided, it must be a HMC
+  // that points to an image.
   optional string new_avatar_url = 3;
-  // The bot's new invite code
+  // The bot's new invite code.
   optional string invite = 4;
 }
-// Response type for EditBot
+// Response type for EditBot.
 message EditBotResponse {}
 
 // Request type for RefreshToken
@@ -80,50 +81,57 @@ message RefreshTokenResponse {
 
 // Request type for DeleteBot
 message DeleteBotRequest {
-  // The bot to delete
+  // The ID of the bot to delete.
   uint64 bot_id = 1;
 }
-// Response type for DeleteBot
+// Response type for DeleteBot.
 message DeleteBotResponse {}
 
-// Request type for GetBot
+// Request type for GetBot.
 message GetBotRequest {
-  // The bot to get the information of
+  // The ID of the bot to get the information of.
   uint64 bot_id = 1;
 }
-// Response type for GetBot
+// Response type for GetBot.
 message GetBotResponse {
-  // The requested bot
+  // The requested bot.
   Bot bot = 1;
 }
 
-// Request type for Policies
+// Request type for Policies.
 message PoliciesRequest {}
-// Response type for Policies
+// Response type for Policies.
 message PoliciesResponse {
-  // How many bots an individual account is allowed to own
+  // How many bots an individual account is allowed to own.
   uint32 max_bots = 1;
 }
 
-// Request type for AddBot
+// Request type for AddBot.
 message AddBotRequest {
-  // The guild to add the bot to
-  uint64 guild_id = 1;
   // The bot's invite code.
-  string invite_code = 2;
+  string invite_code = 1;
+
+  // The location where the bot is being added to.
+  oneof location {
+    // The guild to add the bot to.
+    uint64 guild_id = 2;
+    // The private channel to add the bot to.
+    uint64 channel_id = 3;
+  }
 }
-// Response type for AddBot
+
+// Response type for AddBot.
 message AddBotResponse {}
 
-// The Bots service allows the management of bot accounts
+// The Bots service allows the management of bot accounts.
 service BotsService {
-  // Gets the list of bots that you own
+  // Gets the list of bots that you own.
   rpc MyBots(MyBotsRequest) returns (MyBotsResponse);
-  // Gets information on a given bot
+  // Gets information on a given bot.
   rpc GetBot(GetBotRequest) returns (GetBotResponse);
-  // Creates a new bot account
+  // Creates a new bot account.
   rpc CreateBot(CreateBotRequest) returns (CreateBotResponse);
-  // Modifies a bot account that you own
+  // Modifies a bot account that you own.
   rpc EditBot(EditBotRequest) returns (EditBotResponse);
   // Refreshes the authentication token for a bot that you own
   //
@@ -133,7 +141,7 @@ service BotsService {
   rpc DeleteBot(DeleteBotRequest) returns (DeleteBotResponse);
   // Server policies for bot accounts that the client
   // may display in its UI or restrict actions to prevent
-  // request errors
+  // request errors.
   rpc Policies(PoliciesRequest) returns (PoliciesResponse);
   // Requests a bot to add itself to the guild.
   //

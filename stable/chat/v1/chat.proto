@@ -6,10 +6,9 @@ import "chat/v1/channels.proto";
 import "chat/v1/messages.proto";
 import "chat/v1/permissions.proto";
 import "chat/v1/stream.proto";
+import "chat/v1/private_channel.proto";
 
 package protocol.chat.v1;
-
-option go_package = "github.com/harmony-development/legato/gen/chat/v1";
 
 // The core of Harmony's chat operations.
 service ChatService {
@@ -18,30 +17,32 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
-  // Endpoint to create a "room" guild.
-  rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
-  // Endpoint to create a "direct message" guild.
+  // Endpoint to create a private channel.
   //
-  // - The inviter and the invitee that join the created guild will both be owners.
-  // - The guild should be created on the server that inviter is on.
-  // - The server should send a guild invite to the invitee (specified in the request),
-  // using the `UserInvited` postbox event if the invitee is on another server,
-  // otherwise see the below item.
-  // - The server should process this as follows: adding the invite to their pending
+  // - The server should send an invite to the invitee(s) (specified in the request),
+  // using the `UserInvited` postbox event if the invitee(s) are on another server.
+  // - The receiving server should process this as follows: adding the invite to their pending
   // invite list and sending an `InviteReceived` event over their event stream if
-  // the invitee is on this server.
-  // - The invitee may or may not use the invite. Only the invitee may use the invite.
-  rpc CreateDirectMessage(CreateDirectMessageRequest) returns (CreateDirectMessageResponse) {
+  // the invitee(s) are on this server.
+  // - The invitee(s) may or may not use the invite. Only the invitee(s) may use the invite.
+  rpc CreatePrivateChannel(CreatePrivateChannelRequest) returns (CreatePrivateChannelResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
-  // Endpoint to upgrade a "room" guild to a "normal" guild.
-  rpc UpgradeRoomToGuild(UpgradeRoomToGuildRequest) returns (UpgradeRoomToGuildResponse) {
+  // Endpoint to modify the member list of a private channel.
+  // 
+  // - This is only possible if the channel's `is_locked` property is set to false.
+  // - The server should send an invite to the added members (if any).
+  // This should follow the same invite sending logic in `CreatePrivateChannel`.
+  rpc UpdatePrivateChannelMembers(UpdatePrivateChannelMembersRequest) returns (UpdatePrivateChannelMembersResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_owner = true;
+  }
+
+  // Endpoint to delete a private channel.
+  //
+  // Only the user who created the private channel can delete it.
+  rpc DeletePrivateChannel(DeletePrivateChannelRequest) returns (DeletePrivateChannelResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
   // Endpoint to create an invite.
@@ -83,8 +84,10 @@ service ChatService {
   // server.
   //
   // The "notification" is sending a `InviteRejected` stream event to the
-  // inviter. If the guild's kind is `DirectMessage`, the server should also
-  // set the `rejected` field of the guild's kind to `true`.
+  // inviter.
+  //
+  // The server should increase the invite's used count by one to let the
+  // inviter know that their invite was rejected.
   rpc RejectPendingInvite(RejectPendingInviteRequest) returns (RejectPendingInviteResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
@@ -172,8 +175,8 @@ service ChatService {
         "channels.manage.move";
   }
 
-  // Endpoint to change the text of a message.
-  rpc UpdateMessageText(UpdateMessageTextRequest) returns (UpdateMessageTextResponse) {
+  // Endpoint to change the content of a message.
+  rpc UpdateMessageContent(UpdateMessageContentRequest) returns (UpdateMessageContentResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "messages.send";
@@ -212,6 +215,9 @@ service ChatService {
   //
   // - If the invite used is in a user's "pending invites" list, it should be
   // removed from there.
+  // - If the invite used reaches a use count bigger or equal to it's possible
+  // uses, the invite should be deleted by the server. This doesn't apply if
+  // possible uses is 0, which means an infinite amount of uses.
   rpc JoinGuild(JoinGuildRequest) returns (JoinGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
@@ -241,7 +247,7 @@ service ChatService {
   }
 
   // Endpoint to query if a user has a permission.
-  rpc QueryHasPermission(QueryHasPermissionRequest) returns (QueryHasPermissionResponse) {
+  rpc HasPermission(HasPermissionRequest) returns (HasPermissionResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     // This permissions node is only required if you're trying
     // to see if someone besides yourself has a permission.
@@ -378,14 +384,19 @@ service ChatService {
   }
 
   // Endpoint to stream events from the homeserver.
-  // By default, this endpoint will subscribe to all events.
-  // Any guilds joined in the future will be added to the subscription as well.
-  // Use the UnsubscribeFromAll event for unsubscribing from all current subscriptions and disable the automatic guild subscriptions
+  //
+  // By default, this endpoint will subscribe to all events. Any guilds joined
+  // in the future will be added to the subscription as well.
+  //
+  // Use `StreamEventsRequest.UnsubscribeFromAll` for unsubscribing from all
+  // current subscriptions and disable automatic guild subscriptions.
   rpc StreamEvents(stream StreamEventsRequest) returns (stream StreamEventsResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
   // Endpoint to add a reaction to a message.
+  //
+  // Servers should prevent a user from adding multiple same reactions.
   rpc AddReaction(AddReactionRequest) returns (AddReactionResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
@@ -393,6 +404,12 @@ service ChatService {
   }
 
   // Endpoint to remove a reaction from a message.
+  //
+  // Servers should only remove a reaction if the user making the
+  // request added the reaction before.
+  //
+  // Servers should delete the reaction from the message if it's
+  // reaction count reaches zero.
   rpc RemoveReaction(RemoveReactionRequest) returns (RemoveReactionResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
@@ -406,7 +423,9 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_owner = true;
   }
+
   // Endpoint to give up your own ownership.
+  //
   // Requires that at least one other person will still be owner.
   rpc GiveUpOwnership(GiveUpOwnershipRequest) returns (GiveUpOwnershipResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
