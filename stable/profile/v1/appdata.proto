@@ -36,9 +36,14 @@ message ProfileOverride {
   }
 }
 
-// The message used for the 'h.overrides' app ID
-// of appdata.
+// The message used for the 'h.overrides' app ID of appdata.
 message AppDataOverrides {
   // The list of overrides.
   repeated ProfileOverride overrides = 1;
+}
+
+// The message used for the 'h.user_notes' app ID of appdata.
+message AppDataUserNotes {
+  // The user ID -> note map.
+  map<uint64, string> notes = 1;
 }
