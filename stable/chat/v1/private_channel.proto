@@ -59,10 +59,10 @@ message DeletePrivateChannelRequest {
 // Response type used in `DeletePrivateChannel` endpoint.
 message DeletePrivateChannelResponse {}
 
-// Request type used in `GetPrivateChannels` endpoint.
-message GetPrivateChannelsRequest {}
-// Response type used in `GetPrivateChannels` endpoint.
-message GetPrivateChannelsResponse {
+// Request type used in `GetPrivateChannelList` endpoint.
+message GetPrivateChannelListRequest {}
+// Response type used in `GetPrivateChannelList` endpoint.
+message GetPrivateChannelListResponse {
   // The list of private channels that the user is in.
   repeated PrivateChannelListEntry channels = 1;
 }
