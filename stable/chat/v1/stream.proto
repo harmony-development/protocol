@@ -38,7 +38,7 @@ message StreamEventsRequest {
     // Subscribe to guild events.
     SubscribeToGuild subscribe_to_guild = 1;
     // Subscribe to private channel events.
-    SubscribeToPrivateChannels subscribe_to_private_channels = 2;
+    SubscribeToPrivateChannel subscribe_to_private_channel = 2;
     // Subscribe to action events.
     SubscribeToActions subscribe_to_actions = 3;
     // Subscribe to homeserver events.
