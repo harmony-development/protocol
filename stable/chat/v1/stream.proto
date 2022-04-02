@@ -7,36 +7,44 @@ import "chat/v1/channels.proto";
 import "chat/v1/guilds.proto";
 import "chat/v1/messages.proto";
 import "chat/v1/permissions.proto";
+import "chat/v1/private_channel.proto";
 import "emote/v1/stream.proto";
 import "profile/v1/stream.proto";
 
 // Request type for use in the `StreamEvents` endpoint.
 // By default, this endpoint will subscribe to all events.
-// Any guilds joined in the future will be added to the subscription as well.
-// Use the UnsubscribeFromAll event for unsubscribing from all current subscriptions and disable the automatic guild subscriptions
+// Any guilds / private channels joined in the future will be added to the subscription as well.
+// Use the UnsubscribeFromAll event for unsubscribing from all current subscriptions and disable the automatic guild subscriptions.
 message StreamEventsRequest {
-  // Event source for guilds' events.
+  // Message to use for subscribing to a guild.
   message SubscribeToGuild {
-    // the guild id to subscribe to
+    // The guild ID to subscribe to.
     uint64 guild_id = 1;
   }
-  // Event source for actions' events.
+  // Message to use for subscribing to a private channel.
+  message SubscribeToPrivateChannel {
+    // The channel ID to subscribe to.
+    uint64 channel_id = 1;
+  }
+  // Message to use for subscribing to actions.
   message SubscribeToActions {}
-  // Event source for homeserver events.
+  // Message to use for subscribing to homeserver events.
   message SubscribeToHomeserverEvents {}
-  // Event to unsubscribe from all events.
+  // Message to use for unsubscribing from all events.
   message UnsubscribeFromAll {}
 
   // Describes which event source to subscribe to.
   oneof request {
-    // Subscribe to the guild event source.
+    // Subscribe to guild events.
     SubscribeToGuild subscribe_to_guild = 1;
-    // Subscribe to the action event source.
-    SubscribeToActions subscribe_to_actions = 2;
-    // Subscribe to the homeserver event source.
-    SubscribeToHomeserverEvents subscribe_to_homeserver_events = 3;
+    // Subscribe to private channel events.
+    SubscribeToPrivateChannels subscribe_to_private_channels = 2;
+    // Subscribe to action events.
+    SubscribeToActions subscribe_to_actions = 3;
+    // Subscribe to homeserver events.
+    SubscribeToHomeserverEvents subscribe_to_homeserver_events = 4;
     // Unsubscribe from all events.
-    UnsubscribeFromAll unsubscribe_from_all = 4;
+    UnsubscribeFromAll unsubscribe_from_all = 5;
   }
 }
 
@@ -63,7 +71,8 @@ message StreamEvent {
     // ID that is sent by your client it can use to confirm that the message is sent.
     optional uint64 echo_id = 1;
     // Guild ID of the guild where this event happened.
-    uint64 guild_id = 2;
+    // Null if the event happened in a private channel.
+    optional uint64 guild_id = 2;
     // Channel ID of the channel where this event happened.
     uint64 channel_id = 3;
     // Message ID of the message that was updated.
@@ -78,7 +87,8 @@ message StreamEvent {
   // for the channel the message was updated in.
   message MessageUpdated {
     // Guild ID of the guild where this event happened.
-    uint64 guild_id = 1;
+    // Null if the event happened in a private channel.
+    optional uint64 guild_id = 1;
     // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
     // Message ID of the message that was updated.
@@ -95,7 +105,7 @@ message StreamEvent {
   // for the channel the message was deleted in.
   message MessageDeleted {
     // Guild ID of the guild where this event happened.
-    uint64 guild_id = 1;
+    optional uint64 guild_id = 1;
     // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
     // Message ID of the message that was deleted.
@@ -105,7 +115,7 @@ message StreamEvent {
   // Event sent when a new channel is created.
   message ChannelCreated {
     // Guild ID of the guild where this event happened.
-    uint64 guild_id = 1;
+    optional uint64 guild_id = 1;
     // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
     // Name of this channel.
@@ -208,16 +218,16 @@ message StreamEvent {
   message GuildAddedToList {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
-    // The homeserver this guild is on.
-    string homeserver = 2;
+    // The server ID of the homeserver this guild is on.
+    string server_id = 2;
   }
 
   // Event sent when you leave a guild.
   message GuildRemovedFromList {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
-    // The homeserver this guild is on.
-    string homeserver = 2;
+    // The server ID homeserver this guild is on.
+    string server_id = 2;
   }
 
   // Event sent when an action is performed.
@@ -230,8 +240,10 @@ message StreamEvent {
     uint64 message_id = 3;
     // User ID of the user that triggered the action
     uint64 user_id = 4;
+    // The custom info set by the bot 
+    optional bytes info = 5;
     // The action data payload
-    ActionPayload payload = 5;
+    optional bytes payload = 6;
   }
 
   // Event sent when a role's position in the role list is changed.
@@ -326,7 +338,7 @@ message StreamEvent {
     // User ID of the user that sent the typing notification.
     uint64 user_id = 1;
     // Guild ID of the guild where this event happened.
-    uint64 guild_id = 2;
+    optional uint64 guild_id = 2;
     // Channel ID of the channel where this event happened.
     uint64 channel_id = 3;
   }
@@ -352,7 +364,7 @@ message StreamEvent {
   // the guild channel where the message was pinned.
   message MessagePinned {
     // Guild ID of the guild where this event occured.
-    uint64 guild_id = 1;
+    optional uint64 guild_id = 1;
     // Channel ID of the channel where this event occured.
     uint64 channel_id = 2;
     // Message ID of the message that was pinned.
@@ -365,7 +377,7 @@ message StreamEvent {
   // the guild channel where the message was unpinned.
   message MessageUnpinned {
     // Guild ID of the guild where this event occured.
-    uint64 guild_id = 1;
+    optional uint64 guild_id = 1;
     // Channel ID of the channel where this event occured.
     uint64 channel_id = 2;
     // Message ID of the message that was unpinned.
@@ -379,7 +391,7 @@ message StreamEvent {
   // the guild channel where the reaction was added.
   message NewReactionAdded {
     // Guild ID of the guild where this event occured.
-    uint64 guild_id = 1;
+    optional uint64 guild_id = 1;
     // Channel ID of the channel where this event occured.
     uint64 channel_id = 2;
     // Message ID of the message that had a reaction added.
@@ -492,6 +504,41 @@ message StreamEvent {
     uint64 user_id = 3;
   }
 
+  // Sent when a private channel is deleted.
+  message PrivateChannelDeleted {
+    // The channel ID of the private channel that was deleted.
+    uint64 channel_id = 1;
+  }
+
+  // Sent when a private channel is added to an user's private channel list.
+  message PrivateChannelAddedToList {
+    // The channel ID of the private channel that was added.
+    uint64 channel_id = 1;
+    // The server ID of the homeserver of this private channel.
+    string server_id = 2;
+  }
+  // Sent when a private channel is removed from an user's private channel list.
+  message PrivateChannelRemovedFromList {
+    // The channel ID of the private channel that was removed.
+    uint64 channel_id = 1;
+    // The server ID of the homeserver of this private channel.
+    string server_id = 2;
+  }
+  // Sent when a user joins a private channel.
+  message UserJoinedPrivateChannel {
+    // The channel ID of the private channel.
+    uint64 channel_id = 1;
+    // The user ID of the user who joined the private channel.
+    uint64 user_id = 2;
+  }
+  // Sent when a user leaves a private channel.
+  message UserLeftPrivateChannel {
+    // The channel ID of the private channel.
+    uint64 channel_id = 1;
+    // The user ID of the user who left the private channel.
+    uint64 user_id = 2;
+  }
+
   // Which event to send.
   oneof event {
     // Send the guild added to list event.
@@ -564,5 +611,15 @@ message StreamEvent {
     ReactionAdded reaction_added = 34;
     // Send the reaction removed event.
     ReactionRemoved reaction_removed = 35;
+    // Send the private channel deleted event.
+    PrivateChannelDeleted private_channel_deleted = 36;
+    // Send the private channel added to list event.
+    PrivateChannelAddedToList private_channel_added_to_list = 37;
+    // Send the private channel removed from list event.
+    PrivateChannelRemovedFromList private_channel_removed_from_list = 38;
+    // Send the user joined private channel event.
+    UserJoinedPrivateChannel user_joined_private_channel = 39;
+    // Send the user left private channel event.
+    UserLeftPrivateChannel user_left_private_channel = 40;
   }
 }

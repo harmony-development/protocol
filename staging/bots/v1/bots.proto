@@ -49,6 +49,8 @@ message CreateBotRequest {
 message CreateBotResponse {
   // The newly generated ID of the bot.
   uint64 bot_id = 1;
+  // The authentication token of the bot, used instead of a session token from AuthService
+  string token = 2;
 }
 
 // Request type for EditBot.
@@ -66,7 +68,18 @@ message EditBotRequest {
 // Response type for EditBot.
 message EditBotResponse {}
 
-// Request type for DeleteBot.
+// Request type for RefreshToken
+message RefreshTokenRequest {
+  // The ID of the bot to refresh the token of
+  uint64 bot_id = 1;
+}
+// Response type for RefreshToken
+message RefreshTokenResponse {
+  // The new authentication token for the bot
+  string new_token = 1;
+}
+
+// Request type for DeleteBot
 message DeleteBotRequest {
   // The ID of the bot to delete.
   uint64 bot_id = 1;
@@ -95,11 +108,18 @@ message PoliciesResponse {
 
 // Request type for AddBot.
 message AddBotRequest {
-  // The guild to add the bot to.
-  uint64 guild_id = 1;
   // The bot's invite code.
-  string invite_code = 2;
+  string invite_code = 1;
+
+  // The location where the bot is being added to.
+  oneof location {
+    // The guild to add the bot to.
+    uint64 guild_id = 2;
+    // The private channel to add the bot to.
+    uint64 channel_id = 3;
+  }
 }
+
 // Response type for AddBot.
 message AddBotResponse {}
 
@@ -113,7 +133,11 @@ service BotsService {
   rpc CreateBot(CreateBotRequest) returns (CreateBotResponse);
   // Modifies a bot account that you own.
   rpc EditBot(EditBotRequest) returns (EditBotResponse);
-  // Deletes a bot account that you own.
+  // Refreshes the authentication token for a bot that you own
+  //
+  // This invalidates the current authentication token and returns a new one.
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
+  // Deletes a bot account that you own
   rpc DeleteBot(DeleteBotRequest) returns (DeleteBotResponse);
   // Server policies for bot accounts that the client
   // may display in its UI or restrict actions to prevent

@@ -6,6 +6,7 @@ import "chat/v1/channels.proto";
 import "chat/v1/messages.proto";
 import "chat/v1/permissions.proto";
 import "chat/v1/stream.proto";
+import "chat/v1/private_channel.proto";
 
 package protocol.chat.v1;
 
@@ -16,29 +17,32 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
-  // Endpoint to create a "room" guild.
-  rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
-  // Endpoint to create a "direct message" guild.
+  // Endpoint to create a private channel.
   //
-  // - The inviter and the invitee that join the created guild will both be owners.
-  // - The guild should be created on the server that the inviter is on.
-  // - The server should send a guild invite to the invitee (specified in the request),
-  // using the `UserInvited` postbox event if the invitee is on another server.
+  // - The server should send an invite to the invitee(s) (specified in the request),
+  // using the `UserInvited` postbox event if the invitee(s) are on another server.
   // - The receiving server should process this as follows: adding the invite to their pending
   // invite list and sending an `InviteReceived` event over their event stream if
-  // the invitee is on this server.
-  // - The invitee may or may not use the invite. Only the invitee may use the invite.
-  rpc CreateDirectMessage(CreateDirectMessageRequest) returns (CreateDirectMessageResponse) {
+  // the invitee(s) are on this server.
+  // - The invitee(s) may or may not use the invite. Only the invitee(s) may use the invite.
+  rpc CreatePrivateChannel(CreatePrivateChannelRequest) returns (CreatePrivateChannelResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
-  // Endpoint to upgrade a "room" guild to a "normal" guild.
-  rpc UpgradeRoomToGuild(UpgradeRoomToGuildRequest) returns (UpgradeRoomToGuildResponse) {
+  // Endpoint to modify the member list of a private channel.
+  // 
+  // - This is only possible if the channel's `is_locked` property is set to false.
+  // - The server should send an invite to the added members (if any).
+  // This should follow the same invite sending logic in `CreatePrivateChannel`.
+  rpc UpdatePrivateChannelMembers(UpdatePrivateChannelMembersRequest) returns (UpdatePrivateChannelMembersResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-    option (harmonytypes.v1.metadata).requires_owner = true;
+  }
+
+  // Endpoint to delete a private channel.
+  //
+  // Only the user who created the private channel can delete it.
+  rpc DeletePrivateChannel(DeletePrivateChannelRequest) returns (DeletePrivateChannelResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
   // Endpoint to create an invite.
