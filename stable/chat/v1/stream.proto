@@ -114,7 +114,7 @@ message StreamEvent {
   // Event sent when a new channel is created.
   message ChannelCreated {
     // Guild ID of the guild where this event happened.
-    optional uint64 guild_id = 1;
+    uint64 guild_id = 1;
     // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
     // Name of this channel.
@@ -232,7 +232,7 @@ message StreamEvent {
   // Event sent when an action is performed.
   message ActionPerformed {
     // Guild ID of the guild where this event happened.
-    uint64 guild_id = 1;
+    optional uint64 guild_id = 1;
     // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
     // Message ID where this event happened.
@@ -406,7 +406,7 @@ message StreamEvent {
   // the guild channel where the reaction was added.
   message ReactionAdded {
     // Guild ID of the guild where this event occured.
-    uint64 guild_id = 1;
+    optional uint64 guild_id = 1;
     // Channel ID of the channel where this event occured.
     uint64 channel_id = 2;
     // Message ID of the message that had a reaction added.
@@ -421,7 +421,7 @@ message StreamEvent {
   // the guild channel where the reaction was removed.
   message ReactionRemoved {
     // Guild ID of the guild where this event occured.
-    uint64 guild_id = 1;
+    optional uint64 guild_id = 1;
     // Channel ID of the channel where this event occured.
     uint64 channel_id = 2;
     // Message ID of the message that had a reaction removed.
