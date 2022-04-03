@@ -677,3 +677,13 @@ message RemoveReactionRequest {
 }
 // Used in `RemoveReaction` endpoint.
 message RemoveReactionResponse {}
+
+// Used in `Typing` endpoint.
+message TypingRequest {
+  // The guild id of the channel the user is typing in.
+  optional uint64 guild_id = 1;
+  // The channel id of the channel the user is typing in.
+  uint64 channel_id = 2;
+}
+// Used in `Typing` endpoint.
+message TypingResponse {}
