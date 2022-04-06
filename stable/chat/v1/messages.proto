@@ -327,8 +327,10 @@ message Format {
   }
   // An emoji.
   message Emoji {
-    // The emote data of the emoji.
+    // The emote data of the emote.
     emote.v1.Emote emote = 1;
+    // The (optional) pack ID of this emote.
+    optional uint64 pack_id = 2;
   }
   // Colour modification.
   message Color {
