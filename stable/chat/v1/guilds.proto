@@ -46,12 +46,19 @@ message InviteWithId {
 
 // A pending invite.
 message PendingInvite {
-  // Invite ID of the invite.
-  string invite_id = 1;
   // Server ID of the server the inviter is on.
-  optional string server_id = 2;
+  optional string server_id = 1;
   // User ID of the inviter.
-  uint64 inviter_id = 3;
+  uint64 inviter_id = 2;
+
+  // The location where the user is being invited to.
+  oneof location {
+    // The unique identifier of a user's invite to another
+    // user to join a given guild.
+    string guild_invite_id = 3;
+    // The channel ID of the private channel that the user was invited to.
+    uint64 channel_id = 4;
+  }
 }
 
 // Object representing a guild list entry.
