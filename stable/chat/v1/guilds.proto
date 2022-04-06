@@ -61,8 +61,8 @@ message PendingInvite {
   }
 }
 
-// An outgoing pending invite.
-message OutgoingPendingInvite {
+// An outgoing invite.
+message OutgoingInvite {
   // Server ID of the server the invitee is on.
   optional string server_id = 1;
   // User ID of the invitee.
@@ -302,13 +302,21 @@ message GetPendingInvitesResponse {
   repeated PendingInvite invites = 1;
 }
 
-// Used in `GetOutgoingPendingInvites` endpoint.
-message GetOutgoingPendingInvitesRequest {}
-// Used in `GetOutgoingPendingInvites` endpoint.
-message GetOutgoingPendingInvitesResponse {
+// Used in `GetOutgoingInvites` endpoint.
+message GetOutgoingInvitesRequest {}
+// Used in `GetOutgoingInvites` endpoint.
+message GetOutgoingInvitesResponse {
   // The pending invite(s).
-  repeated OutgoingPendingInvite invites = 1;
+  repeated OutgoingInvite invites = 1;
 }
+
+// Used in `DeleteOutgoingInvite` endpoint.
+message DeleteOutgoingInviteRequest {
+  // The outgoing invite to delete.
+  OutgoingInvite invite = 1;
+}
+// Used in `DeleteOutgoingInvite` endpoint.
+message DeleteOutgoingInviteResponse {}
 
 // Used in `RejectPendingInvite` endpoint.
 message RejectPendingInviteRequest {

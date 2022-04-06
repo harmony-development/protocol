@@ -77,9 +77,14 @@ service ChatService {
   }
 
   // Endpoint to get your outgoing pending invites.
-  rpc GetOutgoingPendingInvites(GetOutgoingPendingInvitesRequest) returns (GetOutgoingPendingInvitesResponse) {
+  rpc GetOutgoingInvites(GetOutgoingInvitesRequest) returns (GetOutgoingInvitesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
-  };
+  }
+
+  // Endpoint to delete (cancel) an outgoing invite.
+  rpc DeleteOutgoingInvite(DeleteOutgoingInviteRequest) returns (DeleteOutgoingInviteResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
 
   // Endpoint to get your pending invites.
   rpc GetPendingInvites(GetPendingInvitesRequest) returns (GetPendingInvitesResponse) {
