@@ -76,6 +76,11 @@ service ChatService {
         "invites.manage.create";
   }
 
+  // Endpoint to get your outgoing pending invites.
+  rpc GetOutgoingPendingInvites(GetOutgoingPendingInvitesRequest) returns (GetOutgoingPendingInvitesResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  };
+
   // Endpoint to get your pending invites.
   rpc GetPendingInvites(GetPendingInvitesRequest) returns (GetPendingInvitesResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
