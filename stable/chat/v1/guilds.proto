@@ -320,20 +320,16 @@ message DeleteOutgoingInviteResponse {}
 
 // Used in `RejectPendingInvite` endpoint.
 message RejectPendingInviteRequest {
-  // Invite ID of the pending invite to reject.
-  string invite_id = 1;
-  // Server ID of the pending invite to reject.
-  optional string server_id = 2;
+  // The pending invite to reject.
+  PendingInvite invite = 1;
 }
 // Used in `RejectPendingInvite` endpoint.
 message RejectPendingInviteResponse {}
 
 // Used in `IgnorePendingInvite` endpoint.
 message IgnorePendingInviteRequest {
-  // ID of the pending invite to ignore.
-  string invite_id = 1;
-  // Server ID of the pending invite to reject.
-  optional string server_id = 2;
+  // The pending invite to ignore.
+  PendingInvite invite = 1;
 }
 // Used in `IgnorePendingInvite` endpoint.
 message IgnorePendingInviteResponse {}
