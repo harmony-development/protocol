@@ -218,7 +218,7 @@ message StreamEvent {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
     // The server ID of the homeserver this guild is on.
-    string server_id = 2;
+    optional string server_id = 2;
   }
 
   // Event sent when you leave a guild.
@@ -226,7 +226,7 @@ message StreamEvent {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
     // The server ID homeserver this guild is on.
-    string server_id = 2;
+    optional string server_id = 2;
   }
 
   // Event sent when an action is performed.
@@ -506,14 +506,14 @@ message StreamEvent {
     // The channel ID of the private channel that was added.
     uint64 channel_id = 1;
     // The server ID of the homeserver of this private channel.
-    string server_id = 2;
+    optional string server_id = 2;
   }
   // Sent when a private channel is removed from an user's private channel list.
   message PrivateChannelRemovedFromList {
     // The channel ID of the private channel that was removed.
     uint64 channel_id = 1;
     // The server ID of the homeserver of this private channel.
-    string server_id = 2;
+    optional string server_id = 2;
   }
   // Sent when a user joins a private channel.
   message UserJoinedPrivateChannel {
