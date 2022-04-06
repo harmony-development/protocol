@@ -446,24 +446,34 @@ message StreamEvent {
     uint64 user_id = 1;
   }
 
-  // Sent when a guild invite is received.
+  // Sent when an invite is received.
   message InviteReceived {
-    // ID of the invite received.
-    string invite_id = 1;
     // Server ID of the server the inviter is on.
-    optional string server_id = 2;
+    optional string server_id = 1;
     // User ID of the inviter.
-    uint64 inviter_id = 3;
+    uint64 inviter_id = 2;
+    // The location where the user was invited to.
+    oneof location {
+      // The unique identifier of a user's invite to another
+      // user to join a given guild.
+      string guild_invite_id = 3;
+      // The channel ID of the private channel that the user was invited to.
+      uint64 channel_id = 4;
+    }
   }
 
-  // Sent when a guild invite is rejected by the invitee.
+  // Sent when an invite is rejected by the invitee.
   message InviteRejected {
-    // Guild ID of the guild that this occured for.
-    uint64 guild_id = 1;
-    // ID of the invite rejected.
-    string invite_id = 2;
     // User ID of the invitee.
-    uint64 user_id = 3;
+    uint64 user_id = 1;
+    // The location where the user was invited to.
+    oneof location {
+      // The unique identifier of a user's invite to another
+      // user to join a given guild.
+      string guild_invite_id = 2;
+      // The channel ID of the private channel that the user was invited to.
+      uint64 channel_id = 3;
+    }
   }
 
   // Sent when an invite is created in a guild.
