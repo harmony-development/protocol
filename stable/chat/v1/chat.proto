@@ -53,6 +53,11 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  // Endpoint to leave a private channel.
+  rpc LeavePrivateChannel(LeavePrivateChannelRequest) returns (LeavePrivateChannelResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+
   // Endpoint to create an invite.
   rpc CreateInvite(CreateInviteRequest) returns (CreateInviteResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;

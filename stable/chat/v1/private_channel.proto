@@ -74,3 +74,11 @@ message JoinPrivateChannelRequest {
 }
 // Response type used in `JoinPrivateChannel` endpoint.
 message JoinPrivateChannelResponse {}
+
+// Request type used in `LeavePrivateChannel` endpoint.
+message LeavePrivateChannelRequest {
+  // The channel ID of the private channel to leave.
+  uint64 channel_id = 1;
+}
+// Response type used in `LeavePrivateChannel` endpoint.
+message LeavePrivateChannelResponse {}
