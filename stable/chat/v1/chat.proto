@@ -19,6 +19,11 @@ service ChatService {
 
   // Endpoint to create a private channel.
   //
+  // If creating a direct message channel (`is_dm` is `true`), and you were in
+  // a DM channel with the user specified in `members` before, this method will
+  // join you to that same DM channel.
+  //
+  //
   // - The server should send an invite to the invitee(s) (specified in the request),
   // using the `UserInvited` postbox event if the invitee(s) are on another server.
   // - The receiving server should process this as follows: adding the invite to their pending
@@ -31,7 +36,7 @@ service ChatService {
 
   // Endpoint to modify the member list of a private channel.
   // 
-  // - This is only possible if the channel's `is_locked` property is set to false.
+  // - This is only possible if the channel's `is_dm` property is set to `false`.
   // - The server should send an invite to the added members (if any).
   // This should follow the same invite sending logic in `CreatePrivateChannel`.
   rpc UpdatePrivateChannelMembers(UpdatePrivateChannelMembersRequest) returns (UpdatePrivateChannelMembersResponse) {

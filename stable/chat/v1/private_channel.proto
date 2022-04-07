@@ -7,11 +7,11 @@ package protocol.chat.v1;
 message PrivateChannel {
   // The list of users that have access to this channel.
   repeated uint64 members = 1;
-  // Whether it is possible to add or remove users to/from this channel.
+  // Whether this is a direct message (1:1) channel or not.
   // 
-  // If a channel is locked, the number of recipients is two (this is a direct message channel).
+  // If a channel is a direct message, the number of recipients is two.
   // It should not be possible to have multiple direct message channels between the same two users.
-  bool is_locked = 2;
+  bool is_dm = 2;
 }
 
 // An entry in the list of private channels.
@@ -27,9 +27,10 @@ message CreatePrivateChannelRequest {
   // The list of users that have access to this channel.
   //
   // These users will be sent an invite.
+  // If `is_dm` is `true`, this must only have one member specified.
   repeated uint64 members = 1;
-  // Whether it is possible to add or remove users to/from this channel.
-  bool is_locked = 2;
+  // Whether this is a direct message (1:1) channel or not.
+  bool is_dm = 2;
 }
 // Response type used in `CreatePrivateChannel` endpoint.
 message CreatePrivateChannelResponse {
