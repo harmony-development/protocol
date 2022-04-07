@@ -66,3 +66,11 @@ message GetPrivateChannelListResponse {
   // The list of private channels that the user is in.
   repeated PrivateChannelListEntry channels = 1;
 }
+
+// Request type used in `JoinPrivateChannel` endpoint.
+message JoinPrivateChannelRequest {
+  // The channel ID of the private channel to join.
+  uint64 channel_id = 1;
+}
+// Response type used in `JoinPrivateChannel` endpoint.
+message JoinPrivateChannelResponse {}

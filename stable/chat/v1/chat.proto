@@ -44,6 +44,14 @@ service ChatService {
   rpc DeletePrivateChannel(DeletePrivateChannelRequest) returns (DeletePrivateChannelResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
+  
+  // Endpoint to join a private channel.
+  //
+  // - If the invite used is in a user's "pending invites" list, it should be
+  // removed from there.
+  rpc JoinPrivateChannel(JoinPrivateChannelRequest) returns (JoinPrivateChannelResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
 
   // Endpoint to create an invite.
   rpc CreateInvite(CreateInviteRequest) returns (CreateInviteResponse) {
@@ -74,16 +82,6 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
     option (harmonytypes.v1.metadata).requires_permission_node =
         "invites.manage.create";
-  }
-
-  // Endpoint to get your outgoing pending invites.
-  rpc GetOutgoingInvites(GetOutgoingInvitesRequest) returns (GetOutgoingInvitesResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
-  }
-
-  // Endpoint to delete (cancel) an outgoing invite.
-  rpc DeleteOutgoingInvite(DeleteOutgoingInviteRequest) returns (DeleteOutgoingInviteResponse) {
-    option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
   // Endpoint to get your pending invites.
