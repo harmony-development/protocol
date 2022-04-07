@@ -451,7 +451,7 @@ message StreamEvent {
     // The user ID of the inviter.
     uint64 inviter_id = 1;
     // The server ID of the server the inviter is on.
-    optional server_id = 2;
+    optional string server_id = 2;
     // The location where the user was invited to.
     oneof location {
       // The unique identifier of a user's invite to another
@@ -467,7 +467,7 @@ message StreamEvent {
     // The user ID of the invitee.
     uint64 invitee_id = 1;
     // The server ID of the server the invitee is on.
-    optional server_id = 2;
+    optional string server_id = 2;
     // The location where the user was invited to.
     oneof location {
       // The unique identifier of a user's invite to another
