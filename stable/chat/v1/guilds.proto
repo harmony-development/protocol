@@ -70,7 +70,7 @@ message GuildListEntry {
   // Guild ID of this guild entry.
   uint64 guild_id = 1;
   // Server ID of the homeserver of this guild.
-  string server_id = 2;
+  optional string server_id = 2;
 }
 
 // A reason for why a user has left a guild.
