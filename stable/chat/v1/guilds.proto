@@ -36,7 +36,7 @@ message Invite {
   uint32 use_count = 2;
 }
 
-// Invite with ID.
+// Object representing an invite with the ID part.
 message InviteWithId {
   // ID of the invite.
   string invite_id = 1;
@@ -45,6 +45,10 @@ message InviteWithId {
 }
 
 // A pending invite.
+//
+// A pending invite's `server_id` and `location` determines whether
+// it is unique or not. If two pending invites have the same `server_id`
+// and `location`, these are considered as the same pending invite.
 message PendingInvite {
   // Server ID of the server where the inviter is on.
   optional string server_id = 1;
