@@ -24,16 +24,16 @@ message PrivateChannelListEntry {
   optional string server_id = 2;
 }
 
-// Request type used in `GetPrivateChannelData` endpoint.
-message GetPrivateChannelDataRequest {
+// Request type used in `GetPrivateChannel` endpoint.
+message GetPrivateChannelRequest {
   // The IDs of the channels to get data for.
   repeated uint64 channel_ids = 1;
 }
 
-// Response type used in `GetPrivateChannelData` endpoint.
-message GetPrivateChannelDataResponse {
+// Response type used in `GetPrivateChannel` endpoint.
+message GetPrivateChannelResponse {
   // The list of private channels.
-  repeated PrivateChannel channels = 1;
+  map<uint64, PrivateChannel> channels = 1;
 }
 
 // Request type used in `CreatePrivateChannel` endpoint.

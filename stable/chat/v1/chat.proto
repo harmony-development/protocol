@@ -91,7 +91,8 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
-  rpc GetPrivateChannelData(GetPrivateChannelDataRequest) returns (GetPrivateChannelDataResponse) {
+  // Endpoint to get private channel data.
+  rpc GetPrivateChannel(GetPrivateChannelRequest) returns (GetPrivateChannelResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
