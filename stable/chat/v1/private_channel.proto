@@ -8,10 +8,12 @@ message PrivateChannel {
   // The list of users that have access to this channel.
   repeated uint64 members = 1;
   // Whether this is a direct message (1:1) channel or not.
-  // 
+  //
   // If a channel is a direct message, the number of recipients is two.
   // It should not be possible to have multiple direct message channels between the same two users.
   bool is_dm = 2;
+  // The name of the channel.
+  optional string name = 3;
 }
 
 // An entry in the list of private channels.
@@ -20,6 +22,8 @@ message PrivateChannelListEntry {
   uint64 channel_id = 1;
   // The server ID of the homeserver of this private channel.
   string server_id = 2;
+  // The data for this channel.
+  PrivateChannel data = 3;
 }
 
 // Request type used in `CreatePrivateChannel` endpoint.
@@ -31,6 +35,8 @@ message CreatePrivateChannelRequest {
   repeated uint64 members = 1;
   // Whether this is a direct message (1:1) channel or not.
   bool is_dm = 2;
+  // The name of the channel.
+  optional string name = 3;
 }
 // Response type used in `CreatePrivateChannel` endpoint.
 message CreatePrivateChannelResponse {
@@ -51,6 +57,16 @@ message UpdatePrivateChannelMembersRequest {
 }
 // Request type used in `UpdatePrivateChannelMembers` endpoint.
 message UpdatePrivateChannelMembersResponse {}
+
+// Request type used in `UpdatePrivateChannelName` endpoint.
+message UpdatePrivateChannelNameRequest {
+  // The channel ID of the private channel to update the name for.
+  uint64 channel_id = 1;
+  // The new name of the private channel.
+  optional string name = 2;
+}
+// Response type used in `UpdatePrivateChannelName` endpoint.
+message UpdatePrivateChannelNameResponse {}
 
 // Request type used in `DeletePrivateChannel` endpoint.
 message DeletePrivateChannelRequest {
