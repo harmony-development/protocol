@@ -20,10 +20,20 @@ message PrivateChannel {
 message PrivateChannelListEntry {
   // The channel ID of this channel list entry.
   uint64 channel_id = 1;
-  // The server ID of the homeserver of this private channel.
-  string server_id = 2;
-  // The data for this channel.
-  PrivateChannel data = 3;
+  // The server ID of the homeserver of this private channel. If local, this is not set.
+  optional string server_id = 2;
+}
+
+// Request type used in `GetPrivateChannelData` endpoint.
+message GetPrivateChannelDataRequest {
+  // The IDs of the channels to get data for.
+  repeated uint64 channel_ids = 1;
+}
+
+// Response type used in `GetPrivateChannelData` endpoint.
+message GetPrivateChannelDataResponse {
+  // The list of private channels.
+  repeated PrivateChannel channels = 1;
 }
 
 // Request type used in `CreatePrivateChannel` endpoint.

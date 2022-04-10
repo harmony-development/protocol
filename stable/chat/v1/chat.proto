@@ -91,6 +91,10 @@ service ChatService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  rpc GetPrivateChannelData(GetPrivateChannelDataRequest) returns (GetPrivateChannelDataResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+
   // Endpoint to invite a user to a guild.
   rpc InviteUserToGuild(InviteUserToGuildRequest) returns (InviteUserToGuildResponse) {
     option (harmonytypes.v1.metadata).requires_authentication = true;
