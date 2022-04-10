@@ -73,7 +73,9 @@ message UpdatePrivateChannelNameRequest {
   // The channel ID of the private channel to update the name for.
   uint64 channel_id = 1;
   // The new name of the private channel.
-  optional string name = 2;
+  //
+  // If this is an empty string, then the channel name will be unset.
+  string name = 2;
 }
 // Response type used in `UpdatePrivateChannelName` endpoint.
 message UpdatePrivateChannelNameResponse {}
