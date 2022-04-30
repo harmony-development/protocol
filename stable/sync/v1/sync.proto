@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package protocol.sync.v1;
 
-option go_package = "github.com/harmony-development/legato/gen/sync/v1";
-
 // Authentication data that will be sent in a `harmonytypes.v1.Token`.
 message AuthData {
   // The server ID of the server initiating the transaction. For Pull,
@@ -33,24 +31,53 @@ message Event {
     // Guild ID of the guild where the user will be.
     uint64 guild_id = 2;
   }
+
+  // Event sent when an user is removed from a private channel.
+  message UserRemovedFromChannel {
+    // User ID of the user that was removed.
+    uint64 user_id = 1;
+    // Channel ID of the channel where the user was.
+    uint64 channel_id = 2;
+  }
+  // Event sent when an user is added to a private channel.
+  message UserAddedToChannel {
+    // User ID of the user that was added.
+    uint64 user_id = 1;
+    // Channel ID of the channel where the user will be.
+    uint64 channel_id = 2;
+  }
+
   // Event sent when a user is invited to a guild.
   message UserInvited {
     // User ID of the invitee.
     uint64 user_id = 1;
     // User ID of the user that invited.
     uint64 inviter_id = 2;
-    // The unique identifier of a user's invite to another
-    // user to join a given guild.
-    string invite_id = 3;
+
+    // The location where the user is being invited to.
+    oneof location {
+      // The unique identifier of a user's invite to another
+      // user to join a given guild.
+      string guild_invite_id = 3;
+      // The channel ID of the private channel that the user was invited to.
+      uint64 channel_id = 4;
+    }
   }
   // Event sent when a user rejects a guild invitation.
   message UserRejectedInvite {
-    // Guild ID of the guild the invitee rejected an invite for.
-    uint64 guild_id = 1;
     // User ID of the invitee that rejected the invitation.
-    uint64 user_id = 2;
-    // Invite ID of the invite that was rejected.
-    string invite_id = 3;
+    uint64 user_id = 1;
+    // User ID of the inviter.
+    uint64 inviter_id = 2;
+
+    // The location where the user was invited to.
+    oneof location {
+      // The unique identifier of a user's invite to another
+      // user to join a given guild.
+      string guild_invite_id = 3;
+      // The channel ID of the private channel that the user was invited to.
+      uint64 channel_id = 4;
+    }
   }
 
   // The kind and data of this event.
@@ -59,10 +86,14 @@ message Event {
     UserRemovedFromGuild user_removed_from_guild = 1;
     // User added to a guild.
     UserAddedToGuild user_added_to_guild = 2;
+    // User removed from a private channel.
+    UserRemovedFromChannel user_removed_from_channel = 3;
+    // User added to a private channel.
+    UserAddedToChannel user_added_to_channel = 4;
     // User invited to a guild.
-    UserInvited user_invited = 3;
+    UserInvited user_invited = 5;
     // User rejected a guild invitation.
-    UserRejectedInvite user_rejected_invite = 4;
+    UserRejectedInvite user_rejected_invite = 6;
   }
 }
 

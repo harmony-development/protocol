@@ -4,8 +4,6 @@ import "harmonytypes/v1/types.proto";
 
 package protocol.chat.v1;
 
-option go_package = "github.com/harmony-development/legato/gen/chat/v1";
-
 // What kind the channel is.
 enum ChannelKind {
   // A text channel. Allows you to simply send messages to a group of people.
@@ -125,13 +123,3 @@ message DeleteChannelRequest {
 }
 // Used in the `DeleteChannel` endpoint.
 message DeleteChannelResponse {}
-
-// Used in `Typing` endpoint.
-message TypingRequest {
-  // The guild id of the channel the user is typing in.
-  uint64 guild_id = 1;
-  // The channel id of the channel the user is typing in.
-  uint64 channel_id = 2;
-}
-// Used in `Typing` endpoint.
-message TypingResponse {}

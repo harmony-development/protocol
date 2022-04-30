@@ -5,69 +5,43 @@ package protocol.chat.v1;
 import "harmonytypes/v1/types.proto";
 import "emote/v1/types.proto";
 
-option go_package = "github.com/harmony-development/legato/gen/chat/v1";
-
 // Overrides provide a way to override the name and avatar of a message.
 message Overrides {
-  // the overridden username.
+  // The overridden username.
   optional string username = 1;
-  // the overridden avatar.
+  // The overridden avatar.
+  //
+  // This can be a file ID or an external image URL.
   optional string avatar = 2;
-  // the reason for overriding username and avatar.
+  // The reason for overriding username and avatar.
   oneof reason {
-    // a custom reason in case the builtin ones don't fit
+    // A custom reason in case the builtin ones don't fit.
     string user_defined = 3;
-    // the override occured because of a webhook
+    // The override occured because of a webhook.
     harmonytypes.v1.Empty webhook = 4;
-    // plurality, not system as in computer
+    // Plurality, not system as in computer.
     harmonytypes.v1.Empty system_plurality = 5;
-    // the override occured because it was made by the server
+    // The override occured because it was made by the server.
     //
     // Servers should reject messages sent by users with this override.
     harmonytypes.v1.Empty system_message = 6;
-    // the override occured because of bridging
+    // The override occured because of bridging.
     harmonytypes.v1.Empty bridge = 7;
   }
 }
 
-// The payload sent to the bot when an action is triggered.
-message ActionPayload {
-  // The payload data for a button action
-  message Button {
-    // The data from the Button action
-    bytes data = 1;
-  }
-  // The payload for a dropdown action
-  message Dropdown {
-    // The user choice from the dropdown.
-    bytes choice = 1;
-  }
-  // The payload for a text input action
-  message Input {
-    // The user input.
-    string input = 1;
-    // The bot-provided data
-    bytes data = 2;
-  }
-  // The payload data
-  oneof payload {
-    // Payload for a button
-    Button button = 1;
-    // Payload for a dropdown
-    Dropdown dropdown = 2;
-    // Payload for a text input
-    Input input = 3;
-  }
-}
-
-// Actions are interactive elements that can exist within an embed.
+// Actions are interactive elements that can exist within a message.
+// They can be only sent by bots; servers should ignore actions created by users.
+// 
+// Servers MUST verify that the action data sent by an user is valid for that action
+// before sending it to the bot.
 message Action {
   // The action type. This is primarily used to change the look of the action to
   // the user (example: Destructive actions will have a red background).
   enum Type {
-    // a normal action.
+    // A normal action.
     TYPE_NORMAL_UNSPECIFIED = 0;
-    // a primary action.
+    // A primary action.
     TYPE_PRIMARY = 1;
     // A destructive / dangerous action.
     TYPE_DESTRUCTIVE = 2;
@@ -78,13 +52,11 @@ message Action {
     // The text to show on the button.
     string text = 1;
 
-    // Action data, which should be used in the call to perform the action.
-    bytes data = 2;
-
     // An external URL that the button links to.
+    //
     // This makes it so that tapping this button will open said URL instead
     // of triggering the action.
-    optional string url = 3;
+    optional string url = 2;
   }
 
   // A dropdown menu that users can click on to trigger an action.
@@ -92,7 +64,7 @@ message Action {
     // The text describing the dropdown.
     string label = 1;
 
-    // An entry in the dropdown
+    // An entry in the dropdown.
     message Entry {
       // The dropdown's UI label.
       string label = 1;
@@ -110,162 +82,136 @@ message Action {
     string label = 1;
     // Whether this text input should be a multiline one or not.
     bool multiline = 2;
-    // Contextual data allowing the bot to discern what the user input is for
-    bytes data = 3;
+    // The default text that should be pre-filled in the text field.
+    optional string default = 3;
   }
 
   // Type of the action.
   Type action_type = 1;
+  // Contextual info allowing the bot to discern what the action is for.
+  // The info of an action cannot be the same with the info of another action in the same message.
+  bytes info = 2;
 
   // The kind of the action.
   oneof kind {
     // Button action.
-    Button button = 2;
+    Button button = 3;
     // Dropdown action.
-    Dropdown dropdown = 3;
+    Dropdown dropdown = 4;
     // Input action.
-    Input input = 4;
+    Input input = 5;
   }
 }
 
 // Object representing a message embed.
 message Embed {
   // Object representing an embed heading.
-  message EmbedHeading {
+  message Heading {
     // Text of the heading.
     string text = 1;
-    // Subtext of the heading.
-    optional string subtext = 2;
     // URL of the heading.
-    optional string url = 3;
-    // Icon of the heading.
-    optional string icon = 4;
+    //
+    // If this is provided, clients should make it so that
+    // interacting with the heading opens this URL, for example
+    // clicking on it.
+    optional string url = 2;
+    // Icon of the heading. This must be a file ID that points
+    // to an image.
+    optional string icon = 3;
   }
 
-  // Object representing an embed field.
-  message EmbedField {
-    // Type representing how to present an embed field.
-    enum Presentation {
-      // Show the field as data.
-      PRESENTATION_DATA_UNSPECIFIED = 0;
-      // Show the field as a captioned image.
-      PRESENTATION_CAPTIONED_IMAGE = 1;
-      // Show the field as a row.
-      PRESENTATION_ROW = 2;
-    }
-
-    // Title of this field.
+  // A field for the embed. Fields usually contain
+  // small information and are not meant to be used
+  // for huge chunks of text.
+  message Field {
+    // Title of this field (what is it?).
     string title = 1;
-    // Subtitle of this field.
-    optional string subtitle = 2;
-    // Body text of this field (eg. a description).
-    optional FormattedText body = 3;
-    // Image URL of this field.
-    optional string image_url = 4;
-    // How to present this field.
-    Presentation presentation = 5;
-    // Actions of this field.
-    repeated Action actions = 6;
+    // Body of this field.
+    string body = 2;
   }
 
-  // Title of this embed.
-  string title = 1;
-  // Body text of this embed.
-  optional FormattedText body = 2;
-  // Color of this embed.
-  optional int32 color = 3;
+  // Data for displaying an image in embed.
+  //
+  // Servers should fill in the `width` and `height` fields, if
+  // the provided `id` is not external.
+  message Image {
+    // File ID or external image URL of an image.
+    string id = 1;
+    // The width of the image, in pixels.
+    uint32 width = 2;
+    // The height of the image, in pixels.
+    uint32 height = 3;
+  }
+
   // Embed heading for the header.
-  optional EmbedHeading header = 4;
-  // Embed heading for the footer.
-  optional EmbedHeading footer = 5;
+  optional Heading header = 1;
+  // Title of this embed.
+  string title = 2;
+  // Body text of this embed.
+  optional FormattedText body = 3;
   // Fields of this embed.
-  repeated EmbedField fields = 6;
+  repeated Field fields = 4;
+  // An image to display on this embed.
+  optional Image image = 5;
+  // Actions to show on this field.
+  repeated Action actions = 6;
+  // Embed heading for the footer.
+  optional Heading footer = 7;
+  // Color of this embed.
+  optional int32 color = 8;
 }
 
-/*
-  Minithumbnail is an extremely low-quality JPEG thumbnail.
 
-  The resolution is usually no larger than 64x64.
-*/
+// An extremely low-quality WebP thumbnail.
+//
+// The resolution is usually no larger than 64x64.
 message Minithumbnail {
-  // The width of the minithumbnail
+  // The width of the minithumbnail, in pixels.
   uint32 width = 1;
-  // The height of the minithumbnail
+  // The height of the minithumbnail, in pixels.
   uint32 height = 2;
-  // The JPEG data of the minithumbnail
+  // The data of the minithumbnail.
   bytes data = 3;
-}
-
-/*
-  Photo contains data about a photo.
-
-  Photo are always JPEG, and are
-  constrained to the following rules:
-
-  - width+height <= 10_000
-  - width <= height*20
-  - height <= width*20
-
-  Photos are preferably no more than 10MB
-  in size, and servers may compress as necessary.
-*/
-message Photo {
-  // The HMC URL of the photo.
-  string hmc = 1;
-  // The filename of the photo.
-  string name = 2;
-  // The size of the photo.
-  uint32 file_size = 3;
-  // The height of the photo, in pixels.
-  uint32 height = 4;
-  // The width of the photo, in pixels.
-  uint32 width = 5;
-  // The photo's caption.
-  FormattedText caption = 6;
-  // A thumbnail representing the photo.
-  Minithumbnail minithumbnail = 7;
 }
 
 // Object representing a generic message attachment.
 message Attachment {
+  // Contains data about an image.
+  message ImageInfo {
+    // The width of the image, in pixels.
+    uint32 width = 1;
+    // The height of the image, in pixels.
+    uint32 height = 2;
+    // A thumbnail for the image.
+    Minithumbnail minithumbnail = 3;
+    // The image's caption.
+    optional string caption = 4;
+  }
+
   // File ID of this attachment.
   string id = 1;
   // Filename of this attachment.
   string name = 2;
   // Mimetype of this attachment.
   string mimetype = 3;
-  // Size of this attachment.
+  // File size of this attachment, in bytes.
   uint32 size = 4;
-  // Caption of this attachment.
-  optional FormattedText caption = 5;
+  // Extra info.
+  oneof info {
+    // Image info.
+    ImageInfo image = 5;
+  }
 }
 
-// Object representing a message's content.
+// Object representing a message's content other than text.
+//
+// `InviteRejected`, `InviteAccepted` and `RoomUpgradedToGuild`, can only
+// be used by servers themselves. Servers should reject messages with this
+// content if they are sent by a user.
+//
+// Text should be displayed before embeds, and embeds should be displayed before attachments.
 message Content {
-  // Object representing text content.
-  message TextContent {
-    // Text content.
-    FormattedText content = 1;
-  }
-  // Object representing embed content.
-  message EmbedContent {
-    // Embed content.
-    repeated Embed embeds = 1;
-  }
-  // Object representing attachment content.
-  message AttachmentContent {
-    // A list of attachments.
-    repeated Attachment files = 1;
-  }
-  // Object representing photo content.
-  message PhotoContent {
-    // A list of photos.
-    repeated Photo photos = 1;
-  }
   // Represents a user rejecting an invite.
-  //
-  // This can only be used by servers themselves. Servers should reject
-  // messages with this content if they are sent by a user.
   message InviteRejected {
     // User ID of the invitee.
     uint64 invitee_id = 1;
@@ -273,9 +219,6 @@ message Content {
     uint64 inviter_id = 2;
   }
   // Represents a user accepting an invite.
-  //
-  // This can only be used by servers themselves. Servers should reject
-  // messages with this content if they are sent by a user.
   message InviteAccepted {
     // User ID of the invitee.
     uint64 invitee_id = 1;
@@ -283,24 +226,22 @@ message Content {
     uint64 inviter_id = 2;
   }
   // Represents a guild upgrade from "room" to "normal".
-  //
-  // This can only be used by servers themselves. Servers should reject
-  // messages with this content if they are sent by a user.
   message RoomUpgradedToGuild {
     // User ID of the user that upgraded the guild.
     uint64 upgraded_by = 1;
   }
 
-  // Content data.
-  oneof content {
-    // Text content.
-    TextContent text_message = 1;
-    // Embed content.
-    EmbedContent embed_message = 2;
-    // Attachment content.
-    AttachmentContent attachment_message = 3;
-    // Photo content.
-    PhotoContent photo_message = 4;
+  // Text content of the message.
+  string text = 1;
+  // Text formatting of the text content.
+  repeated Format text_formats = 2;
+  // Embed content.
+  repeated Embed embeds = 3;
+  // Attachment content.
+  repeated Attachment attachments = 4;
+
+  // Extra content data, in addition to the text content.
+  oneof extra {
     // A user rejected an invite.
     InviteRejected invite_rejected = 5;
     // A user accepted an invite.
@@ -310,140 +251,150 @@ message Content {
   }
 }
 
-// Object representing a reaction.
-message Reaction {
-  // Emote data for this reaction.
+// The kind of this reaction.
+enum ReactionKind {
+  // A reaction that uses an image.
   //
-  // Emote's image ID is used as an identifier for unique reactions.
-  // Emotes with the same names should be "deduplicated" by a client, by suffixing
-  // their names with `~1`, `~2` and so on.
-  emote.v1.Emote emote = 1;
-  // How many reactions this reaction has.
-  uint32 count = 2;
+  // The `data` field of the reaction should be interpreted
+  // as a file ID that points to an image.
+  REACTION_KIND_IMAGE_UNSPECIFIED = 0;
+  // A reaction that uses text. For example, this
+  // can be used to send unicode emojis.
+  //
+  // The `data` field of the reaction should be interpreted
+  // as text to display.
+  REACTION_KIND_TEXT = 1;
 }
 
-// A format for text
+// Object representing a reaction.
+message Reaction {
+  // The kind of the reaction.
+  ReactionKind kind = 1;
+  // The reaction's data. This is interpreted using the `kind`.
+  //
+  // This is used as a unique identifier for reactions.
+  string data = 2;
+  // The name of the reaction.
+  string name = 3;
+  // How many times this reaction has been used.
+  uint32 count = 4;
+}
+
+// A format for text.
 message Format {
-  // Bold text
-  message Bold { }
-  // Italic text
-  message Italic { }
-  // Underlined text
-  message Underline { }
-  // Monospace text
-  message Monospace { }
-  // Superscript text
-  message Superscript { }
-  // Subscript text
-  message Subscript { }
-  // A larger codeblock, with a programming language specified
+  // Bold text.
+  message Bold {}
+  // Italic text.
+  message Italic {}
+  // Underlined text.
+  message Underline {}
+  // Monospace text.
+  message Monospace {}
+  // Superscript text.
+  message Superscript {}
+  // Subscript text.
+  message Subscript {}
+  // A larger codeblock, with a programming language specified.
+  //
   // Clients should ideally not bound the width of codeblock messages,
   // possibly scrolling the codeblock horizontally separately from the
-  // rest of the message
+  // rest of the message.
   message CodeBlock {
-    // programming language of the code block
+    // Programming language of the code block.
     string language = 1;
   }
-  // Mention of a user (on the current homeserver)
+  // Mention of a user (on the current homeserver).
   message UserMention {
-    // user_id of the user being mentioned
+    // User ID of the user being mentioned.
     uint64 user_id = 1;
   }
-  // Mention of a role (on the current guild)
+  // Mention of a role (on the current guild).
   message RoleMention {
-    // the role being mentioned
+    // The role being mentioned.
     uint64 role_id = 1;
   }
-  // Mention of a channel (on the current guild)
+  // Mention of a channel (on the current guild).
   message ChannelMention {
-    // the channel being mentioned
+    // The channel being mentioned.
     uint64 channel_id = 1;
   }
-  // Mention of a guild
+  // Mention of a guild.
   message GuildMention {
-    // the guild being mentioned
+    // The guild being mentioned.
     uint64 guild_id = 1;
-    // which homeserver it belongs to
+    // Which homeserver it belongs to.
     string homeserver = 2;
   }
-  // An emoji
+  // An emoji.
   message Emoji {
-    // The HMC URL of the emoji
-    string image_hmc = 1;
-    // The ID of the emoji pack the emoji is from
-    uint64 pack_id = 2;
+    // The emote data of the emote.
+    emote.v1.Emote emote = 1;
+    // The (optional) pack ID of this emote.
+    optional uint64 pack_id = 2;
   }
-  // Colour modification
+  // Colour modification.
   message Color {
-    // The kind of colour modification to apply
+    // The kind of colour modification to apply.
     enum Kind {
-      // Dimmed colour
+      // Dimmed colour.
       KIND_DIM_UNSPECIFIED = 0;
-      // Brightened colour
+      // Brightened colour.
       KIND_BRIGHT = 1;
-      // Negative colour (usually red)
+      // Negative colour (usually red).
       KIND_NEGATIVE = 2;
-      // Positive colour (usually green)
+      // Positive colour (usually green).
       KIND_POSITIVE = 3;
-      // Informational colour (usually blue)
+      // Informational colour (usually blue).
       KIND_INFO = 4;
-      // Warning colour (usually yellow-orange)
+      // Warning colour (usually yellow-orange).
       KIND_WARNING = 5;
     }
 
-    // The kind of colour modification to apply
+    // The kind of colour modification to apply.
     Kind kind = 1;
   }
-  // Replace a part of the text with the text matching the i18n code.
-  // If i18n code was not found, keep the original text.
-  message Localization {
-    // i18n code for the text.
-    string i18n_code = 1;
-  }
 
-    // where the format begins to apply to
+  // Where the format begins to apply to.
   uint32 start = 1;
-    // how many characters the format is
+  // How many characters the format is.
   uint32 length = 2;
 
-   // the style if format to apply to this text
+  // The style if format to apply to this text.
   oneof format {
-    // a text format for bold text
+    // A text format for bold text.
     Bold bold = 3;
-    // a text format for italic text
+    // A text format for italic text.
     Italic italic = 4;
-    // a text format for underline text
+    // A text format for underline text.
     Underline underline = 5;
-    // a text format for monospace text
+    // A text format for monospace text.
     Monospace monospace = 6;
-    // a text format for superscript text
+    // A text format for superscript text.
     Superscript superscript = 7;
-    // a text format for subscript text
+    // A text format for subscript text.
     Subscript subscript = 8;
-    // a text format for a codeblock
+    // A text format for a codeblock.
     CodeBlock code_block = 9;
-    // a text format for a user mention
+    // A text format for a user mention.
     UserMention user_mention = 10;
-    // a text format for a role mention
+    // A text format for a role mention.
     RoleMention role_mention = 11;
-    // a text format for a channel mention
+    // A text format for a channel mention.
     ChannelMention channel_mention = 12;
-    // a text format for a guild mention
+    // A text format for a guild mention.
     GuildMention guild_mention = 13;
-    // a text format for an emoji
+    // A text format for an emoji.
     Emoji emoji = 14;
-    // a text format for coloured text
+    // A text format for coloured text.
     Color color = 15;
-    // a text format for localization
-    Localization localization = 16;
   }
 }
 
-// Formatted text
+// Formatted text.
 message FormattedText {
-  // The textual content of a message
+  // The textual content of a message.
   string text = 1;
-  // The formats for a message
+  // The formats for a message.
   repeated Format format = 2;
 }
 
@@ -455,9 +406,9 @@ message Message {
   Overrides overrides = 2;
   // User ID of the user who sent this message.
   uint64 author_id = 3;
-  // When this message was created, in miliseconds since unix epoch
+  // When this message was created, in seconds since unix epoch.
   uint64 created_at = 4;
-  // The most recent time this message was edited, in milliseconds since unix epoch
+  // The most recent time this message was edited, in seconds since unix epoch.
   optional uint64 edited_at = 5;
   // The message this message is a reply to.
   optional uint64 in_reply_to = 6;
@@ -465,6 +416,8 @@ message Message {
   Content content = 7;
   // The reactions of the message.
   repeated Reaction reactions = 8;
+  // Bot actions to show on this message.
+  repeated Action actions = 9;
 }
 
 // Object representing a message with it's ID.
@@ -488,7 +441,7 @@ message GetChannelMessagesRequest {
   }
 
   // Guild ID of the guild that has the channel.
-  uint64 guild_id = 1;
+  optional uint64 guild_id = 1;
   // Channel ID of the channel to get messages from.
   uint64 channel_id = 2;
   // The ID of the message that will be used as an "anchor" point to figure out
@@ -530,7 +483,7 @@ message GetChannelMessagesResponse {
 // Used in the `GetMessage` endpoint.
 message GetMessageRequest {
   // Guild ID of the guild where the channel is.
-  uint64 guild_id = 1;
+  optional uint64 guild_id = 1;
   // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
   // Message ID of the message you want to get.
@@ -545,7 +498,7 @@ message GetMessageResponse {
 // Used in the `DeleteMessage` endpoint.
 message DeleteMessageRequest {
   // Guild ID of the guild where the channel is.
-  uint64 guild_id = 1;
+  optional uint64 guild_id = 1;
   // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
   // Message ID of the message you want to delete.
@@ -557,33 +510,83 @@ message DeleteMessageResponse {}
 // Used in the `TriggerAction` endpoint.
 message TriggerActionRequest {
   // Guild ID of the guild where the channel is.
-  uint64 guild_id = 1;
+  optional uint64 guild_id = 1;
   // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
   // Message ID of the message you want to trigger an action in.
   uint64 message_id = 3;
-  // Payload of action data.
-  ActionPayload payload = 4;
+  // Data that alllows the bot to discern which action the user is trying to trigger.
+  // A server MUST verify that this info refers to a valid action for the target message.
+  bytes info = 4;
+  // Payload of action data. Ignored if this is a button action.
+  optional bytes payload = 5;
 }
 // Used in the `TriggerAction` endpoint.
 message TriggerActionResponse {}
 
 // Used in the `SendMessage` endpoint.
 message SendMessageRequest {
+  // Attachment info that can be sent by a user.
+  message Attachment {
+    // Information a user can add to a image attachment.
+    message ImageInfo {
+      // The image's caption.
+      optional string caption = 1;
+      // Whether to use the original image, instead of compressing the image.
+      //
+      // Compression can be forced by servers, so this option may not work on
+      // every homeserver.
+      bool use_original = 2;
+    }
+
+    // The local file ID of the attachment.
+    string id = 1;
+    // Name of the attachment.
+    string name = 2;
+    // Extra information.
+    oneof info {
+      // Image info.
+      ImageInfo image = 3;
+    }
+  }
+
+  // Content that can be sent by a user.
+  message Content {
+    // Text content of the message to be sent.
+    //
+    // If this is empty, then either `attachments`
+    // or `embeds` must be specified.
+    string text = 1;
+    // Text formats for the text content.
+    repeated Format text_formats = 2;
+    // Attachments to be sent.
+    //
+    // If this is empty, then either `embeds` or `text`
+    // must be specified.
+    repeated Attachment attachments = 3;
+    // Embeds to be sent.
+    //
+    // If this is empty, then either `attachemnts`
+    // or `text` must be specified.
+    repeated Embed embeds = 4;
+  }
+
   // Guild ID of the guild where the channel is.
-  uint64 guild_id = 1;
+  optional uint64 guild_id = 1;
   // Channel ID of the channel you want to send a message in.
   uint64 channel_id = 2;
   // Content of the new message.
   Content content = 3;
   // Echo ID of the new message. This can be used by clients to
-  // determine whether a message is sent.
+  // determine whether a message has been broadcasted to other clients.
+  // Note that this does not mean the broadcast reached other clients.
   optional uint64 echo_id = 4;
   // The overrides of this new message.
   optional Overrides overrides = 6;
   // The message this new message is a reply to.
   optional uint64 in_reply_to = 7;
-
+  // Actions to send on this message. Ignored if the message is not sent by a bot.
+  repeated Action actions = 8;
   // The metadata of this new message.
   optional harmonytypes.v1.Metadata metadata = 5;
 }
@@ -593,24 +596,24 @@ message SendMessageResponse {
   uint64 message_id = 1;
 }
 
-// Used in the `UpdateMessageText` endpoint.
-message UpdateMessageTextRequest {
+// Used in the `UpdateMessageContent` endpoint.
+message UpdateMessageContentRequest {
   // Guild ID of the guild where the channel is.
-  uint64 guild_id = 1;
+  optional uint64 guild_id = 1;
   // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
-  // Message ID of the message you want to edit the text of.
+  // Message ID of the message you want to change the content of.
   uint64 message_id = 3;
   // New content for this message.
-  FormattedText new_content = 4;
+  SendMessageRequest.Content new_content = 4;
 }
-// Used in the `UpdateMessageText` endpoint.
-message UpdateMessageTextResponse {}
+// Used in the `UpdateMessageContent` endpoint.
+message UpdateMessageContentResponse {}
 
 // Used in the `PinMessage` endpoint.
 message PinMessageRequest {
   // Guild ID of the guild where the channel is.
-  uint64 guild_id = 1;
+  optional uint64 guild_id = 1;
   // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
   // Message ID of the message we want to pin.
@@ -622,7 +625,7 @@ message PinMessageResponse {}
 // Used in the `UnpinMessage` endpoint.
 message UnpinMessageRequest {
   // Guild ID of the guild where the channel is.
-  uint64 guild_id = 1;
+  optional uint64 guild_id = 1;
   // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
   // Message ID of the message we want to unpin.
@@ -634,7 +637,7 @@ message UnpinMessageResponse {}
 // Used in the `GetPinnedMessages` endpoint.
 message GetPinnedMessagesRequest {
   // Guild ID of the guild where the channel is.
-  uint64 guild_id = 1;
+  optional uint64 guild_id = 1;
   // Channel ID of the channel we want to get pins of.
   uint64 channel_id = 2;
 }
@@ -648,13 +651,17 @@ message GetPinnedMessagesResponse {
 // Used in `AddReaction` endpoint.
 message AddReactionRequest {
   // Guild ID of the guild where the channel is.
-  uint64 guild_id = 1;
+  optional uint64 guild_id = 1;
   // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
   // Message ID of the message we want to add a reaction to.
   uint64 message_id = 3;
-  // The emote we want to react with.
-  emote.v1.Emote emote = 4;
+  // The kind of the reaction we want to react with.
+  ReactionKind reaction_kind = 4;
+  // The data of the reaction we want to react with.
+  string reaction_data = 5;
+  // The name of the reaction we want to react with.
+  string reaction_name = 6;
 }
 // Used in `AddReaction` endpoint.
 message AddReactionResponse {}
@@ -662,13 +669,23 @@ message AddReactionResponse {}
 // Used in `RemoveReaction` endpoint.
 message RemoveReactionRequest {
   // Guild ID of the guild where the channel is.
-  uint64 guild_id = 1;
+  optional uint64 guild_id = 1;
   // Channel ID of the channel where the message is.
   uint64 channel_id = 2;
   // Message ID of the message we want to remove a reaction.
   uint64 message_id = 3;
-  // The emote we want to remove the react of.
-  emote.v1.Emote emote = 4;
+  // The data of the reaction we want to remove.
+  string reaction_data = 4;
 }
 // Used in `RemoveReaction` endpoint.
 message RemoveReactionResponse {}
+
+// Used in `Typing` endpoint.
+message TypingRequest {
+  // The guild id of the channel the user is typing in.
+  optional uint64 guild_id = 1;
+  // The channel id of the channel the user is typing in.
+  uint64 channel_id = 2;
+}
+// Used in `Typing` endpoint.
+message TypingResponse {}

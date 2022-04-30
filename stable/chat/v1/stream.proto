@@ -10,35 +10,40 @@ import "chat/v1/permissions.proto";
 import "emote/v1/stream.proto";
 import "profile/v1/stream.proto";
 
-option go_package = "github.com/harmony-development/legato/gen/chat/v1";
-
 // Request type for use in the `StreamEvents` endpoint.
 // By default, this endpoint will subscribe to all events.
-// Any guilds joined in the future will be added to the subscription as well.
-// Use the UnsubscribeFromAll event for unsubscribing from all current subscriptions and disable the automatic guild subscriptions
+// Any guilds / private channels joined in the future will be added to the subscription as well.
+// Use the UnsubscribeFromAll event for unsubscribing from all current subscriptions and disable the automatic guild subscriptions.
 message StreamEventsRequest {
-  // Event source for guilds' events.
+  // Message to use for subscribing to a guild.
   message SubscribeToGuild {
-    // the guild id to subscribe to
+    // The guild ID to subscribe to.
     uint64 guild_id = 1;
   }
-  // Event source for actions' events.
+  // Message to use for subscribing to a private channel.
+  message SubscribeToPrivateChannel {
+    // The channel ID to subscribe to.
+    uint64 channel_id = 1;
+  }
+  // Message to use for subscribing to actions.
   message SubscribeToActions {}
-  // Event source for homeserver events.
+  // Message to use for subscribing to homeserver events.
   message SubscribeToHomeserverEvents {}
-  // Event to unsubscribe from all events.
+  // Message to use for unsubscribing from all events.
   message UnsubscribeFromAll {}
 
   // Describes which event source to subscribe to.
   oneof request {
-    // Subscribe to the guild event source.
+    // Subscribe to guild events.
     SubscribeToGuild subscribe_to_guild = 1;
-    // Subscribe to the action event source.
-    SubscribeToActions subscribe_to_actions = 2;
-    // Subscribe to the homeserver event source.
-    SubscribeToHomeserverEvents subscribe_to_homeserver_events = 3;
+    // Subscribe to private channel events.
+    SubscribeToPrivateChannel subscribe_to_private_channel = 2;
+    // Subscribe to action events.
+    SubscribeToActions subscribe_to_actions = 3;
+    // Subscribe to homeserver events.
+    SubscribeToHomeserverEvents subscribe_to_homeserver_events = 4;
     // Unsubscribe from all events.
-    UnsubscribeFromAll unsubscribe_from_all = 4;
+    UnsubscribeFromAll unsubscribe_from_all = 5;
   }
 }
 
@@ -58,11 +63,15 @@ message StreamEventsResponse {
 // Describes an event.
 message StreamEvent {
   // Event sent when a new message is sent.
+  //
+  // This event will only be sent to users that have "messages.view" permission
+  // for the channel the message was sent in.
   message MessageSent {
     // ID that is sent by your client it can use to confirm that the message is sent.
     optional uint64 echo_id = 1;
     // Guild ID of the guild where this event happened.
-    uint64 guild_id = 2;
+    // Null if the event happened in a private channel.
+    optional uint64 guild_id = 2;
     // Channel ID of the channel where this event happened.
     uint64 channel_id = 3;
     // Message ID of the message that was updated.
@@ -71,24 +80,31 @@ message StreamEvent {
     Message message = 5;
   }
 
-  // Event sent when a message's text content is updated.
+  // Event sent when a message's content is updated.
+  //
+  // This event will only be sent to users that have "messages.view" permission
+  // for the channel the message was updated in.
   message MessageUpdated {
     // Guild ID of the guild where this event happened.
-    uint64 guild_id = 1;
+    // Null if the event happened in a private channel.
+    optional uint64 guild_id = 1;
     // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
     // Message ID of the message that was updated.
     uint64 message_id = 3;
-    // When this message was edited, in milliseconds since unix epoch
+    // When this message was edited, in seconds since unix epoch.
     uint64 edited_at = 4;
     // New message content.
-    chat.v1.FormattedText new_content = 5;
+    chat.v1.Content new_content = 5;
   }
 
   // Event sent when a message is deleted.
+  //
+  // This event will only be sent to users that have "messages.view" permission
+  // for the channel the message was deleted in.
   message MessageDeleted {
     // Guild ID of the guild where this event happened.
-    uint64 guild_id = 1;
+    optional uint64 guild_id = 1;
     // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
     // Message ID of the message that was deleted.
@@ -112,6 +128,9 @@ message StreamEvent {
   }
 
   // Event sent when a channel's information is changed.
+  //
+  // This event will only be sent to users that have "messages.view" permission
+  // for the channel that was updated.
   message ChannelUpdated {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -124,6 +143,9 @@ message StreamEvent {
   }
 
   // Event sent when a channel's position in the channel list is changed.
+  //
+  // This event will only be sent to users that have "messages.view" permission
+  // for the channel that was moved.
   message ChannelPositionUpdated {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -133,7 +155,10 @@ message StreamEvent {
     optional harmonytypes.v1.ItemPosition new_position = 3;
   }
 
-  // Event sent when all channels have been reordered
+  // Event sent when all channels have been reordered.
+  //
+  // If a user does not have "messages.view" permission for a channel in here,
+  // it should be omitted from the list.
   message ChannelsReordered {
     // guild_id: the guild whose channels are being reordered
     uint64 guild_id = 2;
@@ -142,6 +167,9 @@ message StreamEvent {
   }
 
   // Event sent when a channel is deleted.
+  //
+  // This event will only be sent to users that have "messages.view" permission
+  // for the channel that was deleted.
   message ChannelDeleted {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -189,33 +217,37 @@ message StreamEvent {
   message GuildAddedToList {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
-    // The homeserver this guild is on.
-    string homeserver = 2;
+    // The server ID of the homeserver this guild is on.
+    optional string server_id = 2;
   }
 
   // Event sent when you leave a guild.
   message GuildRemovedFromList {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
-    // The homeserver this guild is on.
-    string homeserver = 2;
+    // The server ID homeserver this guild is on.
+    optional string server_id = 2;
   }
 
   // Event sent when an action is performed.
   message ActionPerformed {
     // Guild ID of the guild where this event happened.
-    uint64 guild_id = 1;
+    optional uint64 guild_id = 1;
     // Channel ID of the channel where this event happened.
     uint64 channel_id = 2;
     // Message ID where this event happened.
     uint64 message_id = 3;
     // User ID of the user that triggered the action
     uint64 user_id = 4;
+    // The custom info set by the bot 
+    optional bytes info = 5;
     // The action data payload
-    ActionPayload payload = 5;
+    optional bytes payload = 6;
   }
 
   // Event sent when a role's position in the role list is changed.
+  //
+  // This event will only be sent to users with the "roles.get" permission.
   message RoleMoved {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -226,6 +258,8 @@ message StreamEvent {
   }
 
   // Event sent when a role is deleted.
+  //
+  // This event will only be sent to users with the "roles.get" permission.
   message RoleDeleted {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -234,6 +268,8 @@ message StreamEvent {
   }
 
   // Event sent when a role is created.
+  //
+  // This event will only be sent to users with the "roles.get" permission.
   message RoleCreated {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -250,6 +286,8 @@ message StreamEvent {
   }
 
   // Event sent when a role's information is changed.
+  //
+  // This event will only be sent to users with the "roles.get" permission.
   message RoleUpdated {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -267,7 +305,7 @@ message StreamEvent {
 
   // Event sent when a role's permissions are changed.
   //
-  // This event will only be sent to users with the "guild.manage" permission.
+  // This event will only be sent to users with the "roles.manage" permission.
   message RolePermissionsUpdated {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -280,6 +318,8 @@ message StreamEvent {
   }
 
   // Event sent when a user's roles are changed.
+  //
+  // This event will only be sent to users with the "roles.user.get" permission.
   message UserRolesUpdated {
     // Guild ID of the guild where this event happened.
     uint64 guild_id = 1;
@@ -290,11 +330,14 @@ message StreamEvent {
   }
 
   // Event sent when a user sends a typing notification in a guild channel.
+  //
+  // Should only be sent to users who have the "message.view" permission for
+  // the guild channel where the typing happened.
   message Typing {
     // User ID of the user that sent the typing notification.
     uint64 user_id = 1;
     // Guild ID of the guild where this event happened.
-    uint64 guild_id = 2;
+    optional uint64 guild_id = 2;
     // Channel ID of the channel where this event happened.
     uint64 channel_id = 3;
   }
@@ -320,7 +363,7 @@ message StreamEvent {
   // the guild channel where the message was pinned.
   message MessagePinned {
     // Guild ID of the guild where this event occured.
-    uint64 guild_id = 1;
+    optional uint64 guild_id = 1;
     // Channel ID of the channel where this event occured.
     uint64 channel_id = 2;
     // Message ID of the message that was pinned.
@@ -333,55 +376,188 @@ message StreamEvent {
   // the guild channel where the message was unpinned.
   message MessageUnpinned {
     // Guild ID of the guild where this event occured.
-    uint64 guild_id = 1;
+    optional uint64 guild_id = 1;
     // Channel ID of the channel where this event occured.
     uint64 channel_id = 2;
     // Message ID of the message that was unpinned.
     uint64 message_id = 3;
   }
 
-  // Sent when a message's reaction is changed.
-  message ReactionUpdated {
+  // Sent when a new reaction is added to a message. This is only sent if
+  // such a reaction wasn't on the message, otherwise see `ReactionAdded`.
+  //
+  // Should only be sent to users who have the "message.view" permission for
+  // the guild channel where the reaction was added.
+  message NewReactionAdded {
     // Guild ID of the guild where this event occured.
-    uint64 guild_id = 1;
+    optional uint64 guild_id = 1;
     // Channel ID of the channel where this event occured.
     uint64 channel_id = 2;
-    // Message ID of the message that had a reaction updated.
+    // Message ID of the message that had a reaction added.
     uint64 message_id = 3;
-    // The reaction.
+    // The reaction that was added.
     chat.v1.Reaction reaction = 4;
+  }
+
+  // Sent when an existing reaction is added to a message. This is only sent
+  // such a reaction was on the message, otherwise see `NewReactionAdded`.
+  //
+  // Should only be sent to users who have the "message.view" permission for
+  // the guild channel where the reaction was added.
+  message ReactionAdded {
+    // Guild ID of the guild where this event occured.
+    optional uint64 guild_id = 1;
+    // Channel ID of the channel where this event occured.
+    uint64 channel_id = 2;
+    // Message ID of the message that had a reaction added.
+    uint64 message_id = 3;
+    // The data of the reaction that was added.
+    string reaction_data = 4;
+  }
+
+  // Sent when an existing reaction is removed from a message.
+  //
+  // Should only be sent to users who have the "message.view" permission for
+  // the guild channel where the reaction was removed.
+  message ReactionRemoved {
+    // Guild ID of the guild where this event occured.
+    optional uint64 guild_id = 1;
+    // Channel ID of the channel where this event occured.
+    uint64 channel_id = 2;
+    // Message ID of the message that had a reaction removed.
+    uint64 message_id = 3;
+    // The data of the reaction that was removed.
+    string reaction_data = 4;
   }
 
   // Sent when there's a new owner.
   message OwnerAdded {
+    // Guild ID of the guild where this event occured.
+    uint64 guild_id = 2;
     // User ID of the new owner.
     uint64 user_id = 1;
   }
 
   // Sent when an owner gives up their ownership.
   message OwnerRemoved {
+    // Guild ID of the guild where this event occured.
+    uint64 guild_id = 2;
     // User ID of the user who is no longer owner.
     uint64 user_id = 1;
   }
 
-  // Sent when a guild invite is received.
+  // Sent when an invite is received.
   message InviteReceived {
-    // ID of the invite received.
-    string invite_id = 1;
-    // Server ID of the server the inviter is on.
+    // The user ID of the inviter.
+    uint64 inviter_id = 1;
+    // The server ID of the server the inviter is on.
     optional string server_id = 2;
-    // User ID of the inviter.
-    uint64 inviter_id = 3;
+    // The location where the user was invited to.
+    oneof location {
+      // The unique identifier of a user's invite to another
+      // user to join a given guild.
+      string guild_invite_id = 3;
+      // The channel ID of the private channel that the user was invited to.
+      uint64 channel_id = 4;
+    }
   }
 
-  // Sent when a guild invite is rejected by the invitee.
+  // Sent when an invite is rejected by the invitee.
   message InviteRejected {
+    // The user ID of the invitee.
+    uint64 invitee_id = 1;
+    // The server ID of the server the invitee is on.
+    optional string server_id = 2;
+    // The location where the user was invited to.
+    oneof location {
+      // The unique identifier of a user's invite to another
+      // user to join a given guild.
+      string guild_invite_id = 3;
+      // The channel ID of the private channel that the user was invited to.
+      uint64 channel_id = 4;
+    }
+  }
+
+  // Sent when an invite is created in a guild.
+  //
+  // This will only be sent to members of a guild with "invites.view" permission.
+  message InviteCreated {
     // Guild ID of the guild that this occured for.
     uint64 guild_id = 1;
-    // ID of the invite rejected.
+    // ID of the invite that was created.
     string invite_id = 2;
-    // User ID of the invitee.
+    // Possible uses of the created invite.
+    uint32 possible_uses = 3;
+  }
+
+  // Sent when an invite is deleted in a guild.
+  //
+  // This can occur because of the invite being used up (0 remaining uses),
+  // or a user deleting the invite.
+  //
+  // This will only be sent to members of a guild with "invites.view" permission.
+  message InviteDeleted {
+    // Guild ID of the guild that this occured for.
+    uint64 guild_id = 1;
+    // ID of the invite that was deleted.
+    string invite_id = 2;
+  }
+
+  // Sent when an invite is used once by a user.
+  //
+  // This will only be sent to members of a guild with "invites.view" permission.
+  message InviteUsed {
+    // Guild ID of the guild that this occured for.
+    uint64 guild_id = 1;
+    // ID of the invite that was used.
+    string invite_id = 2;
+    // User ID of the user that used this invite.
     uint64 user_id = 3;
+  }
+
+  // Sent when a private channel is updated.
+  message PrivateChannelUpdated {
+    // The channel ID of the private channel that was deleted.
+    uint64 channel_id = 1;
+    // The new name of the private channel.
+    //
+    // If this is specified but is empty, then the name was unset.
+    optional string new_name = 2;
+  }
+
+  // Sent when a private channel is deleted.
+  message PrivateChannelDeleted {
+    // The channel ID of the private channel that was deleted.
+    uint64 channel_id = 1;
+  }
+
+  // Sent when a private channel is added to an user's private channel list.
+  message PrivateChannelAddedToList {
+    // The channel ID of the private channel that was added.
+    uint64 channel_id = 1;
+    // The server ID of the homeserver of this private channel.
+    optional string server_id = 2;
+  }
+  // Sent when a private channel is removed from an user's private channel list.
+  message PrivateChannelRemovedFromList {
+    // The channel ID of the private channel that was removed.
+    uint64 channel_id = 1;
+    // The server ID of the homeserver of this private channel.
+    optional string server_id = 2;
+  }
+  // Sent when a user joins a private channel.
+  message UserJoinedPrivateChannel {
+    // The channel ID of the private channel.
+    uint64 channel_id = 1;
+    // The user ID of the user who joined the private channel.
+    uint64 user_id = 2;
+  }
+  // Sent when a user leaves a private channel.
+  message UserLeftPrivateChannel {
+    // The channel ID of the private channel.
+    uint64 channel_id = 1;
+    // The user ID of the user who left the private channel.
+    uint64 user_id = 2;
   }
 
   // Which event to send.
@@ -436,15 +612,37 @@ message StreamEvent {
     MessagePinned message_pinned = 24;
     // Send the message unpinned event.
     MessageUnpinned message_unpinned = 25;
-    // Send the reaction updated event.
-    ReactionUpdated reaction_updated = 26;
     // Send the owner added event.
-    OwnerAdded owner_added = 27;
+    OwnerAdded owner_added = 26;
     // Send the owner removed event.
-    OwnerRemoved owner_removed = 28;
+    OwnerRemoved owner_removed = 27;
     // Send the guild invite received event.
-    InviteReceived invite_received = 29;
+    InviteReceived invite_received = 28;
     // Send the guild invite rejected event.
-    InviteRejected invite_rejected = 30;
+    InviteRejected invite_rejected = 29;
+    // Send the invite created event.
+    InviteCreated invite_created = 30;
+    // Send the invite deleted event.
+    InviteDeleted invite_deleted = 31;
+    // Send the invite used event.
+    InviteUsed invite_used = 32;
+    // Send the new reaction added event.
+    NewReactionAdded new_reaction_added = 33;
+    // Send the reaction added event.
+    ReactionAdded reaction_added = 34;
+    // Send the reaction removed event.
+    ReactionRemoved reaction_removed = 35;
+    // Send the private channel deleted event.
+    PrivateChannelDeleted private_channel_deleted = 36;
+    // Send the private channel updated event.
+    PrivateChannelUpdated private_channel_updated = 37;
+    // Send the private channel added to list event.
+    PrivateChannelAddedToList private_channel_added_to_list = 38;
+    // Send the private channel removed from list event.
+    PrivateChannelRemovedFromList private_channel_removed_from_list = 39;
+    // Send the user joined private channel event.
+    UserJoinedPrivateChannel user_joined_private_channel = 40;
+    // Send the user left private channel event.
+    UserLeftPrivateChannel user_left_private_channel = 41;
   }
 }

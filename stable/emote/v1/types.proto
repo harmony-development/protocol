@@ -14,8 +14,7 @@ message EmotePack {
 
 // Data for a single emote.
 message Emote {
-  // The image ID of the emote. This is the ID of the image in the image store
-  // (same place attachments are stored).
+  // The HMC or external URL of the emote. Must point to an image.
   string image_id = 1;
   // The name of the emote.
   string name = 2;
@@ -43,20 +42,28 @@ message GetEmotePacksResponse {
 // Used in the `GetEmotes` endpoint.
 message GetEmotePackEmotesRequest {
   // The ID of the pack.
-  uint64 pack_id = 1;
+  repeated uint64 pack_id = 1;
 }
 // Used in the `GetEmotes` endpoint.
 message GetEmotePackEmotesResponse {
-  // The list of emotes in the pack.
-  repeated Emote emotes = 1;
+  // An emote pack's emotes.
+  message EmotePackEmotes {
+    // The list of emotes in the pack.
+    repeated Emote emotes = 1;
+  }
+
+  // The requested emote packs' emotes.
+  map<uint64, EmotePackEmotes> pack_emotes = 1;
 }
 
 // Used in the `AddEmoteToPack` endpoint.
 message AddEmoteToPackRequest {
   // The ID of the pack.
   uint64 pack_id = 1;
-  // The emote to add.
-  Emote emote = 2;
+  // The file ID or external URL of the image to use for the emote.
+  string image_id = 2;
+  // The name of the emote.
+  string name = 3;
 }
 // Used in the `AddEmoteToPack` endpoint.
 message AddEmoteToPackResponse {}

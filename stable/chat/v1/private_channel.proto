@@ -1,0 +1,108 @@
+syntax = "proto3";
+
+package protocol.chat.v1;
+
+// PrivateChannel is a private channel between a list of users, independent of a guild.
+// It should be possible to use this channel for both text and voice communications.
+message PrivateChannel {
+  // The list of users that are in this channel.
+  repeated uint64 members = 1;
+  // Whether this is a direct message (1:1) channel or not.
+  //
+  // If a channel is a direct message, the number of recipients is two.
+  // It should not be possible to have multiple direct message channels between the same two users.
+  bool is_dm = 2;
+  // The name of the channel.
+  optional string name = 3;
+}
+
+// An entry in the list of private channels.
+message PrivateChannelListEntry {
+  // The channel ID of this channel list entry.
+  uint64 channel_id = 1;
+  // The server ID of the homeserver of this private channel. If local, this is not set.
+  optional string server_id = 2;
+}
+
+// Request type used in `GetPrivateChannel` endpoint.
+message GetPrivateChannelRequest {
+  // The IDs of the channels to get data for.
+  repeated uint64 channel_ids = 1;
+}
+
+// Response type used in `GetPrivateChannel` endpoint.
+message GetPrivateChannelResponse {
+  // The list of private channels.
+  map<uint64, PrivateChannel> channels = 1;
+}
+
+// Request type used in `CreatePrivateChannel` endpoint.
+message CreatePrivateChannelRequest {
+  // The list of users that will have access to this channel.
+  //
+  // These users will be sent an invite.
+  // If `is_dm` is `true`, this must only have one member specified.
+  repeated uint64 members = 1;
+  // Whether this is a direct message (1:1) channel or not.
+  bool is_dm = 2;
+  // The name of the channel.
+  optional string name = 3;
+}
+// Response type used in `CreatePrivateChannel` endpoint.
+message CreatePrivateChannelResponse {
+  // The channel ID of the newly created private channel.
+  uint64 channel_id = 1;
+}
+
+// Request type used in `UpdatePrivateChannel` endpoint.
+message UpdatePrivateChannelRequest {
+  // The channel ID of the private channel to update.
+  uint64 channel_id = 1;
+
+  // The list of member IDs of members to add to the private channel.
+  //
+  // These users will be sent an invite.
+  repeated uint64 added_members = 2;
+  // The list of member IDs of members to remove from the private channel.
+  repeated uint64 removed_members = 3;
+
+  // The new name of the private channel.
+  //
+  // If this is specified and is an empty string,
+  // then the channel name will be unset.
+  optional string new_name = 4;
+}
+// Request type used in `UpdatePrivateChannel` endpoint.
+message UpdatePrivateChannelResponse {}
+
+// Request type used in `DeletePrivateChannel` endpoint.
+message DeletePrivateChannelRequest {
+  // The channel ID of the private channel to delete.
+  uint64 channel_id = 1;
+}
+// Response type used in `DeletePrivateChannel` endpoint.
+message DeletePrivateChannelResponse {}
+
+// Request type used in `GetPrivateChannelList` endpoint.
+message GetPrivateChannelListRequest {}
+// Response type used in `GetPrivateChannelList` endpoint.
+message GetPrivateChannelListResponse {
+  // The list of private channels that the user is in.
+  repeated PrivateChannelListEntry channels = 1;
+}
+
+// Request type used in `JoinPrivateChannel` endpoint.
+message JoinPrivateChannelRequest {
+  // The channel ID of the private channel to join.
+  uint64 channel_id = 1;
+}
+// Response type used in `JoinPrivateChannel` endpoint.
+message JoinPrivateChannelResponse {}
+
+// Request type used in `LeavePrivateChannel` endpoint.
+message LeavePrivateChannelRequest {
+  // The channel ID of the private channel to leave.
+  uint64 channel_id = 1;
+}
+// Response type used in `LeavePrivateChannel` endpoint.
+message LeavePrivateChannelResponse {}

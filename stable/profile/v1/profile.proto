@@ -17,6 +17,11 @@ service ProfileService {
     option (harmonytypes.v1.metadata).requires_authentication = true;
   }
 
+  // Updates the user's status.
+  rpc UpdateStatus(UpdateStatusRequest) returns (UpdateStatusResponse) {
+    option (harmonytypes.v1.metadata).requires_authentication = true;
+  }
+
   // Gets app data for a user (this can be used to store user preferences which
   // is synchronized across devices).
   rpc GetAppData(GetAppDataRequest) returns (GetAppDataResponse) {

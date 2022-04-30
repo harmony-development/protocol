@@ -46,9 +46,8 @@ Expects authentication: no
 
 The `file_id` should be one of the following:
 
-- An attachment ID returned from POST `/_harmony/media/upload`
-- A URI-encoded URL of an image
-- A URI-encoded HMC URL.
+- A URI-encoded file ID.
+- A URI-encoded URL of an image.
 
 ### Responses
 

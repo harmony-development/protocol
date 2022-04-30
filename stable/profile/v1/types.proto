@@ -2,93 +2,145 @@ syntax = "proto3";
 
 package protocol.profile.v1;
 
-// The possible statuses a user can have.
-enum UserStatus {
-  // User is offline (not connected to the server).
-  USER_STATUS_OFFLINE_UNSPECIFIED = 0;
-  // User is online (this is the default value if ommitted).
-  USER_STATUS_ONLINE = 1;
-  // User is away.
-  USER_STATUS_IDLE = 2;
-  // User does not want to be disturbed.
-  USER_STATUS_DO_NOT_DISTURB = 3;
-  // User is on mobile.
-  USER_STATUS_MOBILE = 4;
-  // User is streaming
-  USER_STATUS_STREAMING = 5;
+// The status information for a user.
+message UserStatus {
+  // Information about an action the user can use
+  // in the context of an activity.
+  message Action {
+    // URL to open when this action is clicked.
+    string url = 1;
+    // Name of this action. This must be provided if
+    // an icon isn't provided.
+    optional string name = 2;
+    // Icon for this action.
+    // This must be a file ID that points to an image.
+    //
+    // This must be provided if a name isn't provided.
+    optional string icon = 3;
+  }
+
+  // Information about an activity the user is performing.
+  message Activity {
+    // When the user started performing this
+    // activity, in seconds since UNIX epoch.
+    uint64 started = 1;
+    // Title of this activity.
+    string title = 2;
+    // Details about this activity.
+    optional string details = 3;
+    // An image that relates to the activity.
+    // This must be a file ID that points to an image.
+    optional string image = 4;
+    // A color that relates to the activity.
+    optional uint32 color = 5;
+    // Actions for this activity.
+    repeated Action actions = 6;
+  }
+
+  // The possible status kinds a user can have.
+  enum Kind {
+    // The user is offline (not connected to the server).
+    KIND_OFFLINE_UNSPECIFIED = 0;
+    // The user is online.
+    KIND_ONLINE = 1;
+    // The user is away.
+    KIND_IDLE = 2;
+    // The user does not want to be disturbed.
+    KIND_DO_NOT_DISTURB = 3;
+  }
+
+  // The possible platforms a user can be on.
+  enum Platform {
+    // The user is on a desktop platform.
+    PLATFORM_DESKTOP_UNSPECIFIED = 0;
+    // The user is on a mobile platform.
+    PLATFORM_MOBILE = 1;
+  }
+
+  // The kind of the status.
+  Kind kind = 1;
+  // The message for the status. This is independent of the
+  // activities being performed by the user.
+  string message = 2;
+  // The activities this user is performing, if any.
+  //
+  // The first activity in this list has the most priority.
+  repeated Activity activities = 3;
+  // The platform the user is on.
+  Platform platform = 4;
 }
 
-// The possible kinds of an account
+// The possible kinds of an account.
 enum AccountKind {
-  // The account is a full-fledged account controlled by a human
+  // The account is a full-fledged account controlled by a human.
   ACCOUNT_KIND_FULL_UNSPECIFIED = 0;
-  // The account is an account controlled by a bot
+  // The account is an account controlled by a bot.
   ACCOUNT_KIND_BOT = 1;
-  // The account is a guest account controlled by a human
+  // The account is a guest account controlled by a human.
   ACCOUNT_KIND_GUEST = 2;
 }
 
 // Data for a single profile, without the user's ID.
 message Profile {
-  // the name of the user.
+  // The name of the user.
   string user_name = 1;
-  // the user's avatar.
+  // The user's avatar. This must be a file ID.
   optional string user_avatar = 2;
-  // the status of the user.
+  // The status of the user.
   UserStatus user_status = 3;
-  // whether the user is a bot or not
-  bool is_bot = 4 [ deprecated = true ];
-  // what kind of account the user is, e.g. full, guest, bot
-  AccountKind account_kind = 5;
+  // What kind of account the user is, e.g. full, guest, bot.
+  AccountKind account_kind = 4;
 }
 
 // Used in `GetProfile` endpoint.
 message GetProfileRequest {
-  // The id of the user to get.
-  uint64 user_id = 1;
+  // The ID(s) of the user(s) to get.
+  repeated uint64 user_id = 1;
 }
 
 // Used in `GetProfile` endpoint.
 message GetProfileResponse {
-  // The user's profile
-  Profile profile = 1;
+  // The users' profile(s).
+  map<uint64, Profile> profile = 1;
 }
 
 // Used in `UpdateProfile` endpoint.
 message UpdateProfileRequest {
-  // new name of the user.
+  // New name of the user.
   optional string new_user_name = 1;
-  // new user avatar. The avatar will be removed if the string is empty.
+  // New user avatar. The avatar will be removed if the string is empty.
+  // This must be a local file ID.
   optional string new_user_avatar = 2;
-  // new status of the user.
-  optional UserStatus new_user_status = 3;
-  // new whether the user is a bot or not
-  //
-  // Deprecated; see bot service and guest handling
-  // in auth.
-  optional bool new_is_bot = 4 [ deprecated = true ];
 }
 
 // Used in `UpdateProfile` endpoint.
 message UpdateProfileResponse {}
 
+// Used in `UpdateStatus` endpoint.
+message UpdateStatusRequest {
+  // The new user status to use.
+  UserStatus new_status = 1;
+}
+// Used in `UpdateStatus` endpoint.
+message UpdateStatusResponse {}
+
 // Used in `GetAppData` endpoint.
 message GetAppDataRequest {
-  // the app id.
+  // The app id.
   string app_id = 1;
 }
 
 // Used in `GetAppData` endpoint.
 message GetAppDataResponse {
-  // the app data.
+  // The app data.
   bytes app_data = 1;
 }
 
 // Used in `SetAppData` endpoint.
 message SetAppDataRequest {
-  // the app id.
+  // The app id.
   string app_id = 1;
-  // the app data.
+  // The app data.
   bytes app_data = 2;
 }
 // Used in `SetAppData` endpoint.

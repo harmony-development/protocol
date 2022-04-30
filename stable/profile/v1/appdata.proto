@@ -11,32 +11,39 @@ import "harmonytypes/v1/types.proto";
 // with the override the tag belongs to, stripping
 // the tag indicators.
 message OverrideTag {
-    // The portion of the tag before the messge.
-    string before = 1;
-    // The portion of the tag after the messge.
-    string after = 2;
+  // The portion of the tag before the messge.
+  string before = 1;
+  // The portion of the tag after the messge.
+  string after = 2;
 }
 
-// An individual override
+// An individual override.
 message ProfileOverride {
-    // The username for this override
-    optional string username = 1;
-    // The avatar for this override
-    optional string avatar = 2;
-    // The tags for this override.
-    repeated OverrideTag tags = 3;
-    // The reason this override is used
-    oneof reason {
-        // a custom reason in case the builtin ones don't fit
-        string user_defined = 4;
-        // plurality, not system as in computer
-        harmonytypes.v1.Empty system_plurality = 5;
-    }
+  // The username for this override.
+  optional string username = 1;
+  // The avatar for this override.
+  //
+  // This can be a file ID or an external image URL.
+  optional string avatar = 2;
+  // The tags for this override.
+  repeated OverrideTag tags = 3;
+  // The reason this override is used.
+  oneof reason {
+    // A custom reason in case the builtin ones don't fit.
+    string user_defined = 4;
+    // Plurality, not system as in computer.
+    harmonytypes.v1.Empty system_plurality = 5;
+  }
 }
 
-// The message used for the 'h.overrides' key
-// of appdata.
+// The message used for the 'h.overrides' app ID of appdata.
 message AppDataOverrides {
-    // The list of overrides.
-    repeated ProfileOverride overrides = 1;
+  // The list of overrides.
+  repeated ProfileOverride overrides = 1;
+}
+
+// The message used for the 'h.user_notes' app ID of appdata.
+message AppDataUserNotes {
+  // The user ID -> note map.
+  map<uint64, string> notes = 1;
 }
