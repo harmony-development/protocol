@@ -5,7 +5,7 @@ package protocol.chat.v1;
 // PrivateChannel is a private channel between a list of users, independent of a guild.
 // It should be possible to use this channel for both text and voice communications.
 message PrivateChannel {
-  // The list of users that have access to this channel.
+  // The list of users that are in this channel.
   repeated uint64 members = 1;
   // Whether this is a direct message (1:1) channel or not.
   //
@@ -38,7 +38,7 @@ message GetPrivateChannelResponse {
 
 // Request type used in `CreatePrivateChannel` endpoint.
 message CreatePrivateChannelRequest {
-  // The list of users that have access to this channel.
+  // The list of users that will have access to this channel.
   //
   // These users will be sent an invite.
   // If `is_dm` is `true`, this must only have one member specified.
@@ -54,31 +54,26 @@ message CreatePrivateChannelResponse {
   uint64 channel_id = 1;
 }
 
-// Request type used in `UpdatePrivateChannelMembers` endpoint.
-message UpdatePrivateChannelMembersRequest {
-  // The channel ID of the private channel to update the member list for.
+// Request type used in `UpdatePrivateChannel` endpoint.
+message UpdatePrivateChannelRequest {
+  // The channel ID of the private channel to update.
   uint64 channel_id = 1;
+
   // The list of member IDs of members to add to the private channel.
   //
   // These users will be sent an invite.
   repeated uint64 added_members = 2;
   // The list of member IDs of members to remove from the private channel.
   repeated uint64 removed_members = 3;
-}
-// Request type used in `UpdatePrivateChannelMembers` endpoint.
-message UpdatePrivateChannelMembersResponse {}
 
-// Request type used in `UpdatePrivateChannelName` endpoint.
-message UpdatePrivateChannelNameRequest {
-  // The channel ID of the private channel to update the name for.
-  uint64 channel_id = 1;
   // The new name of the private channel.
   //
-  // If this is an empty string, then the channel name will be unset.
-  string name = 2;
+  // If this is specified and is an empty string,
+  // then the channel name will be unset.
+  optional string new_name = 4;
 }
-// Response type used in `UpdatePrivateChannelName` endpoint.
-message UpdatePrivateChannelNameResponse {}
+// Request type used in `UpdatePrivateChannel` endpoint.
+message UpdatePrivateChannelResponse {}
 
 // Request type used in `DeletePrivateChannel` endpoint.
 message DeletePrivateChannelRequest {

@@ -515,6 +515,16 @@ message StreamEvent {
     uint64 user_id = 3;
   }
 
+  // Sent when a private channel is updated.
+  message PrivateChannelUpdated {
+    // The channel ID of the private channel that was deleted.
+    uint64 channel_id = 1;
+    // The new name of the private channel.
+    //
+    // If this is specified but is empty, then the name was unset.
+    optional string new_name = 2;
+  }
+
   // Sent when a private channel is deleted.
   message PrivateChannelDeleted {
     // The channel ID of the private channel that was deleted.
@@ -624,13 +634,15 @@ message StreamEvent {
     ReactionRemoved reaction_removed = 35;
     // Send the private channel deleted event.
     PrivateChannelDeleted private_channel_deleted = 36;
+    // Send the private channel updated event.
+    PrivateChannelUpdated private_channel_updated = 37;
     // Send the private channel added to list event.
-    PrivateChannelAddedToList private_channel_added_to_list = 37;
+    PrivateChannelAddedToList private_channel_added_to_list = 38;
     // Send the private channel removed from list event.
-    PrivateChannelRemovedFromList private_channel_removed_from_list = 38;
+    PrivateChannelRemovedFromList private_channel_removed_from_list = 39;
     // Send the user joined private channel event.
-    UserJoinedPrivateChannel user_joined_private_channel = 39;
+    UserJoinedPrivateChannel user_joined_private_channel = 40;
     // Send the user left private channel event.
-    UserLeftPrivateChannel user_left_private_channel = 40;
+    UserLeftPrivateChannel user_left_private_channel = 41;
   }
 }
